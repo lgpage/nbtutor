@@ -1,10 +1,11 @@
 
 import {$} from "nbtutor-deps";
 
+import events from "base/js/events";
+
 
 export class Toolbar {
     constructor(cell){
-        this.cell = cell;
         this.$root = cell.celltoolbar.element.find(".button_container");
         this.$btn_first = $("<button/>")
             .text("<< First Line");
@@ -15,9 +16,16 @@ export class Toolbar {
         this.$btn_last = $("<button/>")
             .text("Last Line >>");
         this.$select_view = $("<select/>");
+
+        // Should have already been created, but just in case
+        cell.metadata.nbtutor = cell.metadata.nbtutor || {};
+        this.metadata = cell.metadata.nbtutor;
+
+        // Build the UI elements
+        this._build();
     }
 
-    initUI(){
+    _build(){
         this.$root.addClass("nbtutor-buttons");
         this.$root.append(this.$btn_first);
         this.$root.append(this.$btn_prev);
@@ -46,24 +54,30 @@ export class Toolbar {
 
         let that = this;
         this.$select_view.change(() => {
-            that.update();
+            let render_view = this.$select_view.val();
+            this.metadata.render_view = render_view;
+            if (render_view === "none"){
+                this.hideButtons();
+            } else {
+                this.showButtons();
+            }
+            events.trigger("render_view_changed.CellToolBar");
         });
 
-        let render_view = this.cell.metadata.nbtutor.render_view || "none";
+        // Initialize the current render view from the metadata
+        let render_view = this.metadata.render_view || "none";
         this.$select_view.val(render_view).trigger("change");
-        return this;
     }
 
-    update(){
-        let render_view = this.$select_view.val();
-        this.cell.metadata.nbtutor.render_view = render_view;
-        if (render_view == "none"){
-            this.$root.children("button")
-                .addClass("nbtutor-hidden");
-        }
-        else {
-            this.$root.children("button")
-                .removeClass("nbtutor-hidden");
-        }
+    renderView(){
+        return this.metadata.render_view;
+    }
+
+    showButtons(){
+        this.$root.children("button").removeClass("nbtutor-hidden");
+    }
+
+    hideButtons(){
+        this.$root.children("button").addClass("nbtutor-hidden");
     }
 }
