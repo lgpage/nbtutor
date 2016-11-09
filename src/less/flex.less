@@ -1,0 +1,44 @@
+.nbtutor-canvas,
+.nbtutor-canvas div
+{
+    position: relative;
+}
+
+.nbtutor-input-area,
+.nbtutor-canvas,
+.nbtutor-stack,
+.nbtutor-heap,
+.nbtutor-heap-row
+{
+    display: flex;
+}
+
+.nbtutor-input-area,
+.nbtutor-canvas,
+.nbtutor-heap-row
+{
+    flex-flow: row;
+}
+
+.nbtutor-stack,
+.nbtutor-heap
+{
+    flex-flow: column;
+}
+
+.nbtutor-input-area .CodeMirror,
+.nbtutor-canvas,
+.nbtutor-stack,
+.nbtutor-heap
+{
+    flex: 1 1 50em;
+}
+
+.nbtutor-canvas {
+    border-left: 1px solid black;
+}
+
+.nbtutor-heap {
+    align-items: flex-end;
+}
+
