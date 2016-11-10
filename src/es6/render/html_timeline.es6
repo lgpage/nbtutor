@@ -9,15 +9,16 @@ export class TimelineUI{
     }
 
     create(){
+        // First destroy any previous visualization
+        this.destroy();
+
+        // Create trace step headings data
         let headings = ["Names"];
         for (let t=0; t<this.stack_timeline.tracestep; t++){
             headings.push(t);
         }
 
-        // First empty the parent div
-        this.empty();
-
-        // Create stack_timeline tables for each frame
+        // Create stack timeline tables for each frame
         let that = this;
         let d3Tables = this.d3Root.selectAll("div")
             .data(this.stack_timeline.stack_frames, (d) => d.uuid)
@@ -31,16 +32,18 @@ export class TimelineUI{
         let d3Tbodys = d3Tables.append("tbody");
         let d3Tfoots = d3Tables.append("tfoot");
 
+        // Create stace step headings
         d3Theads.append("tr").append("th")
             .attr("colspan", this.stack_timeline.tracestep+1)
             .text((d) => d.name + " frame");
+
         d3Theads.append("tr").selectAll("th")
             .data(headings)
             .enter()
                 .append("th")
                 .text((d) => d);
 
-        // Add names and values to each frame stack_timeline
+        // Add names and values to each frame stack timeline
         let d3Rows = d3Tbodys.selectAll("tr")
             .data((d) => d.vars, (d) => d.name)
             .enter()
@@ -55,7 +58,7 @@ export class TimelineUI{
                 })
                 .text((d) => d);
 
-        // Toggle hover class
+        // Toggle mouce hover over name
         d3Rows.on('mouseover', function(d) {
             d3.select(this).classed("nbtutor-hover", true);
         });
@@ -64,12 +67,8 @@ export class TimelineUI{
         });
     }
 
-    empty(keepRoot=true){
+    destroy(){
         jsplumb.empty(this.d3Root[0]);
-        if (keepRoot) {
-            this.d3Root.selectAll("div").remove();
-        } else {
-            this.d3Root.remove();
-        }
+        this.d3Root.selectAll("div").remove();
     }
 }

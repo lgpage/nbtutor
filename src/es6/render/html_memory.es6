@@ -10,6 +10,7 @@ function createPrimitive(d, d3Div){
     d3Obj.append("div")
         .attr("class", "nbtutor-var-type")
         .text(d.type);
+
     d3Obj.append("div")
         .attr("class", "nbtutor-var-value")
         .text(d.value);
@@ -26,17 +27,12 @@ function createUnknown(d, d3Div){
 
 
 function getCreateObjectFunction(type) {
-    let map = {
+    let func = {
         "int": createPrimitive,
         "float": createPrimitive,
         "str": createPrimitive,
     };
-
-    let func = map[type];
-    if (func === undefined){
-        return createUnknown;
-    }
-    return func;
+    return func[type] || createUnknown;
 }
 
 
@@ -59,13 +55,13 @@ function connectObjects(fromId, toId, container, cssClass){
 export class MemoryModelUI{
     constructor(trace_history, d3Root){
         this.trace_history = trace_history;
-        this.connectors = [];
         this.d3Root = d3Root;
+        this.connectors = [];
     }
 
     create(tracestep){
-        // First empty the parent div
-        this.empty();
+        // First destroy any previous visualization
+        this.destroy();
 
         // Init parent div
         this.d3Root.append("div")
@@ -76,17 +72,11 @@ export class MemoryModelUI{
         // Create tables for each frame
         let stack_history = this.trace_history.stack_history;
         let heap_history = this.trace_history.heap_history;
-        let d3Divs = this.d3Root.select(".nbtutor-stack").selectAll("div")
-            .data(
-                stack_history.getStackFrames(tracestep).map((d) => {
-                    return {uuid: d.uuid, name: d.name};
-                }),
-                (d) => d.uuid
-            );
-
-        let d3Frames = d3Divs.enter()
-            .append("div")
-            .attr("class", "nbtutor-frame");
+        let d3Frames = this.d3Root.select(".nbtutor-stack").selectAll("div")
+            .data(stack_history.getStackFrames(tracestep), (d) => d.uuid)
+            .enter()
+                .append("div")
+                .attr("class", "nbtutor-frame");
 
         d3Frames.append("table")
             .attr("id", (d) => d.uuid)
@@ -98,19 +88,15 @@ export class MemoryModelUI{
         d3Frames.select("table").append("tbody");
         d3Frames.select("table").append("tfoot");
 
-        // Toggle active class
+        // Toggle active frame
         this.d3Root.selectAll("table").classed("nbtutor-active", false);
         this.d3Root.selectAll("table:last-child").classed("nbtutor-active", true);
 
         // Add names to each frame
-        let d3Rows = d3Frames.select("tbody").selectAll("tr")
-            .data(
-                (d, i) => stack_history.getStackFrames(tracestep)[i].vars,
-                (d) => {return d.name;}
-            );
-
-        let d3Names = d3Rows.enter()
-            .append("tr");
+        let d3Names = d3Frames.select("tbody").selectAll("tr")
+            .data((d) => d.vars, (d) => d.name)
+            .enter()
+                .append("tr");
 
         d3Names.append("td")
             .attr("class", "nbtutor-var-name")
@@ -122,11 +108,12 @@ export class MemoryModelUI{
             .append("div")
                 .attr("id", (d) => d.uuid)
             .each((d) => {
-                let obj = heap_history.getObjectById(tracestep, d.id);
-                that.connectors.push({ from: d.uuid, to: obj.uuid });
+                // Add connectors data from name to object
+                let object = heap_history.getObjectById(tracestep, d.id);
+                that.connectors.push({from: d.uuid, to: object.uuid});
             });
 
-        // Toggle hover classes
+        // Toggle mouse hover over name
         d3Names.on('mouseover', function(d){
             d3.select(this).classed("nbtutor-hover", true);
             d3.select(".nbtutor-var-object." + d.uuid)
@@ -164,13 +151,9 @@ export class MemoryModelUI{
         });
     }
 
-    empty(keepRoot=true){
+    destroy(){
         jsplumb.empty(this.d3Root[0]);
+        this.d3Root.selectAll("div").remove();
         this.connectors = [];
-        if (keepRoot) {
-            this.d3Root.selectAll("div").remove();
-        } else {
-            this.d3Root.remove();
-        }
     }
 }
