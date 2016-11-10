@@ -52,7 +52,7 @@ export class HeapHistory{
          * Get a single heap object at a specified trace step in the history
          * that matches a specified object id.
          */
-        let objects = this.getHeapObjects[tracestep] || [];
+        let objects = this.getHeapObjects(tracestep) || [];
         let ind = objects.map((d) => d.id).indexOf(id);
         return objects[ind];
     }

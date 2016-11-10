@@ -121,6 +121,7 @@ export class VisualizedCell {
             let render_view = that.metadata.render_view;
             if (render_view == "none"){
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");
+                that.codemirror.clearGutter("nbtutor-linemarkers");
             } else {
                 if (that.trace_history.updateData()){
                     // Only visualize the execute if the data could be updated
@@ -137,12 +138,12 @@ export class VisualizedCell {
     visualize(){
         // visualize code execution
         let render_view = this.metadata.render_view;
-        //if (render_view == "memory"){
-        //    this.memoryUI.create(this.tracestep);
-        //}
-        //if (render_view == "timeline"){
-        //    this.timelineUI.create();
-        //}
+        if (render_view == "memory"){
+            this.memoryUI.create(this.tracestep);
+        }
+        if (render_view == "timeline"){
+            this.timelineUI.create();
+        }
 
         // Update CodeMirror line markers
         this.codemirror.setOption('lineNumbers', true);

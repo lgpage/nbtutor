@@ -3,24 +3,24 @@ import {d3, jsplumb} from "nbtutor-deps";
 
 
 export class TimelineUI{
-    constructor(timeline, d3Root){
-        this.timeline = timeline;
+    constructor(stack_timeline, d3Root){
+        this.stack_timeline = stack_timeline;
         this.d3Root = d3Root;
     }
 
     create(){
         let headings = ["Names"];
-        for (let t=0; t<this.timeline.time; t++){
+        for (let t=0; t<this.stack_timeline.tracestep; t++){
             headings.push(t);
         }
 
         // First empty the parent div
         this.empty();
 
-        // Create timeline tables for each frame
+        // Create stack_timeline tables for each frame
         let that = this;
         let d3Tables = this.d3Root.selectAll("div")
-            .data(this.timeline.frames, (d) => d.uuid)
+            .data(this.stack_timeline.stack_frames, (d) => d.uuid)
             .enter()
                 .append("div")
                     .attr("class", "nbtutor-timeline")
@@ -32,7 +32,7 @@ export class TimelineUI{
         let d3Tfoots = d3Tables.append("tfoot");
 
         d3Theads.append("tr").append("th")
-            .attr("colspan", this.timeline.time+1)
+            .attr("colspan", this.stack_timeline.tracestep+1)
             .text((d) => d.name + " frame");
         d3Theads.append("tr").selectAll("th")
             .data(headings)
@@ -40,7 +40,7 @@ export class TimelineUI{
                 .append("th")
                 .text((d) => d);
 
-        // Add names and values to each frame timeline
+        // Add names and values to each frame stack_timeline
         let d3Rows = d3Tbodys.selectAll("tr")
             .data((d) => d.vars, (d) => d.name)
             .enter()

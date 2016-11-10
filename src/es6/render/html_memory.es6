@@ -57,13 +57,13 @@ function connectObjects(fromId, toId, container, cssClass){
 
 
 export class MemoryModelUI{
-    constructor(stacktrace, d3Root){
-        this.stacktrace = stacktrace;
+    constructor(trace_history, d3Root){
+        this.trace_history = trace_history;
         this.connectors = [];
         this.d3Root = d3Root;
     }
 
-    create(lineNo){
+    create(tracestep){
         // First empty the parent div
         this.empty();
 
@@ -74,10 +74,11 @@ export class MemoryModelUI{
             .attr("class", "nbtutor-heap");
 
         // Create tables for each frame
-        let trace = this.stacktrace.get(lineNo);
+        let stack_history = this.trace_history.stack_history;
+        let heap_history = this.trace_history.heap_history;
         let d3Divs = this.d3Root.select(".nbtutor-stack").selectAll("div")
             .data(
-                trace.frames.map((d) => {
+                stack_history.getStackFrames(tracestep).map((d) => {
                     return {uuid: d.uuid, name: d.name};
                 }),
                 (d) => d.uuid
@@ -104,7 +105,7 @@ export class MemoryModelUI{
         // Add names to each frame
         let d3Rows = d3Frames.select("tbody").selectAll("tr")
             .data(
-                (d, i) => trace.frames[i].vars,
+                (d, i) => stack_history.getStackFrames(tracestep)[i].vars,
                 (d) => {return d.name;}
             );
 
@@ -121,7 +122,7 @@ export class MemoryModelUI{
             .append("div")
                 .attr("id", (d) => d.uuid)
             .each((d) => {
-                let obj = that.stacktrace.getHeapVarById(lineNo, d.id);
+                let obj = heap_history.getObjectById(tracestep, d.id);
                 that.connectors.push({ from: d.uuid, to: obj.uuid });
             });
 
@@ -145,7 +146,7 @@ export class MemoryModelUI{
 
         // Create heap objects
         let d3HeapRows = this.d3Root.select(".nbtutor-heap").selectAll("div")
-            .data(trace.heap, (d) => d.uuid)
+            .data(heap_history.getHeapObjects(tracestep), (d) => d.uuid)
             .enter()
                 .append("div")
                 .attr("class", "nbtutor-heap-row");
