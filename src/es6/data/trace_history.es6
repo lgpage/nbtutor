@@ -33,7 +33,8 @@ function alertUserMissingData(){
 
 
 export class TraceHistory{
-    constructor(){
+    constructor(cell){
+        this.cell = cell;
         this.tracesteps = 0;
         this.line_numbers = [];
         this.stack_history = null;
@@ -48,7 +49,7 @@ export class TraceHistory{
         return this.line_numbers[tracestep];
     }
 
-    updateData(cell){
+    updateData(){
         /**
          * Update data from notebook cell metadata
          */
@@ -60,9 +61,10 @@ export class TraceHistory{
             this.output_history = new OutputHistory(history.output_history);
             this.line_numbers = history.line_numbers.map((d) => +d);
             this.tracesteps = this.line_numbers.length;
+            return 1;
         } else {
-            events.trigger("missing_metadata.TraceHistory");
             alertUserMissingData();
+            return 0;
         }
     }
 }

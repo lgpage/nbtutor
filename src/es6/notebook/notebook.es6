@@ -29,6 +29,12 @@ export class VisualizedCell {
             .attr("class", "nbtutor-canvas")
             .attr("id", "c-" + uuid.v4())
             .addClass("nbtutor-hidden");
+        this.$lineMarker = $("<i/>")
+            .attr("class", "fa fa-long-arrow-right fa-lg")
+            .addClass("nbtutor-current-line");
+        this.$nextLineMarker = $("<i/>")
+            .attr("class", "fa fa-long-arrow-right fa-lg")
+            .addClass("nbtutor-next-line");
         this.d3Root = d3.select(this.$nbtutor_canvas.toArray()[0]);
 
         this.toolbar = new Toolbar(cell);
@@ -108,8 +114,10 @@ export class VisualizedCell {
 
         let that = this;
         events.on('global_hide.CellToolBar', () => {
-            // This event destroys the celltoolbar, so need to clean up for
-            // if / when the celltoolbar is rebuild
+            that.destroy();
+        });
+
+        events.on('rebuild.CellToolBar', () => {
             that.destroy();
         });
 
@@ -118,8 +126,14 @@ export class VisualizedCell {
             if (render_view == "none"){
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");
             } else {
-                that.$nbtutor_canvas.removeClass("nbtutor-hidden");
-                that.toolbar.$btn_first.trigger("click");
+                if (that.trace_history.updateData()){
+                    // Only visualize the execute if the data could be updated
+                    that.$nbtutor_canvas.removeClass("nbtutor-hidden");
+                    that.toolbar.$btn_first.trigger("click");
+                } else {
+                    // Else set the render view back to 'none'
+                    that.$toolbar.$select_view.val("none").trigger("change");
+                }
             }
         });
     }
@@ -127,43 +141,41 @@ export class VisualizedCell {
     visualize(){
         // visualize code execution
         let render_view = this.metadata.render_view;
-        if (render_view == "memory"){
-            this.memoryUI.create(this.tracestep);
-        }
-        if (render_view == "timeline"){
-            this.timelineUI.create();
-        }
+        //if (render_view == "memory"){
+        //    this.memoryUI.create(this.tracestep);
+        //}
+        //if (render_view == "timeline"){
+        //    this.timelineUI.create();
+        //}
 
         // Update CodeMirror line markers
         this.codemirror.setOption('lineNumbers', true);
         this.codemirror.clearGutter("nbtutor-linemarkers");
 
         let lineNo = this.trace_history.getLineNumber(this.tracestep);
-        let nextLineNo = this.trace_history.getLineNumber(this.tracestep+1);
+        if (lineNo-1 >= 0) {
+            this.codemirror.setGutterMarker(
+                lineNo-1,
+                "nbtutor-linemarkers",
+                this.$lineMarker.toArray()[0]
+            );
+        }
 
-        let lineMarker = $("<i/>")
-            .attr("class", "fa fa-long-arrow-right fa-lg")
-            .addClass("nbtutor-current-line");
-        let nextLineMarker = $("<i/>")
-            .attr("class", "fa fa-long-arrow-right fa-lg")
-            .addClass("nbtutor-next-line");
-
-        this.codemirror.setGutterMarker(
-            lineNo,
-            "nbtutor-linemarkers",
-            lineMarker.toArray()[0]
-        );
-        this.codemirror.setGutterMarker(
-            nextLineNo,
-            "nbtutor-linemarkers",
-            nextLineMarker.toArray()[0]
-        );
+        let nextLineNo = this.trace_history.getLineNumber(this.tracestep+1) || 0;
+        if (nextLineNo-1 >= 0) {
+            this.codemirror.setGutterMarker(
+                nextLineNo-1,
+                "nbtutor-linemarkers",
+                this.$nextLineMarker.toArray()[0]
+            );
+        }
     }
 
     updateData(){
+        let json_str = this.cell.output_area.outputs[0].text;
+
         try {
             // If it looks like our object, and smells like it...
-            let json_str = this.cell.output_area.outputs[0].text;
             let trace_history = JSON.parse(json_str);
             if (trace_history.line_numbers &&
                 trace_history.stack_history &&
@@ -171,11 +183,14 @@ export class VisualizedCell {
                 trace_history.output_history
             ){
                 this.metadata.trace_history = trace_history;
-                this.toolbar.$btn_first.trigger("click");
             }
-        } catch (SyntaxError) {
-            // else do nothing
-            return;
+        }
+        catch (err) {
+            this.metadata.trace_history = undefined;
+        }
+        finally {
+            this.$toolbar.$select_view.trigger("change");
+            return Boolean(this.metadata.trace_history);
         }
     }
 

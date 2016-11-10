@@ -35,8 +35,7 @@ define([
 
         requirejs(["nbtutor-deps"], function(deps){
             requirejs(["nbtutor-notebook"], function(nb){
-                var nbtutor = new nb.VisualizedCell(cell);
-                cell.nbtutor = nbtutor.initUI();
+                cell.nbtutor = new nb.VisualizedCell(cell);
             });
         });
     };
@@ -70,10 +69,18 @@ define([
             this._global_hide();
         };
 
+        // Trigger event on toolbar rebuild
+        CellToolbar.prototype._rebuild = CellToolbar.prototype.rebuild;
+        CellToolbar.prototype.rebuild = function(){
+            events.trigger('rebuild.CellToolBar', this.cell);
+            this._rebuild();
+        };
+
         CellToolbar.register_callback(
             "nbtutor.visualize_type",
             initVisualizedCell
         );
+
         CellToolbar.register_preset(
             "Visualize",
             ["nbtutor.visualize_type"],
