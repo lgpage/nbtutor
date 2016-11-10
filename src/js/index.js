@@ -62,18 +62,20 @@ define([
     var initEvents = function(){
         var CellToolbar = celltoolbar.CellToolbar;
 
+        // Trigger event on toolbar rebuild
+        CellToolbar.prototype._rebuild = CellToolbar.prototype.rebuild;
+        CellToolbar.prototype.rebuild = function(){
+            if (this.cell.nbtutor) {
+                this.cell.nbtutor.destroy();
+            }
+            this._rebuild();
+        };
+
         // Trigger event when toolbar is (globally) hidden
         CellToolbar._global_hide = CellToolbar.global_hide;
         CellToolbar.global_hide = function(){
             events.trigger('global_hide.CellToolBar');
             this._global_hide();
-        };
-
-        // Trigger event on toolbar rebuild
-        CellToolbar.prototype._rebuild = CellToolbar.prototype.rebuild;
-        CellToolbar.prototype.rebuild = function(){
-            events.trigger('rebuild.CellToolBar', this.cell);
-            this._rebuild();
         };
 
         CellToolbar.register_callback(

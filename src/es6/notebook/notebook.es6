@@ -117,10 +117,6 @@ export class VisualizedCell {
             that.destroy();
         });
 
-        events.on('rebuild.CellToolBar', () => {
-            that.destroy();
-        });
-
         events.on("render_view_changed.CellToolBar", () => {
             let render_view = that.metadata.render_view;
             if (render_view == "none"){
