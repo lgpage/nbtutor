@@ -69,15 +69,14 @@ export class Toolbar {
         this.$select_view.val(render_view).trigger("change");
     }
 
-    renderView(){
-        return this.metadata.render_view;
-    }
-
     showButtons(){
         this.$root.children("button").removeClass("nbtutor-hidden");
     }
 
     hideButtons(){
         this.$root.children("button").addClass("nbtutor-hidden");
+    }
+
+    destroy(){
     }
 }

@@ -2,9 +2,9 @@
 import {$} from "nbtutor-deps";
 import {uuid} from "nbtutor-deps";
 
-import {StackHistory} from "../data/stack_history";
-import {HeapHistory} from "../data/heap_history";
-import {OutputHistory} from "../data/output_history";
+import {StackHistory} from "./stack_history";
+import {HeapHistory} from "./heap_history";
+import {OutputHistory} from "./output_history";
 
 import dialog from "base/js/dialog";
 import events from "base/js/events";
