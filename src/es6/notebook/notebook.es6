@@ -129,7 +129,7 @@ export class VisualizedCell {
                     that.toolbar.$btn_first.trigger("click");
                 } else {
                     // Else set the render view back to 'none'
-                    that.$toolbar.$select_view.val("none").trigger("change");
+                    that.toolbar.$select_view.val("none").trigger("change");
                 }
             }
         });
@@ -186,7 +186,7 @@ export class VisualizedCell {
             this.metadata.trace_history = undefined;
         }
         finally {
-            this.$toolbar.$select_view.trigger("change");
+            this.toolbar.$select_view.trigger("change");
             return Boolean(this.metadata.trace_history);
         }
     }
