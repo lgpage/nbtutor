@@ -9,7 +9,7 @@ from ._version import __version_info__
 
 # IPython Extension points
 def load_ipython_extension(ip):
-    from .kernel.IpythonMagic import NbtutorMagics  # pylint: disable=cyclic-import
+    from .ipython.magic import NbtutorMagics  # pylint: disable=cyclic-import
     ip.register_magics(NbtutorMagics)
 
 

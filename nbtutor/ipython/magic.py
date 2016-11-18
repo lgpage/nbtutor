@@ -5,6 +5,8 @@ from IPython.core import display
 from IPython.core import magic_arguments
 from IPython.core.magic import Magics, magics_class, cell_magic
 
+from .debugger import Bdb
+
 
 @magics_class
 class NbtutorMagics(Magics):
@@ -29,6 +31,7 @@ class NbtutorMagics(Magics):
     @cell_magic
     def nbtutor(self, line, cell):
         args = magic_arguments.parse_argstring(self.nbtutor, line)
-        print(args)
-        pass
+        bdb = Bdb(self.shell)
+        bdb.run_cell(cell)
+        print(bdb.trace_history.json_dumps())
 
