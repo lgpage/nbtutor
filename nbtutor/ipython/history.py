@@ -32,6 +32,9 @@ class StackFrames(object):
     def json_dumps(self):
         return json.dumps(self.data)
 
+    def __iter__(self):
+        return iter(self.data)
+
 
 class Heap(object):
 
@@ -60,6 +63,9 @@ class Heap(object):
     def json_dumps(self):
         return json.dumps(self.data)
 
+    def __iter__(self):
+        return iter(self.data)
+
 
 class TraceHistory(object):
 
@@ -79,6 +85,20 @@ class TraceHistory(object):
 
     def append_output(self, output):
         self.outputs.append(output)
+
+    def sort_frame_locals(self):
+        ids_sort_order = set()
+        for heap in self.heap_history:
+            for obj in heap:
+                ids_sort_order.add(obj['id'])
+        ids_sort_order = list(ids_sort_order)
+
+        def id_sort_key(x):
+            return ids_sort_order.index(x['id'])
+
+        for stackframes in self.stack_history:
+            for frame in stackframes:
+                frame['vars'].sort(key=id_sort_key)
 
     def json_dumps(self):
         return json.dumps({

@@ -77,4 +77,4 @@ class Bdb(StdBdb):
         self.tracestep += 1
 
     def finalize(self):
-        pass
+        self.trace_history.sort_frame_locals()
