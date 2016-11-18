@@ -100,6 +100,9 @@ class TraceHistory(object):
             for frame in stackframes:
                 frame['vars'].sort(key=id_sort_key)
 
+        for heap in self.heap_history:
+            heap.data.sort(key=id_sort_key)
+
     def json_dumps(self):
         return json.dumps({
             "stack_history": [x.data for x in self.stack_history],
