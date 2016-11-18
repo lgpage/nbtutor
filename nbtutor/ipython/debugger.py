@@ -7,6 +7,13 @@ from bdb import Bdb as StdBdb
 from .history import Heap, StackFrames, TraceHistory
 
 
+ignore_vars = [
+    "__name__",
+    "__builtin__",
+    "__builtins__",
+]
+
+
 def filter_dict(d, exclude):
     ret = {}
     for key, value in d.items():
@@ -63,7 +70,7 @@ class Bdb(StdBdb):
 
             user_locals = filter_dict(
                 frame.f_locals,
-                self.ipy_shell.user_ns_hidden.keys()
+                ignore_vars + list(self.ipy_shell.user_ns_hidden.keys())
             )
 
             stack_data.append_frame(frame, lineno)
