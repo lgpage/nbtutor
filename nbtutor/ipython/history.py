@@ -87,11 +87,11 @@ class TraceHistory(object):
         self.outputs.append(output)
 
     def sort_frame_locals(self):
-        ids_sort_order = set()
+        ids_sort_order = list()
         for heap in self.heap_history:
             for obj in heap:
-                ids_sort_order.add(obj['id'])
-        ids_sort_order = list(ids_sort_order)
+                if obj['id'] not in ids_sort_order:
+                    ids_sort_order.append(obj['id'])
 
         def id_sort_key(x):
             return ids_sort_order.index(x['id'])
