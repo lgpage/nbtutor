@@ -12,7 +12,7 @@ class StackFrames(object):
     def clear(self):
         self.__init__()
 
-    def append_frame(self, frame, lineno):
+    def add_frame(self, frame, lineno):
         name = frame.f_code.co_name
         self.data.append(dict({
             "id": id(frame),
@@ -21,13 +21,17 @@ class StackFrames(object):
             "vars": list(),
         }))
 
-    def append_frame_locals(self, frame_ind, filtered_locals):
+    def add_frame_locals(self, frame_ind, filtered_locals):
         frame_data = self.data[frame_ind]
         for name, obj in filtered_locals.items():
             frame_data["vars"].append(dict({
                 "name": name,
                 "id": id(obj),
             }))
+
+    def add(self, frame, frame_ind, lineno, filtered_locals):
+        self.add_frame(frame, lineno)
+        self.add_frame_locals(frame_ind, filtered_locals)
 
     def json_dumps(self):
         return json.dumps(self.data)
@@ -51,7 +55,7 @@ class Heap(object):
             ret.append(obj['id'])
         return ret
 
-    def append_locals(self, filtered_locals):
+    def add(self, filtered_locals):
         for name, obj in filtered_locals.items():
             if id(obj) not in self.object_ids:
                 self.data.append(dict({
@@ -109,3 +113,4 @@ class TraceHistory(object):
             "heap_history": [x.data for x in self.heap_history],
             "outputs": self.outputs,
         })
+

@@ -73,10 +73,8 @@ class Bdb(StdBdb):
                 ignore_vars + list(self.ipy_shell.user_ns_hidden.keys())
             )
 
-            stack_data.append_frame(frame, lineno)
-            stack_data.append_frame_locals(frame_ind-1, user_locals)
-
-            heap_data.append_locals(user_locals)
+            stack_data.add(frame, frame_ind-1, lineno, user_locals)
+            heap_data.add(user_locals)
 
             self.trace_history.append_stackframes(stack_data)
             self.trace_history.append_heap(heap_data)
@@ -85,3 +83,4 @@ class Bdb(StdBdb):
 
     def finalize(self):
         self.trace_history.sort_frame_locals()
+
