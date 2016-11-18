@@ -174,12 +174,9 @@ export class VisualizedCell {
         try {
             // If it looks like our object, and smells like it...
             let trace_history = JSON.parse(json_str);
-            if (trace_history.line_numbers &&
-                trace_history.stack_history &&
-                trace_history.heap_history &&
-                trace_history.output_history
-            ){
+            if (trace_history.stack_history && trace_history.heap_history){
                 this.metadata.trace_history = trace_history;
+                console.log(trace_history);
             }
         }
         catch (err) {

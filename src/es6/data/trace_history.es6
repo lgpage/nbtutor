@@ -59,8 +59,8 @@ export class TraceHistory{
             this.stack_history = new StackHistory(history.stack_history);
             this.heap_history = new HeapHistory(history.heap_history);
             this.output_history = new OutputHistory(history.output_history);
-            this.line_numbers = history.line_numbers.map((d) => +d);
-            this.tracesteps = this.line_numbers.length;
+            this.line_numbers = []; //history.line_numbers.map((d) => +d);
+            this.tracesteps = history.stack_history.length;
             return 1;
         } else {
             alertUserMissingData();
