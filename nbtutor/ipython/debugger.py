@@ -65,6 +65,7 @@ class Bdb(StdBdb):
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
         for frame_ind, (frame, lineno) in enumerate(stack_frames):
 
+            # Skip the self.run calling frame
             if frame_ind <= 0:
                 continue
 
@@ -72,6 +73,9 @@ class Bdb(StdBdb):
                 frame.f_locals,
                 ignore_vars + list(self.ipy_shell.user_ns_hidden.keys())
             )
+
+            # Add 1 because cell magics is actually line 1
+            lineno += 1
 
             stack_data.add(frame, frame_ind-1, lineno, user_locals)
             heap_data.add(user_locals)
