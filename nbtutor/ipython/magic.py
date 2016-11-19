@@ -24,13 +24,17 @@ class NbtutorMagics(Magics):
         '-d', '--depth', metavar='N', type=int, default=1,
         help="The stack frame visualization depth (default: 1)."
     )
+    @magic_arguments.argument(
+        '-p', '--precision', metavar='P', type=int, default=3,
+        help="The precision for floats (default: 3)."
+    )
     @cell_magic
     def nbtutor(self, line, cell):
         args = magic_arguments.parse_argstring(self.nbtutor, line)
         if args.reset:
             NamespaceMagics(self.shell).reset('-f')
 
-        bdb = Bdb(self.shell)
+        bdb = Bdb(self.shell, vars(args))
         bdb.run_cell(cell)
         print(bdb.trace_history.json_dumps())
 

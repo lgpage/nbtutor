@@ -37,9 +37,10 @@ def redirect_stdout(new_stdout):
 
 class Bdb(StdBdb):
 
-    def __init__(self, ipy_shell):
+    def __init__(self, ipy_shell, options):
         super(Bdb, self).__init__()
         self.ipy_shell = ipy_shell
+        self.options = options
         self.trace_history = TraceHistory()
         self.stdout = StringIO()
         self.tracestep = 0
@@ -93,7 +94,7 @@ class Bdb(StdBdb):
             lineno += 1
 
             stack_data.add(frame, frame_ind-1, lineno, event_type, user_locals)
-            heap_data.add(user_locals)
+            heap_data.add(user_locals, **self.options)
 
         self.trace_history.append_stackframes(stack_data)
         self.trace_history.append_heap(heap_data)

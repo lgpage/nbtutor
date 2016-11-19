@@ -4,6 +4,15 @@ from __future__ import absolute_import, print_function
 import json
 
 
+def format(type_name, value, **kwargs):
+    formatter = {
+        'float': lambda x: '{:.{}f}'.format(x, kwargs.get('precision', 6)),
+    }
+    if type_name not in formatter.keys():
+        return '{}'.format(value)
+    return formatter[type_name](value)
+
+
 class StackFrames(object):
 
     def __init__(self):
@@ -16,7 +25,7 @@ class StackFrames(object):
         name = frame.f_code.co_name
         self.data.append(dict({
             "id": id(frame),
-            "name": name,
+            "name": "Global" if name == "<module>" else name,
             "lineno": lineno,
             "event": event,
             "vars": list(),
@@ -56,13 +65,14 @@ class Heap(object):
             ret.append(obj['id'])
         return ret
 
-    def add(self, filtered_locals):
+    def add(self, filtered_locals, **kwargs):
         for name, obj in filtered_locals.items():
             if id(obj) not in self.object_ids:
+                type_name = type(obj).__name__
                 self.data.append(dict({
                     "id": id(obj),
-                    "type": type(obj).__name__,
-                    "value": str(obj),
+                    "type": type_name,
+                    "value": format(type_name, obj, **kwargs),
                 }))
 
     def json_dumps(self):
