@@ -43,6 +43,7 @@ class Bdb(StdBdb):
         self.options = options
         self.trace_history = TraceHistory()
         self.stdout = StringIO()
+        self.skip_frames = False
         self.tracestep = 0
 
     def run_cell(self, cell):
@@ -78,12 +79,22 @@ class Bdb(StdBdb):
         stack_data = StackFrames()
         heap_data = Heap()
 
+        frame_ind = -1
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
-        for frame_ind, (frame, lineno) in enumerate(stack_frames):
+        for frame, lineno in stack_frames:
 
-            # Skip the self.run calling frame
-            if frame_ind <= 0:
+            # Skip the self.run calling frame (first frame)
+            if frame_ind < 0:
+                frame_ind += 1
                 continue
+
+            # Skip frames after a certain depth
+            if frame_ind > self.options.get('depth', 1):
+                self.skip_frames = True
+                break
+
+            # Reset: Don't skip frames within a certain depth
+            self.skip_frames = False
 
             user_locals = filter_dict(
                 frame.f_locals,
@@ -93,13 +104,15 @@ class Bdb(StdBdb):
             # Add 1 because cell magics is actually line 1
             lineno += 1
 
-            stack_data.add(frame, frame_ind-1, lineno, event_type, user_locals)
+            stack_data.add(frame, frame_ind, lineno, event_type, user_locals)
             heap_data.add(user_locals, **self.options)
+            frame_ind += 1
 
-        self.trace_history.append_stackframes(stack_data)
-        self.trace_history.append_heap(heap_data)
-        self.trace_history.append_output(self.stdout.getvalue())
-        self.tracestep += 1
+        if not self.skip_frames:
+            self.trace_history.append_stackframes(stack_data)
+            self.trace_history.append_heap(heap_data)
+            self.trace_history.append_output(self.stdout.getvalue())
+            self.tracestep += 1
 
     def finalize(self):
         self.trace_history.sort_frame_locals()
