@@ -42,11 +42,23 @@ export class TraceHistory{
         this.output_history = null;
     }
 
-    getLineNumber(tracestep){
+    curLineNumbers(tracestep){
         /*
-         * Get the code line number at a specified trace step in the history
+         * Get the current code line numbers at a specified trace step in the
+         * history
          */
-        return this.line_numbers[tracestep];
+        let stackframes = this.stack_history.getStackFrames(tracestep) || [];
+        return stackframes.map((frame) => +frame.lineno);
+    }
+
+    nextLineNumber(tracestep){
+        /*
+         * Get the next code line number at a specified trace step in the
+         * history
+         */
+        let stackframes = this.stack_history.getStackFrames(tracestep) || [];
+        let topframe = stackframes[stackframes.length-1];
+        return +topframe.lineno;
     }
 
     updateData(){

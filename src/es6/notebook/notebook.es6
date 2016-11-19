@@ -3,6 +3,7 @@ import {d3} from "nbtutor-deps";
 import {uuid} from "nbtutor-deps";
 
 import {Toolbar} from "./toolbar";
+import {GutterMarkers} from "./gutters";
 import {TraceHistory} from "../data/trace_history";
 import {StackTimeline} from "../data/stack_timeline";
 import {MemoryModelUI} from "../render/html_memory";
@@ -20,7 +21,6 @@ export class VisualizedCell {
         this.stack_timeline = new StackTimeline();
 
         this.cell = cell;
-        this.codemirror = cell.code_mirror;
         this.metadata = cell.metadata.nbtutor;
 
         this.$input_area = cell.element.find(".input_area")
@@ -29,15 +29,10 @@ export class VisualizedCell {
             .attr("class", "nbtutor-canvas")
             .attr("id", "c-" + uuid.v4())
             .addClass("nbtutor-hidden");
-        this.$lineMarker = $("<i/>")
-            .attr("class", "fa fa-long-arrow-right fa-lg")
-            .addClass("nbtutor-current-line");
-        this.$nextLineMarker = $("<i/>")
-            .attr("class", "fa fa-long-arrow-right fa-lg")
-            .addClass("nbtutor-next-line");
         this.d3Root = d3.select(this.$nbtutor_canvas.toArray()[0]);
 
         this.toolbar = new Toolbar(cell);
+        this.markers = new GutterMarkers(cell);
         this.memoryUI = new MemoryModelUI(this.trace_history, this.d3Root);
         this.timelineUI = new TimelineUI(this.stack_timeline, this.d3Root);
 
@@ -106,12 +101,6 @@ export class VisualizedCell {
         this._bindButtons();
         this.$input_area.append(this.$nbtutor_canvas);
 
-        // Create codemirror gutter id for nbtutor
-        let gutters = this.codemirror.options.gutters;
-        if (gutters.indexOf("nbtutor-linemarkers") < 0){
-            gutters.push("nbtutor-linemarkers");
-        }
-
         let that = this;
         events.on('global_hide.CellToolBar', () => {
             that.destroy();
@@ -121,7 +110,7 @@ export class VisualizedCell {
             let render_view = that.metadata.render_view;
             if (render_view == "none"){
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");
-                that.codemirror.clearGutter("nbtutor-linemarkers");
+                that.markers.destroy();
             } else {
                 if (that.trace_history.updateData()){
                     // Only visualize the execute if the data could be updated
@@ -145,27 +134,9 @@ export class VisualizedCell {
             this.timelineUI.create();
         }
 
-        // Update CodeMirror line markers
-        this.codemirror.setOption('lineNumbers', true);
-        this.codemirror.clearGutter("nbtutor-linemarkers");
-
-        let lineNo = this.trace_history.getLineNumber(this.tracestep);
-        if (lineNo-1 >= 0) {
-            this.codemirror.setGutterMarker(
-                lineNo-1,
-                "nbtutor-linemarkers",
-                this.$lineMarker.toArray()[0]
-            );
-        }
-
-        let nextLineNo = this.trace_history.getLineNumber(this.tracestep+1) || 0;
-        if (nextLineNo-1 >= 0) {
-            this.codemirror.setGutterMarker(
-                nextLineNo-1,
-                "nbtutor-linemarkers",
-                this.$nextLineMarker.toArray()[0]
-            );
-        }
+        let curLines = this.trace_history.curLineNumbers(this.tracestep);
+        let nextLine = this.trace_history.nextLineNumber(this.tracestep);
+        this.markers.setMarkers(curLines, nextLine);
     }
 
     updateData(){
@@ -189,7 +160,7 @@ export class VisualizedCell {
 
     destroy(){
         this.$nbtutor_canvas.remove();
-        this.codemirror.clearGutter("nbtutor-linemarkers");
+        this.markers.destroy();
         this.cell.nbtutor = null;
     }
 }
