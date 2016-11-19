@@ -176,7 +176,6 @@ export class VisualizedCell {
             let trace_history = JSON.parse(json_str);
             if (trace_history.stack_history && trace_history.heap_history){
                 this.metadata.trace_history = trace_history;
-                console.log(trace_history);
             }
         }
         catch (err) {

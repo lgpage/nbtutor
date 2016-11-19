@@ -76,9 +76,8 @@ class Bdb(StdBdb):
             stack_data.add(frame, frame_ind-1, lineno, user_locals)
             heap_data.add(user_locals)
 
-            self.trace_history.append_stackframes(stack_data)
-            self.trace_history.append_heap(heap_data)
-
+        self.trace_history.append_stackframes(stack_data)
+        self.trace_history.append_heap(heap_data)
         self.tracestep += 1
 
     def finalize(self):
