@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
+import sys
+from contextlib import contextmanager
+
+from io import StringIO
 from bdb import BdbQuit
 from bdb import Bdb as StdBdb
 
@@ -22,19 +26,30 @@ def filter_dict(d, exclude):
     return ret
 
 
+@contextmanager
+def redirect_stdout(new_stdout):
+    old_stdout, sys.stdout = sys.stdout, new_stdout
+    try:
+        yield None
+    finally:
+        sys.stdout = old_stdout
+
+
 class Bdb(StdBdb):
 
     def __init__(self, ipy_shell):
         super(Bdb, self).__init__()
         self.ipy_shell = ipy_shell
         self.trace_history = TraceHistory()
+        self.stdout = StringIO()
         self.tracestep = 0
 
-    def run_cell(self, cell, globals=None, locals=None):
-        globals = globals or self.ipy_shell.user_global_ns
-        locals = locals or self.ipy_shell.user_ns
+    def run_cell(self, cell):
+        globals = self.ipy_shell.user_global_ns
+        locals = self.ipy_shell.user_ns
         try:
-            self.run(cell, globals, locals)
+            with redirect_stdout(self.stdout):
+                self.run(cell, globals, locals)
         except SystemExit:
             raise BdbQuit
         finally:
@@ -82,6 +97,7 @@ class Bdb(StdBdb):
 
         self.trace_history.append_stackframes(stack_data)
         self.trace_history.append_heap(heap_data)
+        self.trace_history.append_output(self.stdout.getvalue())
         self.tracestep += 1
 
     def finalize(self):

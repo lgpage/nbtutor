@@ -77,7 +77,7 @@ class TraceHistory(object):
     def __init__(self):
         self.stack_history = list()
         self.heap_history = list()
-        self.outputs = list()
+        self.output_history = list()
 
     def clear(self):
         self.__init__()
@@ -89,7 +89,7 @@ class TraceHistory(object):
         self.heap_history.append(heap)
 
     def append_output(self, output):
-        self.outputs.append(output)
+        self.output_history.append(output)
 
     def sort_frame_locals(self):
         ids_sort_order = list()
@@ -112,6 +112,6 @@ class TraceHistory(object):
         return json.dumps({
             "stack_history": [x.data for x in self.stack_history],
             "heap_history": [x.data for x in self.heap_history],
-            "outputs": self.outputs,
+            "output_history": self.output_history,
         })
 

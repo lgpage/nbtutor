@@ -46,7 +46,6 @@ export class VisualizedCell {
         this.toolbar.$btn_first.on("click", () => {
             let stack_history = this.trace_history.stack_history;
             let heap_history = this.trace_history.heap_history;
-            let output_history = this.trace_history.output_history;
 
             that.tracestep = 0;
             that.stack_timeline.clear();
@@ -69,7 +68,6 @@ export class VisualizedCell {
             if (that.tracestep < that.trace_history.tracesteps-1){
                 let stack_history = this.trace_history.stack_history;
                 let heap_history = this.trace_history.heap_history;
-                let output_history = this.trace_history.output_history;
 
                 that.tracestep += 1;
                 that.stack_timeline.push(
@@ -83,7 +81,6 @@ export class VisualizedCell {
         this.toolbar.$btn_last.on("click", () => {
             let stack_history = this.trace_history.stack_history;
             let heap_history = this.trace_history.heap_history;
-            let output_history = this.trace_history.output_history;
 
             that.stack_timeline.clear();
             that.tracestep = that.trace_history.tracesteps-1;
@@ -138,6 +135,18 @@ export class VisualizedCell {
         let curLines = this.trace_history.curLineNumbers(this.tracestep);
         let nextLine = this.trace_history.nextLineNumber(this.tracestep);
         this.markers.setMarkers(curLines, nextLine);
+
+        // Manage cell output
+        let output_history = this.trace_history.output_history;
+        let output_area = this.cell.output_area;
+        output_area.clear_output();
+        output_area.handle_output({
+            header: {msg_type: "stream"},
+            content: {
+                name: "nbtutor",
+                text: output_history.getOutput(this.tracestep),
+            },
+        });
     }
 
     updateData(){
