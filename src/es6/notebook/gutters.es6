@@ -16,8 +16,6 @@ export class GutterMarkers {
         // First clear current gutter markers
         this.codemirror.clearGutter("nbtutor-linemarkers");
 
-        console.log(curLines, nextLine);
-
         // Update CodeMirror line markers
         let that = this;
         curLines.map((line) => {

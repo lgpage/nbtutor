@@ -20,7 +20,10 @@ export class TimelineUI{
 
         // Create stack timeline tables for each frame
         let that = this;
-        let d3Tables = this.d3Root.selectAll("div")
+        let d3Canvas = this.d3Root.append("div")
+            .attr("class", "nbtutor-timeline-canvas");
+
+        let d3Tables = d3Canvas.selectAll("div")
             .data(this.stack_timeline.stack_frames, (d) => d.uuid)
             .enter()
                 .append("div")

@@ -88,10 +88,6 @@ export class MemoryModelUI{
         d3Frames.select("table").append("tbody");
         d3Frames.select("table").append("tfoot");
 
-        // Toggle active frame
-        this.d3Root.selectAll("table").classed("nbtutor-active", false);
-        this.d3Root.selectAll("table:last-child").classed("nbtutor-active", true);
-
         // Add names to each frame
         let d3Names = d3Frames.select("tbody").selectAll("tr")
             .data((d) => d.vars, (d) => d.name)
@@ -112,6 +108,12 @@ export class MemoryModelUI{
                 let object = heap_history.getObjectById(tracestep, d.id);
                 that.connectors.push({from: d.uuid, to: object.uuid});
             });
+
+        // Toggle active frame
+        this.d3Root.selectAll("table")
+            .classed("nbtutor-active", false);
+        d3.select(this.d3Root.selectAll("table")[0].pop())
+            .classed("nbtutor-active", true);
 
         // Toggle mouse hover over name
         d3Names.on('mouseover', function(d){

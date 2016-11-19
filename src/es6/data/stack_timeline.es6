@@ -8,6 +8,14 @@ export class StackTimeline{
         this.stack_frames = [];
     }
 
+    _fill(){
+        let that = this;
+        this.stack_frames.map((frame) => {
+            frame.tracestep = that.tracestep;
+            frame._fill();
+        });
+    }
+
     clear(){
         /*
          * Clear the stack timeline
@@ -55,6 +63,7 @@ export class StackTimeline{
             }
         });
         this.tracestep += 1;
+        this._fill();
     }
 
     pop(){
