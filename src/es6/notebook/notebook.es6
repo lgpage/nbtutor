@@ -9,19 +9,40 @@ import {StackTimeline} from "../data/stack_timeline";
 import {MemoryModelUI} from "../render/html_memory";
 import {TimelineUI} from "../render/html_timeline";
 
+import dialog from "base/js/dialog";
 import events from "base/js/events";
+import Jupyter from "base/js/namespace";
+
+
+function alertUserMissingData(){
+    let msg = $("<p/>").text(
+        "No visualization data was found for this cell. " +
+        "Please include the following magic at the start " +
+        "of the cell and run the code again:"
+    ).append($("<pre/>").text(
+        "%%nbtutor"
+    ));
+
+    dialog.modal({
+        notebook: Jupyter.notebook,
+        keyboard_manager: Jupyter.notebook.keyboard_manager,
+        title: "Missing Visualization Data",
+        body: msg,
+        buttons: {
+            OK: {}
+        }
+    });
+}
 
 
 export class VisualizedCell {
     constructor(cell){
-        cell.metadata.nbtutor = cell.metadata.nbtutor || {};
-
         this.tracestep = 0;
         this.trace_history = new TraceHistory(cell);
         this.stack_timeline = new StackTimeline();
 
         this.cell = cell;
-        this.metadata = cell.metadata.nbtutor;
+        this.codemirror = cell.code_mirror;
         this.output_area = this.cell.output_area;
 
         this.$input_area = cell.element.find(".input_area")
@@ -100,31 +121,31 @@ export class VisualizedCell {
         this.$input_area.append(this.$nbtutor_canvas);
 
         let that = this;
-        events.on('global_hide.CellToolBar', () => {
+        events.on("global_hide.CellToolBar", () => {
             that.destroy();
         });
 
-        events.on("render_view_changed.CellToolBar", () => {
-            let render_view = that.metadata.render_view;
+        this.toolbar.$select_view.on("change", function(){
+            let render_view = $(this).val();
             if (render_view == "none"){
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");
                 that.markers.destroy();
             } else {
-                if (that.trace_history.updateData()){
-                    // Only visualize the execute if the data could be updated
-                    that.$nbtutor_canvas.removeClass("nbtutor-hidden");
-                    that.toolbar.$btn_first.trigger("click");
-                } else {
-                    // Else set the render view back to 'none'
-                    that.toolbar.$select_view.val("none").trigger("change");
-                }
+                that.$nbtutor_canvas.removeClass("nbtutor-hidden");
+                that.toolbar.$btn_first.trigger("click");
             }
+        });
+
+        this.codemirror.on("change", () => {
+            that.markers.destroy();
+            that.toolbar.$select_view.val("none").trigger("change");
+            that.trace_history.clear();
         });
     }
 
     visualize(){
         // visualize code execution
-        let render_view = this.metadata.render_view;
+        let render_view = this.toolbar.$select_view.val();
         if (render_view == "memory"){
             this.memoryUI.create(this.tracestep);
         }
@@ -156,16 +177,19 @@ export class VisualizedCell {
             // If it looks like our object, and smells like it...
             let trace_history = JSON.parse(json_str);
             if (trace_history.stack_history && trace_history.heap_history){
-                this.metadata.trace_history = trace_history;
+                this.trace_history.updateData(trace_history)
                 this.output_area.clear_output();
+                this.toolbar.$select_view.val("memory");
             }
         }
         catch (err) {
-            this.metadata.trace_history = undefined;
+            this.trace_history.clear();
+            this.toolbar.$select_view.val("none");
+            alertUserMissingData();
         }
         finally {
             this.toolbar.$select_view.trigger("change");
-            return Boolean(this.metadata.trace_history);
+            return Boolean(this.trace_history.stack_history);
         }
     }
 

@@ -82,7 +82,6 @@ class Bdb(StdBdb):
         frame_ind = -1
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
         for frame, lineno in stack_frames:
-
             # Skip the self.run calling frame (first frame)
             if frame_ind < 0:
                 frame_ind += 1
