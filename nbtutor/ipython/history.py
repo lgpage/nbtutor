@@ -12,12 +12,13 @@ class StackFrames(object):
     def clear(self):
         self.__init__()
 
-    def add_frame(self, frame, lineno):
+    def add_frame(self, frame, lineno, event):
         name = frame.f_code.co_name
         self.data.append(dict({
             "id": id(frame),
             "name": name,
             "lineno": lineno,
+            "event": event,
             "vars": list(),
         }))
 
@@ -29,8 +30,8 @@ class StackFrames(object):
                 "id": id(obj),
             }))
 
-    def add(self, frame, frame_ind, lineno, filtered_locals):
-        self.add_frame(frame, lineno)
+    def add(self, frame, frame_ind, lineno, event, filtered_locals):
+        self.add_frame(frame, lineno, event)
         self.add_frame_locals(frame_ind, filtered_locals)
 
     def json_dumps(self):

@@ -43,7 +43,7 @@ class Bdb(StdBdb):
     def user_call(self, frame, argument_list):
         """This method is called when there is the remote possibility that we
         ever need to stop in this function."""
-        pass
+        self.get_stack_data(frame, None, 'call')
 
     def user_line(self, frame):
         """This function is called when we stop or break at this line."""
@@ -77,7 +77,7 @@ class Bdb(StdBdb):
             # Add 1 because cell magics is actually line 1
             lineno += 1
 
-            stack_data.add(frame, frame_ind-1, lineno, user_locals)
+            stack_data.add(frame, frame_ind-1, lineno, event_type, user_locals)
             heap_data.add(user_locals)
 
         self.trace_history.append_stackframes(stack_data)

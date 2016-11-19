@@ -47,8 +47,9 @@ export class TraceHistory{
          * Get the current code line numbers at a specified trace step in the
          * history
          */
-        let stackframes = this.stack_history.getStackFrames(tracestep) || [];
-        return stackframes.map((frame) => +frame.lineno);
+        let stackframes = this.stack_history.getStackFrames(tracestep-1) || [];
+        let lines = stackframes.map((frame) => +frame.lineno);
+        return lines;
     }
 
     nextLineNumber(tracestep){
@@ -57,8 +58,13 @@ export class TraceHistory{
          * history
          */
         let stackframes = this.stack_history.getStackFrames(tracestep) || [];
-        let topframe = stackframes[stackframes.length-1];
-        return +topframe.lineno;
+        let frame = stackframes[stackframes.length-1];
+        let line = +frame.lineno;
+        if (frame.event === "return"){
+            frame = stackframes[stackframes.length-2] || {};
+            line = +(frame.lineno || 0);
+        }
+        return line;
     }
 
     updateData(){

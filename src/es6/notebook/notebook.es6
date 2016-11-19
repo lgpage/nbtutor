@@ -134,6 +134,7 @@ export class VisualizedCell {
             this.timelineUI.create();
         }
 
+        // Add CodeMirror line markers
         let curLines = this.trace_history.curLineNumbers(this.tracestep);
         let nextLine = this.trace_history.nextLineNumber(this.tracestep);
         this.markers.setMarkers(curLines, nextLine);
