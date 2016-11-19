@@ -4,14 +4,15 @@ function toShortString(type, value){
      * Get a short string representation for an object type and value
      */
     let short_str = {
-        'int':   (value.length > 3) ? 'INT' : value,
+        'int': (value.length > 3) ? 'INT' : value,
         'float': (value.length > 3) ? 'FLT' : value,
-        'str':   (value.length > 3) ? 'STR' : value,
-        'func':   'FNC',
+        'str': (value.length > 3) ? 'STR' : value,
+        'module': 'MOD',
+        'function': 'FNC',
         'lambda': 'FNC',
-        'class':  'CLS',
-        'list':   'LST',
-        'tuple':  'TPL',
+        'class': 'CLS',
+        'list': 'LST',
+        'tuple': 'TPL',
     };
     return short_str[type] || 'OBJ';
 }
