@@ -39,4 +39,4 @@ class NbtutorMagics(Magics):
 
         bdb = Bdb(self.shell, vars(args))
         bdb.run_cell(cell)
-        self.comm.send(bdb.trace_history.json_dumps())
+        self.comm.send(bdb.trace_history.json_clean())

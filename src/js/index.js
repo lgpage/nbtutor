@@ -77,7 +77,7 @@ define([
                 comm.on_msg(function(msg){
                     var msg_id = msg.parent_header.msg_id;
                     var cell = Jupyter.notebook.get_msg_cell(msg_id);
-                    cell.nbtutor.updateData(JSON.parse(msg.content.data));
+                    cell.nbtutor.updateData(msg.content.data);
                 });
             });
         });

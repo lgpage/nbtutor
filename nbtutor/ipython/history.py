@@ -3,6 +3,8 @@ from __future__ import absolute_import, print_function
 
 import json
 
+from ipykernel import jsonutil
+
 
 def format(type_name, value, **kwargs):
     formatter = {
@@ -46,6 +48,9 @@ class StackFrames(object):
     def json_dumps(self):
         return json.dumps(self.data)
 
+    def json_clean(self):
+        return jsonutil.json_clean(self.data)
+
     def __iter__(self):
         return iter(self.data)
 
@@ -77,6 +82,9 @@ class Heap(object):
 
     def json_dumps(self):
         return json.dumps(self.data)
+
+    def json_clean(self):
+        return jsonutil.json_clean(self.data)
 
     def __iter__(self):
         return iter(self.data)
@@ -120,6 +128,13 @@ class TraceHistory(object):
 
     def json_dumps(self):
         return json.dumps({
+            "stack_history": [x.data for x in self.stack_history],
+            "heap_history": [x.data for x in self.heap_history],
+            "output_history": self.output_history,
+        })
+
+    def json_clean(self):
+        return jsonutil.json_clean({
             "stack_history": [x.data for x in self.stack_history],
             "heap_history": [x.data for x in self.heap_history],
             "output_history": self.output_history,
