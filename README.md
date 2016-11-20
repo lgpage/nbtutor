@@ -18,22 +18,22 @@ TODO: Include `.gif` example
 There are also optional arguments that can be used with the cell magic:
 
 - Reset the IPython user namespace
-    ```python
-    %%nbtutor -r/--reset
-    ```
+```python
+%%nbtutor -r/--reset
+```
 
-*Suppress the confirmation message from `-r/--reset`*
+- Suppress the confirmation message from `-r/--reset`
 ```python
 %%nbtutor -r/--reset -f/--force
 ```
 
-*Specify the maximum frame depth to visualize*
+- Specify the maximum frame depth to visualize
 ```python
 %%nbtutor -d/--depth N
 ```
 "Global" frame is depth 0 (default depth: 1).
 
-*Specify the precision (number of decimals) for floats*
+- Specify the precision (number of decimals) for floats
 ```python
 %%nbtutor -p/--precision P
 ```
