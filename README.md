@@ -17,10 +17,10 @@ TODO: Include `.gif` example
 ### Optional arguments
 There are also optional arguments that can be used with the cell magic:
 
-*Reset the IPython user namespace*
-```python
-%%nbtutor -r/--reset
-```
+- Reset the IPython user namespace
+    ```python
+    %%nbtutor -r/--reset
+    ```
 
 *Suppress the confirmation message from `-r/--reset`*
 ```python
