@@ -85,7 +85,6 @@ define([
                     // Wait a little bit for the toolbar to load
                     setTimeout(function(){
                         cell.nbtutor.updateData(msg.content.data);
-                        console.log("Updated data");
                     }, 500);
                 });
             });
