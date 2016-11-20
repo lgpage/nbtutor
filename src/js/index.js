@@ -40,25 +40,6 @@ define([
         });
     };
 
-    // XXX Find a better way of doing this
-    var processCellOutput = function(cell){
-        var maxTry = 5;
-        var wait = window.setTimeout(function(){
-            // Wait for cell output.
-            // Kernel extension should return only 1 output
-            if (cell.output_area.outputs.length > 0){
-                window.clearTimeout(wait);
-                cell.nbtutor.updateData(cell);
-            }
-            maxTry -= 1;
-            if (maxTry === 0){
-                // Give up after max tries reached, probably running a normal
-                // CodeCell with no outputs or long execution time or both.
-                window.clearTimeout(wait);
-            }
-        }, 300);
-    };
-
     var initEvents = function(){
         var CellToolbar = celltoolbar.CellToolbar;
 
@@ -89,9 +70,25 @@ define([
             Jupyter.notebook
         );
 
-        // XXX Find a better way of doing this
+        // XXX This feels like such a hack, I'm pretty sure I don't understand
+        // comms properly. I am also pretty sure this can fall over due to
+        // async updates.
+        var cellToUpdate = null;
+        events.on('kernel_ready.Kernel', function(){
+            var comm_manager = Jupyter.notebook.kernel.comm_manager;
+            comm_manager.register_target('nbtutor_comm', function(comm, msg){
+                comm.on_msg(function(msg){
+                    var nbtutor_data = JSON.parse(msg.content.data);
+                    if (!cellToUpdate){
+                        throw Error("Comm update fell over.")
+                    }
+                    cellToUpdate.nbtutor.updateData(nbtutor_data);
+                });
+            });
+        });
+
         events.on('execute.CodeCell', function(event, data){
-            processCellOutput(data.cell);
+            cellToUpdate = data.cell;
         });
 
         requirejs(["nbtutor-deps"], function(deps){

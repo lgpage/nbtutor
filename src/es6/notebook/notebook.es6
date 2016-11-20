@@ -170,27 +170,10 @@ export class VisualizedCell {
         });
     }
 
-    updateData(){
-        let json_str = this.output_area.outputs[0].text;
-
-        try {
-            // If it looks like our object, and smells like it...
-            let trace_history = JSON.parse(json_str);
-            if (trace_history.stack_history && trace_history.heap_history){
-                this.trace_history.updateData(trace_history)
-                this.output_area.clear_output();
-                this.toolbar.$select_view.val("memory");
-            }
-        }
-        catch (err) {
-            this.trace_history.clear();
-            this.toolbar.$select_view.val("none");
-            alertUserMissingData();
-        }
-        finally {
-            this.toolbar.$select_view.trigger("change");
-            return Boolean(this.trace_history.stack_history);
-        }
+    updateData(data){
+        this.output_area.clear_output();
+        this.trace_history.updateData(data)
+        this.toolbar.$select_view.val("memory").trigger("change");
     }
 
     destroy(){

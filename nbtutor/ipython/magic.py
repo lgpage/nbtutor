@@ -6,6 +6,8 @@ from IPython.core import magic_arguments
 from IPython.core.magic import Magics, magics_class, cell_magic
 from IPython.core.magics.namespace import NamespaceMagics
 
+from ipykernel.comm import Comm
+
 from .debugger import Bdb
 
 
@@ -14,6 +16,7 @@ class NbtutorMagics(Magics):
 
     def __init__(self, shell):
         super(NbtutorMagics, self).__init__(shell)
+        self.comm = Comm(target_name='nbtutor_comm')
 
     @magic_arguments.magic_arguments()
     @magic_arguments.argument(
@@ -36,5 +39,4 @@ class NbtutorMagics(Magics):
 
         bdb = Bdb(self.shell, vars(args))
         bdb.run_cell(cell)
-        print(bdb.trace_history.json_dumps())
-
+        self.comm.send(bdb.trace_history.json_dumps())
