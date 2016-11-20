@@ -31,13 +31,14 @@ There are also optional arguments that can be used with the cell magic:
 ```python
 %%nbtutor -d/--depth N
 ```
-"Global" frame is depth 0 (default depth: 1).
 
 - Specify the precision (number of decimals) for floats
 ```python
 %%nbtutor -p/--precision P
 ```
-(default precision: 3)
+
+*Note: The "Global" frame is depth 0; the default depth is 1, and the default
+precision is 3*
 
 
 ## Develop
