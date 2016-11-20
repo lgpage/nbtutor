@@ -12,7 +12,7 @@ magic to the top of the `CodeCell` and execute it again:
 %%nbtutor
 ```
 
-TODO: Include `.gif` example
+![Usage](examples/usage.gif "Usage")
 
 ### Optional arguments
 There are also optional arguments that can be used with the cell magic:
