@@ -1,0 +1,8 @@
+name: nbtutor
+channels:
+  - defaults
+dependencies:
+  - anaconda-client
+  - nodejs
+  - notebook >=4.2.0
+  - python

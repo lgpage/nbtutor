@@ -80,7 +80,7 @@ You can create a Python development environment named `nbtutor` from
 
 ```shell
 conda create -n nbtutor python=YOUR_FAVORITE_PYTHON
-conda update env
+conda env update
 source activate nbtutor
 ```
 
