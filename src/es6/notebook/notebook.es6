@@ -62,6 +62,14 @@ export class VisualizedCell {
         this._build();
     }
 
+    _checkData(){
+        // Alert if no data
+        if (!this.trace_history || !this.trace_history.stack_history){
+            this.toolbar.$select_view.val("none").trigger("change");
+            alertUserMissingData();
+        }
+    }
+
     _bindButtons(){
         let that = this;
 
@@ -69,6 +77,7 @@ export class VisualizedCell {
             let stack_history = this.trace_history.stack_history;
             let heap_history = this.trace_history.heap_history;
 
+            that._checkData();
             that.tracestep = 0;
             that.stack_timeline.clear();
             that.stack_timeline.push(
@@ -80,6 +89,7 @@ export class VisualizedCell {
 
         this.toolbar.$btn_prev.on("click", () => {
             if (that.tracestep > 0){
+                that._checkData();
                 that.tracestep -= 1;
                 that.stack_timeline.pop();
                 that.visualize();
@@ -91,6 +101,7 @@ export class VisualizedCell {
                 let stack_history = this.trace_history.stack_history;
                 let heap_history = this.trace_history.heap_history;
 
+                that._checkData();
                 that.tracestep += 1;
                 that.stack_timeline.push(
                     stack_history.getStackFrames(that.tracestep),
@@ -104,6 +115,7 @@ export class VisualizedCell {
             let stack_history = this.trace_history.stack_history;
             let heap_history = this.trace_history.heap_history;
 
+            that._checkData();
             that.stack_timeline.clear();
             that.tracestep = that.trace_history.tracesteps-1;
             for (let tracestep=0; tracestep<that.tracestep+1; tracestep++){
