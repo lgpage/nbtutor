@@ -1,4 +1,45 @@
 
+## Usage (Jupyter Notebook)
+First load the `nbtutor` IPython kernel extension at top of the Notebook by
+executing the following magic in a `CodeCell`:
+```python
+%load_ext nbtutor
+```
+
+Then to visualize the execute of code in a `CodeCell` add the following
+magic to the top of the `CodeCell` and execute it again:
+```python
+%%nbtutor
+```
+
+TODO: Include `.gif` example
+
+### Optional arguments
+There are also optional arguments that can be used with the cell magic:
+
+*Reset the IPython user namespace*
+```python
+%%nbtutor -r/--reset
+```
+
+*Suppress the confirmation message from `-r/--reset`*
+```python
+%%nbtutor -r/--reset -f/--force
+```
+
+*Specify the maximum frame depth to visualize*
+```python
+%%nbtutor -d/--depth N
+```
+"Global" frame is depth 0 (default depth: 1).
+
+*Specify the precision (number of decimals) for floats*
+```python
+%%nbtutor -p/--precision P
+```
+(default precision: 3)
+
+
 ## Develop
 This assumes you have cloned this repository locally:
 ```shell
@@ -17,6 +58,7 @@ The `nbtutor` ipython kernel extension (magics) is stored in the
 `./nbtutor/ipython` folder
 
 Build tools are stored in the `./tools` folder.
+
 
 ### Getting started
 You'll need conda installed, either from
@@ -40,6 +82,7 @@ Finally, you are ready to build the assets with:
 ```shell
 npm run build
 ```
+
 
 ### Installing the nbextension
 To ensure that you always get the right assets (for development), install
