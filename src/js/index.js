@@ -70,25 +70,16 @@ define([
             Jupyter.notebook
         );
 
-        // XXX This feels like such a hack, I'm pretty sure I don't understand
-        // comms properly. I am also pretty sure this can fall over due to
-        // async updates.
-        var cellToUpdate = null;
+        // XXX This feels a bit hacky
         events.on('kernel_ready.Kernel', function(){
             var comm_manager = Jupyter.notebook.kernel.comm_manager;
             comm_manager.register_target('nbtutor_comm', function(comm, msg){
                 comm.on_msg(function(msg){
-                    var nbtutor_data = JSON.parse(msg.content.data);
-                    if (!cellToUpdate){
-                        throw Error("Comm update fell over.")
-                    }
-                    cellToUpdate.nbtutor.updateData(nbtutor_data);
+                    var msg_id = msg.parent_header.msg_id;
+                    var cell = Jupyter.notebook.get_msg_cell(msg_id);
+                    cell.nbtutor.updateData(JSON.parse(msg.content.data));
                 });
             });
-        });
-
-        events.on('execute.CodeCell', function(event, data){
-            cellToUpdate = data.cell;
         });
 
         requirejs(["nbtutor-deps"], function(deps){
