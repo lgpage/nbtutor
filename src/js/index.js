@@ -77,7 +77,16 @@ define([
                 comm.on_msg(function(msg){
                     var msg_id = msg.parent_header.msg_id;
                     var cell = Jupyter.notebook.get_msg_cell(msg_id);
-                    cell.nbtutor.updateData(msg.content.data);
+                    if (!cell.nbtutor){
+                        CellToolbar.global_show();
+                        CellToolbar.activate_preset("Visualize");
+                        Jupyter.notebook.metadata.celltoolbar = "Visualize";
+                    }
+                    // Wait a little bit for the toolbar to load
+                    setTimeout(function(){
+                        cell.nbtutor.updateData(msg.content.data);
+                        console.log("Updated data");
+                    }, 500);
                 });
             });
         });
