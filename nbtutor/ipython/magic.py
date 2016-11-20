@@ -21,7 +21,11 @@ class NbtutorMagics(Magics):
     @magic_arguments.magic_arguments()
     @magic_arguments.argument(
         '-r', '--reset', action='store_true', default=False,
-        help="Forced reset (clear) of the IPython global namespace."
+        help="Reset (clear) the IPython global namespace."
+    )
+    @magic_arguments.argument(
+        '-f', '--force', action='store_true', default=False,
+        help="Suppress the reset confirmation message."
     )
     @magic_arguments.argument(
         '-d', '--depth', metavar='N', type=int, default=1,
@@ -35,7 +39,8 @@ class NbtutorMagics(Magics):
     def nbtutor(self, line, cell):
         args = magic_arguments.parse_argstring(self.nbtutor, line)
         if args.reset:
-            NamespaceMagics(self.shell).reset('-f')
+            params = '-f' if args.force else ''
+            NamespaceMagics(self.shell).reset(params)
 
         bdb = Bdb(self.shell, vars(args))
         bdb.run_cell(cell)
