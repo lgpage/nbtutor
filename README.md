@@ -1,4 +1,14 @@
 
+# Nbtutor
+
+Visualize Python code execution (line-by-line) in [Jupyter
+Notebook](http://jupyter.org) cells. Inspired by [Online Python
+Tutor](http://pythontutor.com).
+
+**Note: This project is not quite ready for release. This has only been tested
+using Python3.5 and will probably fall over in Python2.7**
+
+
 ## Usage (Jupyter Notebook)
 First load the `nbtutor` IPython kernel extension at top of the Notebook by
 executing the following magic in a `CodeCell`:
