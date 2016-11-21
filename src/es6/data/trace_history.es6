@@ -23,29 +23,29 @@ export class TraceHistory{
         this.output_history = null;
     }
 
-    curLineNumbers(tracestep){
-        /*
-         * Get the current code line numbers at a specified trace step in the
-         * history
-         */
-        let stackframes = this.stack_history.getStackFrames(tracestep-1) || [];
-        let lines = stackframes.map((frame) => +frame.lineno);
-        return lines;
-    }
+    getLineNumbers(tracestep){
+        let curstack = this.stack_history.getStackFrames(tracestep) || [];
+        let prevstack = this.stack_history.getStackFrames(tracestep-1) || [];
+        let prevframe = prevstack[prevstack.length-1] || {};
 
-    nextLineNumber(tracestep){
-        /*
-         * Get the next code line number at a specified trace step in the
-         * history
-         */
-        let stackframes = this.stack_history.getStackFrames(tracestep) || [];
-        let frame = stackframes[stackframes.length-1];
-        let line = +frame.lineno;
-        if (frame.event === "return"){
-            frame = stackframes[stackframes.length-2] || {};
-            line = +(frame.lineno || 0);
+        let prevLines = [+(prevframe.lineno || 0)];
+        let curLines = curstack.map((frame) => +frame.lineno);
+        let nextLine = curLines.pop();
+
+        if (prevframe.event === "return"){
+            let frame = prevstack[prevstack.length-2] || {};
+            prevLines.push(+(frame.lineno || 0));
         }
-        return line;
+
+        if (tracestep == this.stack_history.data.length-1){
+            nextLine = 0;
+        }
+
+        return {
+            prevLines: prevLines,
+            curLines: curLines,
+            nextLine: nextLine,
+        };
     }
 
     updateData(history){
