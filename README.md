@@ -42,13 +42,13 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor -d/--depth N
 ```
 
-- Specify the precision (number of decimals) for floats
+- Specify the number of significant digits for floats
 ```python
-%%nbtutor -p/--precision P
+%%nbtutor -s/--digits D
 ```
 
 *Note: The "Global" frame is depth 0; the default depth is 1, and the default
-precision is 3*
+significant digits is 3*
 
 
 ## Develop

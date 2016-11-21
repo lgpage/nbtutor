@@ -8,7 +8,7 @@ from ipykernel import jsonutil
 
 def format(type_name, value, **kwargs):
     formatter = {
-        'float': lambda x: '{:.{}f}'.format(x, kwargs.get('precision', 6)),
+        'float': lambda x: '{:.{}g}'.format(x, kwargs.get('digits', 6)),
     }
     if type_name not in formatter.keys():
         return '{}'.format(value)

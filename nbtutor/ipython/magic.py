@@ -32,8 +32,8 @@ class NbtutorMagics(Magics):
         help="The stack frame visualization depth (default: 1)."
     )
     @magic_arguments.argument(
-        '-p', '--precision', metavar='P', type=int, default=3,
-        help="The precision for floats (default: 3)."
+        '-s', '--digits', metavar='D', type=int, default=3,
+        help="The number of significant digits for floats (default: 3)."
     )
     @cell_magic
     def nbtutor(self, line, cell):
