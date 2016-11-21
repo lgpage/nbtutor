@@ -58,6 +58,7 @@ class StackFrames(object):
 class Heap(object):
 
     def __init__(self):
+        self.seq_types = (list, tuple, dict)
         self.data = list()
 
     def clear(self):
@@ -70,15 +71,57 @@ class Heap(object):
             ret.append(obj['id'])
         return ret
 
+    def has_object(self, obj_id):
+        return obj_id in self.object_ids
+
+    def _add_object(self, obj, **kwargs):
+        obj_id = id(obj)
+        if self.has_object(obj_id):
+            return
+        type_name = type(obj).__name__
+        self.data.append(dict({
+            "id": obj_id,
+            "type": type_name,
+            "value": format(type_name, obj, **kwargs),
+        }))
+
+    def _add_seq(self, obj, **kwargs):
+        obj_id = id(obj)
+        if self.has_object(obj_id):
+            return
+
+        keys = None
+        values = obj
+        if isinstance(obj, (dict, )):
+            keys = sorted(obj.keys())
+            values = [obj[k] for k in keys]
+
+        data_values = []
+        type_name = type(obj).__name__
+        for i, val in enumerate(values):
+            if isinstance(val, self.seq_types):
+                self._add_seq(val, **kwargs)
+            else:
+                self._add_object(val, **kwargs)
+
+            data_values.append(dict({
+                "id": id(val),
+                "key": None if not keys else keys[i],
+                "value": None,
+            }))
+
+        self.data.append(dict({
+            "id": obj_id,
+            "type": type_name,
+            "value": data_values,
+        }))
+
     def add(self, filtered_locals, **kwargs):
-        for name, obj in filtered_locals.items():
-            if id(obj) not in self.object_ids:
-                type_name = type(obj).__name__
-                self.data.append(dict({
-                    "id": id(obj),
-                    "type": type_name,
-                    "value": format(type_name, obj, **kwargs),
-                }))
+        for _, obj in filtered_locals.items():
+            if isinstance(obj, self.seq_types):
+                self._add_seq(obj, **kwargs)
+            else:
+                self._add_object(obj, **kwargs)
 
     def json_dumps(self):
         return json.dumps(self.data)

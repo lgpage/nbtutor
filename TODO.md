@@ -1,6 +1,5 @@
 ## TODO List:
-- Use IPythons types macro for common type names
-- Visualize seq types (list, tuple, dict, ndarray)
+- Visualize seq types (dict, ndarray)
 - Args: Render seq depth and size
 - Process stderr properly
 - Add marker and table legends
