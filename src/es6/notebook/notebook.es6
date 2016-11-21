@@ -166,9 +166,8 @@ export class VisualizedCell {
         }
 
         // Add CodeMirror line markers
-        let curLines = this.trace_history.curLineNumbers(this.tracestep);
-        let nextLine = this.trace_history.nextLineNumber(this.tracestep);
-        this.markers.setMarkers(curLines, nextLine);
+        let lineNumbers = this.trace_history.getLineNumbers(this.tracestep);
+        this.markers.setMarkers(lineNumbers);
 
         // Manage cell output
         let output_history = this.trace_history.output_history;

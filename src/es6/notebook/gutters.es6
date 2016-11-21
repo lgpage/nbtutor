@@ -12,9 +12,13 @@ export class GutterMarkers {
         }
     }
 
-    setMarkers(curLines, nextLine){
+    setMarkers(lineNumbers){
         // First clear current gutter markers
         this.codemirror.clearGutter("nbtutor-linemarkers");
+
+        let prevLines = lineNumbers.prevLines;
+        let curLines = lineNumbers.curLines;
+        let nextLine = lineNumbers.nextLine;
 
         // Update CodeMirror line markers
         let that = this;
@@ -31,10 +35,22 @@ export class GutterMarkers {
             }
         });
 
+        prevLines.map((line) => {
+            let $prevLineMarker = $("<i/>")
+                .attr("class", "fa fa-long-arrow-right fa-lg")
+                .addClass("nbtutor-prev-line");
+            if (line-1 >= 0) {
+                that.codemirror.setGutterMarker(
+                    line-1,
+                    "nbtutor-linemarkers",
+                    $prevLineMarker.toArray()[0]
+                );
+            }
+        });
+
         let $nextLineMarker = $("<i/>")
             .attr("class", "fa fa-long-arrow-right fa-lg")
             .addClass("nbtutor-next-line");
-
         if (nextLine-1 >= 0) {
             this.codemirror.setGutterMarker(
                 nextLine-1,

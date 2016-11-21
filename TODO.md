@@ -1,5 +1,4 @@
 ## TODO List:
-- Add diff marker for current execution line
 - Use IPythons types macro for common type names
 - Visualize seq types (list, tuple, dict, ndarray)
 - Args: Render seq depth and size
