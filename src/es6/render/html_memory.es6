@@ -85,7 +85,6 @@ export class MemoryModelUI{
                 .text((d) => d);
 
         // Add sequence anchors
-        let that = this;
         let heap_history = this.trace_history.heap_history;
         let d3Refs = d3ValRow.selectAll("td")
             .data(d.value)
@@ -93,6 +92,7 @@ export class MemoryModelUI{
                 .append("td")
                 .attr("class", "nbtutor-anchor-from");
 
+        let that = this;
         d3Refs.append("div")
             .each(function(d){
                 // Create a uuid for the anchor
@@ -114,6 +114,53 @@ export class MemoryModelUI{
         });
     }
 
+    createDict(d, d3Div, tracestep){
+        d3Div.classed("nbtutor-heap-row-left", true);
+        let d3Obj = d3Div.append("div")
+            .attr("class", "nbtutor-var-object")
+            .attr("id", d.uuid);
+
+        d3Obj.append("div")
+            .attr("class", "nbtutor-var-type")
+            .text(d.type);
+
+        let d3Table = d3Obj.append("table")
+            .attr("class", "nbtutor-seq-" + d.type);
+
+        let d3Rows = d3Table.selectAll("tr")
+            .data(d.value)
+            .enter()
+                .append("tr");
+
+        let d3Keys = d3Rows.append("td")
+            .attr("class", "nbtutor-var-key")
+            .text((d) => d.key);
+
+        let that = this;
+        let heap_history = this.trace_history.heap_history;
+        d3Rows.append("td")
+            .attr("class", "nbtutor-anchor-from")
+            .append("div")
+            .each(function(d){
+                // Create a uuid for the anchor
+                d.uuid = 'r-' + uuid.v4();
+                // Add connectors data from sequence position to object
+                let object = heap_history.getObjectById(tracestep, d.id);
+                that.connectors.push({from: d.uuid, to: object.uuid});
+                d3.select(this).attr("id", (d) => d.uuid);
+            });
+
+        // Toggle mouse hover over ref
+        d3Rows.on('mouseover', function(d){
+            d3.select(this).classed("nbtutor-hover", true);
+            that._setHover(d.uuid, true);
+        });
+        d3Rows.on('mouseout', function(d){
+            d3.select(this).classed("nbtutor-hover", false);
+            that._setHover(d.uuid, false);
+        });
+    }
+
     createObject(d, d3Div, tracestep){
         switch (d.type){
             case "int":
@@ -124,6 +171,9 @@ export class MemoryModelUI{
             case "list":
             case "tuple":
                 this.createSequence(d, d3Div, tracestep);
+                break;
+            case "dict":
+                this.createDict(d, d3Div, tracestep);
                 break;
             default:
                 this.createPrimitive({

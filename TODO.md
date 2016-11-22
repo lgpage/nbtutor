@@ -1,5 +1,5 @@
 ## TODO List:
-- Visualize seq types (dict, ndarray)
+- Visualize seq types (ndarray)
 - Args: Render seq depth and size
 - Process stderr properly
 - Add marker and table legends
@@ -8,4 +8,5 @@
   and outputs
 - Handle outputs better using IPython API
 - Test on python2.7
+- Lotsa duplicate code in render memory that can be refactored
 - Package (pip and conda)
