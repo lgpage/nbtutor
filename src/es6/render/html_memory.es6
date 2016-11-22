@@ -163,6 +163,7 @@ export class MemoryModelUI{
 
     createObject(d, d3Div, tracestep){
         switch (d.type){
+            case "bool":
             case "int":
             case "float":
             case "str":
