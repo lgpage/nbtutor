@@ -15,7 +15,10 @@ function connectObjects(fromId, toId, container, cssClass){
         ],
     };
     if (fromId[0] == 'r'){
-        stateMachineConnector.anchors = ["Top", "Left"];
+        stateMachineConnector.anchors = [
+            "Top",
+            ["Left", "Right"],
+        ];
     }
 
     jsplumb.setContainer(container);
