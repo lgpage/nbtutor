@@ -102,12 +102,16 @@ export class MemoryModelUI{
         let that = this;
         d3Refs.append("div")
             .each(function(d){
-                // Create a uuid for the anchor
-                d.uuid = 'r-' + uuid.v4();
-                // Add connectors data from sequence position to object
                 let object = heap_history.getObjectById(tracestep, d.id);
-                that.connectors.push({from: d.uuid, to: object.uuid});
-                d3.select(this).attr("id", (d) => d.uuid);
+                if (object.inplace){
+                    d3.select(this).text(object.value);
+                } else {
+                    // Add connectors data from name to object
+                    d.uuid = 'r-' + uuid.v4();
+                    that.connectors.push({from: d.uuid, to: object.uuid});
+                    d3.select(this).attr("id", (d) => d.uuid);
+                }
+
             });
 
         // Toggle mouse hover over ref
