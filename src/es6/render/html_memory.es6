@@ -42,6 +42,10 @@ export class MemoryModelUI{
     }
 
     createPrimitive(d, d3Div){
+        if (d.inplace) {
+            return;
+        }
+
         let d3Obj = d3Div.append("div")
             .attr("class", "nbtutor-var-object")
             .attr("id", d.uuid);
@@ -231,10 +235,14 @@ export class MemoryModelUI{
             .attr("class", "nbtutor-anchor-from")
             .append("div")
                 .attr("id", (d) => d.uuid)
-            .each((d) => {
-                // Add connectors data from name to object
+            .each(function(d){
                 let object = heap_history.getObjectById(tracestep, d.id);
-                that.connectors.push({from: d.uuid, to: object.uuid});
+                if (object.inplace){
+                    d3.select(this).text(object.value);
+                } else {
+                    // Add connectors data from name to object
+                    that.connectors.push({from: d.uuid, to: object.uuid});
+                }
             });
 
         // Toggle active frame

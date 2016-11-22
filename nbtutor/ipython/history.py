@@ -82,6 +82,7 @@ class Heap(object):
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
+            "inplace": kwargs.get("inline", False),
             "value": format(type_name, obj, **kwargs),
         }))
 
@@ -107,6 +108,7 @@ class Heap(object):
             data_values.append(dict({
                 "id": id(val),
                 "key": None if not keys else keys[i],
+                "inplace": kwargs.get("inline", False),
                 "value": None,
             }))
 

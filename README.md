@@ -37,6 +37,11 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor -r/--reset -f/--force
 ```
 
+- Render primitive objects inline
+```python
+%%nbtutor -i/--inline
+```
+
 - Specify the maximum frame depth to visualize
 ```python
 %%nbtutor -d/--depth N

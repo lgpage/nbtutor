@@ -28,6 +28,10 @@ class NbtutorMagics(Magics):
         help="Suppress the reset confirmation message."
     )
     @magic_arguments.argument(
+        '-i', '--inline', action='store_true', default=False,
+        help="Inline primitive objects."
+    )
+    @magic_arguments.argument(
         '-d', '--depth', metavar='N', type=int, default=1,
         help="The stack frame visualization depth (default: 1)."
     )

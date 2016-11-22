@@ -3,11 +3,12 @@ function toShortString(type, value){
     /**
      * Get a short string representation for an object type and value
      */
+    console.log(value);
     let short_str = {
         'int': (value.length > 3) ? 'INT' : value,
         'float': (value.length > 3) ? 'FLT' : value,
         'str': (value.length > 3) ? 'STR' : value,
-        'bool': value[0].toUpperCase(),
+        'bool': (typeof value === 'string') ? value[0].toUpperCase() : value,
         'none': 'NON',
         'complex': 'CPX',
         'module': 'MOD',
