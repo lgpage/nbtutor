@@ -44,6 +44,7 @@ class Bdb(StdBdb):
         self.trace_history = TraceHistory()
         self.stdout = StringIO()
         self.skip_frames = False
+        self.code_error = False
         self.tracestep = 0
 
     def run_cell(self, cell):
@@ -52,8 +53,8 @@ class Bdb(StdBdb):
         try:
             with redirect_stdout(self.stdout):
                 self.run(cell, globals, locals)
-        except SystemExit:
-            raise BdbQuit
+        except:
+            self.code_error = True
         finally:
             self.finalize()
 
