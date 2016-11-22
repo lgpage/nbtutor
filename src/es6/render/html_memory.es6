@@ -167,6 +167,7 @@ export class MemoryModelUI{
             case "int":
             case "float":
             case "str":
+            case "NoneType":
                 this.createPrimitive(d, d3Div);
                 break;
             case "list":
