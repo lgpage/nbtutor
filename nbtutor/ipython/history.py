@@ -144,6 +144,9 @@ class Heap(object):
 
         type_name = type(obj).__name__
         type_catagory = get_type_catagory(obj)
+        if type_catagory == 'primitive':
+            position = 'right' if not self.options.nolies else position
+
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
