@@ -41,11 +41,9 @@ class Bdb(StdBdb):
         super(Bdb, self).__init__()
         self.ipy_shell = ipy_shell
         self.options = options
-        self.trace_history = TraceHistory()
-        self.stdout = StringIO()
-        self.skip_frames = False
         self.code_error = False
-        self.tracestep = 0
+        self.stdout = StringIO()
+        self.trace_history = TraceHistory(options)
 
     def run_cell(self, cell):
         globals = self.ipy_shell.user_global_ns
@@ -55,6 +53,8 @@ class Bdb(StdBdb):
                 self.run(cell, globals, locals)
         except:
             self.code_error = True
+            if self.options.debug:
+                raise BdbQuit
         finally:
             self.finalize()
 
@@ -77,43 +77,42 @@ class Bdb(StdBdb):
         pass
 
     def get_stack_data(self, frame, traceback, event_type):
-        stack_data = StackFrames()
-        heap_data = Heap()
-
-        frame_ind = -1
+        heap_data = Heap(self.options)
+        stack_data = StackFrames(self.options)
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
+
+        skip_this_frame = True
         for frame, lineno in stack_frames:
             # Skip the self.run calling frame (first frame)
-            if frame_ind < 0:
-                frame_ind += 1
+            if skip_this_frame:
+                skip_this_frame = False
                 continue
 
             # Skip frames after a certain depth
-            if frame_ind > self.options.get('depth', 1):
-                self.skip_frames = True
+            skip_this_stack = False
+            if len(stack_data) > self.options.get('depth', 1):
+                skip_this_stack = True
                 break
-
-            # Reset: Don't skip frames within a certain depth
-            self.skip_frames = False
 
             user_locals = filter_dict(
                 frame.f_locals,
                 ignore_vars + list(self.ipy_shell.user_ns_hidden.keys())
             )
 
-            # Add 1 because cell magics is actually line 1
-            lineno += 1
+            lineno += 1  # Add 1 because cell magics is actually line 1
+            # FIXME: This is wrong for any/all frame code objects not created
+            # with cell magic.
+            # FIXME: Linenos from any/all frame code objects not created in
+            # Jupyter (the IPython shell) should be ignored (set to 0).
+            stack_data.add(frame, lineno, event_type, user_locals)
+            heap_data.add(user_locals)
 
-            stack_data.add(frame, frame_ind, lineno, event_type, user_locals)
-            heap_data.add(user_locals, **self.options)
-            frame_ind += 1
-
-        if not self.skip_frames:
-            self.trace_history.append_stackframes(stack_data)
-            self.trace_history.append_heap(heap_data)
-            self.trace_history.append_output(self.stdout.getvalue())
-            self.tracestep += 1
+        if not skip_this_stack and not stack_data.is_empty():
+            self.trace_history.append(
+                    stack_data,
+                    heap_data,
+                    self.stdout.getvalue()
+            )
 
     def finalize(self):
         self.trace_history.sort_frame_locals()
-
