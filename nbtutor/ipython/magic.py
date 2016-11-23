@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
-from IPython.core import display
 from IPython.core import magic_arguments
 from IPython.core.magic import Magics, magics_class, cell_magic
 from IPython.core.magics.namespace import NamespaceMagics
@@ -49,14 +48,14 @@ class NbtutorMagics(Magics):
     )
     @cell_magic
     def nbtutor(self, line, cell):
-        args = magic_arguments.parse_argstring(self.nbtutor, line)
-        if args.reset:
-            params = '-f' if args.force else ''
+        opts = magic_arguments.parse_argstring(self.nbtutor, line)
+        if opts.reset:
+            params = '-f' if opts.force else ''
             NamespaceMagics(self.shell).reset(params)
         if opts.nolies:
             opts.inline = False
 
-        bdb = Bdb(self.shell, vars(args))
+        bdb = Bdb(self.shell, opts)
         bdb.run_cell(cell)
         if bdb.code_error and not opts.debug:
             self.shell.run_cell(cell)
