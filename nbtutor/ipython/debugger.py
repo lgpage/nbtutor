@@ -91,7 +91,7 @@ class Bdb(StdBdb):
 
             # Skip frames after a certain depth
             skip_this_stack = False
-            if len(stack_data) > self.options.get('depth', 1):
+            if len(stack_data) > self.options.depth:
                 skip_this_stack = True
                 break
 

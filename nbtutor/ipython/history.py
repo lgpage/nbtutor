@@ -41,17 +41,18 @@ if numpy is not None:
 
 primitive_types = tuple(primitive_types)
 sequence_types = tuple(sequence_types)
+key_value_types = tuple(key_value_types)
 
 
 def format(obj, options):
     formatters = {
         float: lambda x: '{:.{}g}'.format(x, options.digits),
     }
-    for _type, fmtr in formatter.items():
+    for _type, fmtr in formatters.items():
         if isinstance(obj, (_type, )):
             return fmtr(obj)
     try:
-        return str(value)
+        return str(obj)
     except:
         return 'OBJECT'
 
@@ -214,7 +215,7 @@ class Heap(object):
         }))
 
     def _add(self, obj):
-        if isinstance(obj, (key_value_types, )):
+        if isinstance(obj, key_value_types):
             self._add_key_value_object(obj)
         elif isinstance(obj, sequence_types):
             self._add_sequence_object(obj)
