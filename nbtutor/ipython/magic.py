@@ -39,16 +39,26 @@ class NbtutorMagics(Magics):
         '-s', '--digits', metavar='D', type=int, default=3,
         help="The number of significant digits for floats (default: 3)."
     )
+    @magic_arguments.argument(
+        '--debug', action='store_true', default=False,
+        help="Debug nbtutor."
+    )
+    @magic_arguments.argument(
+        '--nolies', action='store_true', default=False,
+        help="Nothing inlined. No assumptions or lies in rendering objects."
+    )
     @cell_magic
     def nbtutor(self, line, cell):
         args = magic_arguments.parse_argstring(self.nbtutor, line)
         if args.reset:
             params = '-f' if args.force else ''
             NamespaceMagics(self.shell).reset(params)
+        if opts.nolies:
+            opts.inline = False
 
         bdb = Bdb(self.shell, vars(args))
         bdb.run_cell(cell)
-        if bdb.code_error:
+        if bdb.code_error and not opts.debug:
             self.shell.run_cell(cell)
         else:
             self.comm.send(bdb.trace_history.json_clean())
