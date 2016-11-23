@@ -15,6 +15,7 @@ ignore_vars = [
     "__name__",
     "__builtin__",
     "__builtins__",
+    "__module__",
 ]
 
 
