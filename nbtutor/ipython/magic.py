@@ -39,12 +39,12 @@ class NbtutorMagics(Magics):
         help="The number of significant digits for floats (default: 3)."
     )
     @magic_arguments.argument(
-        '--debug', action='store_true', default=False,
-        help="Debug nbtutor."
+        '--nolies', action='store_true', default=False,
+        help="No inlined keys, attributes or primitive objects"
     )
     @magic_arguments.argument(
-        '--nolies', action='store_true', default=False,
-        help="Nothing inlined. No assumptions or lies in rendering objects."
+        '--debug', action='store_true', default=False,
+        help="Debug nbtutor."
     )
     @cell_magic
     def nbtutor(self, line, cell):

@@ -51,6 +51,11 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor --digits D
 ```
 
+- No inlined keys, attributes, or primitive objects
+```python
+%%nbtutor --nolies
+```
+
 *Note: The "Global" frame is depth 0; the default depth is 1, and the default
 significant digits is 3*
 
