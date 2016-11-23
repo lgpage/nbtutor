@@ -194,10 +194,10 @@ class Heap(object):
         for key in obj_keys:
             value = obj[key]
             self._add(key, position='left')
-            self._add(val)
+            self._add(value)
             data_values.append(dict({
                 "key_id": id(key),
-                "val_id": id(val),
+                "val_id": id(value),
             }))
 
         type_name = type(obj).__name__
@@ -214,13 +214,13 @@ class Heap(object):
             "values": data_values,
         }))
 
-    def _add(self, obj):
+    def _add(self, obj, **kwargs):
         if isinstance(obj, key_value_types):
-            self._add_key_value_object(obj)
+            self._add_key_value_object(obj, **kwargs)
         elif isinstance(obj, sequence_types):
-            self._add_sequence_object(obj)
+            self._add_sequence_object(obj, **kwargs)
         else:
-            self._add_object(obj)
+            self._add_object(obj, **kwargs)
 
     def add(self, filtered_locals):
         for obj in filtered_locals.values():
