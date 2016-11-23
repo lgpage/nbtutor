@@ -36,7 +36,7 @@ class NbtutorMagics(Magics):
         help="The stack frame visualization depth (default: 1)."
     )
     @magic_arguments.argument(
-        '-s', '--digits', metavar='D', type=int, default=3,
+        '--digits', metavar='D', type=int, default=3,
         help="The number of significant digits for floats (default: 3)."
     )
     @magic_arguments.argument(
