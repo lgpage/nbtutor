@@ -136,40 +136,10 @@ class Heap(object):
     def has_object(self, obj_id):
         return obj_id in self.object_ids
 
-    def _add_object(self, obj):
+    def _add_object(self, obj, position='right'):
         obj_id = id(obj)
         if self.has_object(obj_id):
             return
-
-        type_name = type(obj).__name__
-        type_catagory = get_type_catagory(obj)
-        self.data.append(dict({
-            "id": obj_id,
-            "type": type_name,
-            "catagory": type_catagory,
-            "value": format(obj, self.options),
-        }))
-
-    def _add_key_value_object(self, obj):
-        obj_id = id(obj)
-        if self.has_object(obj_id):
-            return
-
-        obj_keys = obj.keys()
-        try:
-            obj_keys = sorted(obj_keys, key=lambda x: str(x))
-        except:
-            pass
-
-        data_values = []
-        for key in obj_keys:
-            value = obj[key]
-            self._add(key)
-            self._add(val)
-            data_values.append(dict({
-                "key_id": id(key),
-                "val_id": id(val),
-            }))
 
         type_name = type(obj).__name__
         type_catagory = get_type_catagory(obj)
@@ -178,13 +148,12 @@ class Heap(object):
             "type": type_name,
             "catagory": type_catagory,
             "options": {
-                "inline_keys": not self.options.nolies,
-                "inline_vals": self.options.inline,
+                "position": position,
             },
-            "value": data_values,
+            "value": format(obj, self.options),
         }))
 
-    def _add_sequence_object(self, obj):
+    def _add_sequence_object(self, obj, position='center'):
         obj_id = id(obj)
         if self.has_object(obj_id):
             return
@@ -204,6 +173,42 @@ class Heap(object):
             "catagory": type_catagory,
             "options": {
                 "inline": self.options.inline,
+                "position": position,
+            },
+            "values": data_values,
+        }))
+
+    def _add_key_value_object(self, obj, position='center'):
+        obj_id = id(obj)
+        if self.has_object(obj_id):
+            return
+
+        obj_keys = obj.keys()
+        try:
+            obj_keys = sorted(obj_keys, key=lambda x: str(x))
+        except:
+            pass
+
+        data_values = []
+        for key in obj_keys:
+            value = obj[key]
+            self._add(key, position='left')
+            self._add(val)
+            data_values.append(dict({
+                "key_id": id(key),
+                "val_id": id(val),
+            }))
+
+        type_name = type(obj).__name__
+        type_catagory = get_type_catagory(obj)
+        self.data.append(dict({
+            "id": obj_id,
+            "type": type_name,
+            "catagory": type_catagory,
+            "options": {
+                "inline_keys": not self.options.nolies,
+                "inline_vals": self.options.inline,
+                "position": position,
             },
             "values": data_values,
         }))
