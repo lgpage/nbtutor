@@ -60,4 +60,4 @@ class NbtutorMagics(Magics):
         if bdb.code_error and not opts.debug:
             self.shell.run_cell(cell)
         else:
-            self.comm.send(bdb.trace_history.json_clean())
+            self.comm.send(bdb.trace_history.clean())
