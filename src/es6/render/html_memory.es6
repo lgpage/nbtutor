@@ -2,28 +2,16 @@
 import {d3, uuid, jsplumb} from "nbtutor-deps";
 
 
-function connectObjects(fromId, toId, container, cssClass){
-    let stateMachineConnector = {
-        paintStyle: {lineWidth: 2, stroke: "#056"},
-        cssClass: cssClass,
-        endpoint: "Blank",
-        anchors: ["Right", "Left"],
-        connector: ["Bezier", {"curviness": 80}],
-        detachable: false,
-        overlays: [
-            ["Arrow", {length: 10, width: 10, location: 1, cssClass: cssClass}]
-        ],
-    };
-    if (fromId[0] == 'r'){
-        stateMachineConnector.anchors = [
-            "Top",
-            ["Left", "Right"],
-        ];
-    }
-
-    jsplumb.setContainer(container);
-    jsplumb.connect({source: fromId, target: toId}, stateMachineConnector);
-}
+let stateMachineConnector = {
+    paintStyle: {lineWidth: 2, stroke: "#056"},
+    endpoint: "Blank",
+    anchors: ["Right", "Left"],
+    connector: ["Bezier", {"curviness": 80}],
+    detachable: false,
+    overlays: [
+        ["Arrow", {length: 10, width: 10, location: 1}]
+    ],
+};
 
 
 export class MemoryModelUI{
@@ -31,55 +19,86 @@ export class MemoryModelUI{
         this.trace_history = trace_history;
         this.d3Root = d3Root;
         this.connectors = [];
+        this.objects_rendered = [];
     }
 
     _setHover(cls, state){
-        d3.select(".nbtutor-var-object." + cls)
-            .select(".nbtutor-var-value")
+        d3.select(".nbtutor-var-object." + cls).select(".nbtutor-var-value")
             .classed("nbtutor-hover", state);
-        d3.select(".nbtutor-var-object." + cls)
-            .select("table")
+        d3.select(".nbtutor-var-object." + cls).select("table")
             .classed("nbtutor-hover", state);
         d3.selectAll("svg." + cls).classed("jtk-hover", state);
         d3.selectAll("path." + cls).classed("jtk-hover", state);
     }
 
-    createPrimitive(d, d3Div){
-        if (d.inplace) {
-            return;
-        }
-
-        let d3Obj = d3Div.append("div")
-            .attr("class", "nbtutor-var-object")
-            .attr("id", d.uuid);
-
-        d3Obj.append("div")
-            .attr("class", "nbtutor-var-type")
-            .text(d.type);
-
-        d3Obj.append("div")
-            .attr("class", "nbtutor-var-value")
-            .text(d.value);
+    _connectObjects(){
+        let that = this;
+        this.connectors.map((con) => {
+            stateMachineConnector.cssClass = con.from;
+            stateMachineConnector.overlays[0][1].cssClass = con.from;
+            if (con.from[0] == 'r'){
+                stateMachineConnector.anchors = [
+                    ["Top", "Bottom"], ["Left", "Right"]
+                ];
+            }
+            d3.select("#" + con.to).classed(con.from, true);
+            jsplumb.setContainer(that.d3Root[0]);
+            jsplumb.connect({
+                source: con.from,
+                target: con.to
+            }, stateMachineConnector);
+        });
     }
 
-    createSequence(d, d3Div, tracestep){
-        d3Div.classed("nbtutor-heap-row-left", true);
-        let d3Obj = d3Div.append("div")
-            .attr("class", "nbtutor-var-object")
-            .attr("id", d.uuid);
+    _createHeapDiv(object){
+        let position = object.options.position || 'right';
+        let d3Obj = this.d3Root.select(".nbtutor-heap")
+            .append("div")
+                .attr("class", "nbtutor-heap-row-" + position)
+            .append("div")
+                .attr("class", "nbtutor-var-object")
+                .attr("id", object.uuid);
+        return d3Obj;
+    }
 
+    _createPrimitive(object){
+        let d3Obj = this._createHeapDiv(object);
         d3Obj.append("div")
             .attr("class", "nbtutor-var-type")
-            .text(d.type);
+            .text(object.type);
+        d3Obj.append("div")
+            .attr("class", "nbtutor-var-value")
+            .text(object.value);
+    }
+
+    _createSequence(object, tracestep){
+        let that = this;
+        let heap_history = this.trace_history.heap_history;
+        object.values.map((obj) => {
+            let child = heap_history.getObjectById(tracestep, obj.id);
+            if (!object.options.inline || child.catagory != 'primitive'){
+                obj.uuid = 'r-' + uuid.v4();
+                that._createObject(child, tracestep);
+                that.connectors.push({
+                    from: obj.uuid,
+                    to: child.uuid
+                });
+            }
+        });
+
+        let d3Obj = this._createHeapDiv(object);
+        d3Obj.append("div")
+            .attr("class", "nbtutor-var-type")
+            .text(object.type);
 
         let d3Table = d3Obj.append("table")
-            .attr("class", "nbtutor-seq-" + d.type);
+            .attr("class", "nbtutor-seq-" + object.type);
         let d3IndRow = d3Table.append("tr");
         let d3ValRow = d3Table.append("tr");
 
         // Create sequence index numbers
         let indexes = [];
-        for (let i=0; i<d.value.length; i++){
+        for (let i=0; i<object.values.length; i++){
             indexes.push(i);
         }
 
@@ -92,26 +111,20 @@ export class MemoryModelUI{
                 .text((d) => d);
 
         // Add sequence anchors
-        let heap_history = this.trace_history.heap_history;
         let d3Refs = d3ValRow.selectAll("td")
-            .data(d.value)
+            .data(object.values)
             .enter()
                 .append("td")
                 .attr("class", "nbtutor-anchor-from");
 
-        let that = this;
         d3Refs.append("div")
             .each(function(d){
-                let object = heap_history.getObjectById(tracestep, d.id);
-                if (object.inplace){
-                    d3.select(this).text(object.value);
+                let child = heap_history.getObjectById(tracestep, d.id);
+                if (object.options.inline && child.catagory === 'primitive'){
+                    d3.select(this).text(child.value);
                 } else {
-                    // Add connectors data from name to object
-                    d.uuid = 'r-' + uuid.v4();
-                    that.connectors.push({from: d.uuid, to: object.uuid});
                     d3.select(this).attr("id", (d) => d.uuid);
                 }
-
             });
 
         // Toggle mouse hover over ref
@@ -125,76 +138,111 @@ export class MemoryModelUI{
         });
     }
 
-    createDict(d, d3Div, tracestep){
-        d3Div.classed("nbtutor-heap-row-left", true);
-        let d3Obj = d3Div.append("div")
-            .attr("class", "nbtutor-var-object")
-            .attr("id", d.uuid);
+    _createDict(object, tracestep){
+        let that = this;
+        let heap_history = this.trace_history.heap_history;
+        object.values.map((obj) => {
+            let key = heap_history.getObjectById(tracestep, obj.key_id);
+            if (!object.options.inline_keys || key.catagory != 'primitive'){
+                obj.key_uuid = 'r-' + uuid.v4();
+                that._createObject(key, tracestep);
+                that.connectors.push({
+                    from: obj.key_uuid,
+                    to: key.uuid
+                });
+            }
+            let value = heap_history.getObjectById(tracestep, obj.val_id);
+            if (!object.options.inline_vals || value.catagory != 'primitive'){
+                obj.val_uuid = 'r-' + uuid.v4();
+                that._createObject(value, tracestep);
+                that.connectors.push({
+                    from: obj.val_uuid,
+                    to: value.uuid
+                });
+            }
+        });
 
+
+        let d3Obj = this._createHeapDiv(object);
         d3Obj.append("div")
             .attr("class", "nbtutor-var-type")
-            .text(d.type);
+            .text(object.type);
 
         let d3Table = d3Obj.append("table")
-            .attr("class", "nbtutor-seq-" + d.type);
+            .attr("class", "nbtutor-seq-" + object.type);
 
         let d3Rows = d3Table.selectAll("tr")
-            .data(d.value)
+            .data(object.values)
             .enter()
                 .append("tr");
 
         let d3Keys = d3Rows.append("td")
-            .attr("class", "nbtutor-var-key")
-            .text((d) => d.key);
+            .attr("class", "nbtutor-anchor-from");
+        let d3Vals = d3Rows.append("td")
+            .attr("class", "nbtutor-anchor-from");
 
-        let that = this;
-        let heap_history = this.trace_history.heap_history;
-        d3Rows.append("td")
-            .attr("class", "nbtutor-anchor-from")
-            .append("div")
+        d3Keys.append("div")
             .each(function(d){
-                // Create a uuid for the anchor
-                d.uuid = 'r-' + uuid.v4();
-                // Add connectors data from sequence position to object
-                let object = heap_history.getObjectById(tracestep, d.id);
-                that.connectors.push({from: d.uuid, to: object.uuid});
-                d3.select(this).attr("id", (d) => d.uuid);
+                let key = heap_history.getObjectById(tracestep, d.key_id);
+                if (object.options.inline_keys && key.catagory === 'primitive'){
+                    d3.select(this).text(key.value);
+                } else {
+                    d3.select(this).attr("id", (d) => d.key_uuid);
+                }
+            });
+
+        d3Vals.append("div")
+            .each(function(d){
+                let value = heap_history.getObjectById(tracestep, d.val_id);
+                if (object.options.inline_vals && value.catagory === 'primitive'){
+                    d3.select(this).text(value.value);
+                } else {
+                    d3.select(this).attr("id", (d) => d.val_uuid);
+                }
             });
 
         // Toggle mouse hover over ref
-        d3Rows.on('mouseover', function(d){
+        d3Keys.on('mouseover', function(d){
             d3.select(this).classed("nbtutor-hover", true);
-            that._setHover(d.uuid, true);
+            that._setHover(d.key_uuid, true);
         });
-        d3Rows.on('mouseout', function(d){
+        d3Keys.on('mouseout', function(d){
             d3.select(this).classed("nbtutor-hover", false);
-            that._setHover(d.uuid, false);
+            that._setHover(d.key_uuid, false);
+        });
+        d3Vals.on('mouseover', function(d){
+            d3.select(this).classed("nbtutor-hover", true);
+            that._setHover(d.val_uuid, true);
+        });
+        d3Vals.on('mouseout', function(d){
+            d3.select(this).classed("nbtutor-hover", false);
+            that._setHover(d.val_uuid, false);
         });
     }
 
-    createObject(d, d3Div, tracestep){
-        switch (d.type){
-            case "bool":
-            case "int":
-            case "float":
-            case "str":
-            case "complex":
-            case "NoneType":
-                this.createPrimitive(d, d3Div);
+    _createObject(object, tracestep){
+        if (this.objects_rendered.indexOf(object.uuid) >= 0){
+            return;
+        }
+
+        this.objects_rendered.push(object.uuid);
+        switch (object.catagory){
+            case "primitive":
+                this._createPrimitive(object);
                 break;
-            case "list":
-            case "tuple":
-                this.createSequence(d, d3Div, tracestep);
+            case "sequence":
+                this._createSequence(object, tracestep);
                 break;
-            case "dict":
-                this.createDict(d, d3Div, tracestep);
+            case "key-value":
+                this._createDict(object, tracestep);
                 break;
             default:
-                this.createPrimitive({
-                    uuid: d.uuid,
-                    type: d.type,
+                this._createPrimitive({
+                    uuid: object.uuid,
+                    type: object.type,
+                    options: object.options,
                     value: 'OBJECT',
-                }, d3Div);
+                });
         }
     }
 
@@ -208,11 +256,13 @@ export class MemoryModelUI{
         this.d3Root.append("div")
             .attr("class", "nbtutor-heap");
 
-        // Create tables for each frame
         let stack_history = this.trace_history.stack_history;
         let heap_history = this.trace_history.heap_history;
+        let stack_frames = stack_history.getStackFrames(tracestep);
+
+        // Create tables for each frame
         let d3Frames = this.d3Root.select(".nbtutor-stack").selectAll("div")
-            .data(stack_history.getStackFrames(tracestep), (d) => d.uuid)
+            .data(stack_frames, (d) => d.uuid)
             .enter()
                 .append("div")
                 .attr("class", "nbtutor-frame");
@@ -229,61 +279,52 @@ export class MemoryModelUI{
 
         // Add names to each frame
         let d3Names = d3Frames.select("tbody").selectAll("tr")
-            .data((d) => d.vars, (d) => d.name)
+            .data((d) => {
+                return d.vars.map((v) => {
+                    return {object: v, options: d.options};
+                });
+            }, (d) => d.object.name)
             .enter()
                 .append("tr");
 
+        let that = this;
         d3Names.append("td")
             .attr("class", "nbtutor-var-name")
-            .text((d) => d.name);
+            .text((d) => d.object.name);
 
-        let that = this;
         d3Names.append("td")
             .attr("class", "nbtutor-anchor-from")
             .append("div")
-                .attr("id", (d) => d.uuid)
+                .attr("id", (d) => d.object.uuid)
             .each(function(d){
-                let object = heap_history.getObjectById(tracestep, d.id);
-                if (object.inplace){
+                let object = heap_history.getObjectById(tracestep, d.object.id);
+                if (d.options.inline && object.catagory === 'primitive'){
                     d3.select(this).text(object.value);
                 } else {
-                    // Add connectors data from name to object
-                    that.connectors.push({from: d.uuid, to: object.uuid});
+                    that._createObject(object, tracestep);
+                    that.connectors.push({
+                        from: d.object.uuid,
+                        to: object.uuid
+                    });
                 }
             });
 
+        // Create connector lines
+        this._connectObjects();
+
         // Toggle active frame
-        this.d3Root.selectAll("table")
-            .classed("nbtutor-active", false);
-        d3.select(this.d3Root.selectAll("table")[0].pop())
-            .classed("nbtutor-active", true);
+        let d3Tables = this.d3Root.select(".nbtutor-stack").selectAll("table");
+        d3Tables.classed("nbtutor-active", false);
+        d3.select(d3Tables[0].pop()).classed("nbtutor-active", true);
 
         // Toggle mouse hover over name
         d3Names.on('mouseover', function(d){
             d3.select(this).classed("nbtutor-hover", true);
-            that._setHover(d.uuid, true);
+            that._setHover(d.object.uuid, true);
         });
         d3Names.on('mouseout', function(d){
             d3.select(this).classed("nbtutor-hover", false);
-            that._setHover(d.uuid, false);
-        });
-
-        // Create heap objects
-        let d3HeapRows = this.d3Root.select(".nbtutor-heap").selectAll("div")
-            .data(heap_history.getHeapObjects(tracestep), (d) => d.uuid)
-            .enter()
-                .append("div")
-                .attr("class", "nbtutor-heap-row");
-
-        d3HeapRows.each(function(d){
-            let d3Div = d3.select(this);
-            that.createObject(d, d3Div, tracestep);
-        });
-
-        // Create connector lines
-        this.connectors.map((con) => {
-            d3.select("#" + con.to).classed(con.from, true);
-            connectObjects(con.from, con.to, that.d3Root[0], con.from);
+            that._setHover(d.object.uuid, false);
         });
     }
 
@@ -291,5 +332,6 @@ export class MemoryModelUI{
         jsplumb.empty(this.d3Root[0]);
         this.d3Root.selectAll("div").remove();
         this.connectors = [];
+        this.objects_rendered = [];
     }
 }
