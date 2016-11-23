@@ -313,10 +313,9 @@ export class MemoryModelUI{
         this._connectObjects();
 
         // Toggle active frame
-        this.d3Root.selectAll("table")
-            .classed("nbtutor-active", false);
-        d3.select(this.d3Root.selectAll("table")[0].pop())
-            .classed("nbtutor-active", true);
+        let d3Tables = this.d3Root.select(".nbtutor-stack").selectAll("table");
+        d3Tables.classed("nbtutor-active", false);
+        d3.select(d3Tables[0].pop()).classed("nbtutor-active", true);
 
         // Toggle mouse hover over name
         d3Names.on('mouseover', function(d){
