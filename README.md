@@ -1,12 +1,13 @@
 
 # Nbtutor
-
 Visualize Python code execution (line-by-line) in [Jupyter
 Notebook](http://jupyter.org) cells. Inspired by [Online Python
 Tutor](http://pythontutor.com).
 
 **Note: This project is not quite ready for release. This has only been tested
 using Python3.5 and will probably fall over in Python2.7**
+
+![Usage](examples/usage.gif "Usage")
 
 
 ## Usage (Jupyter Notebook)
@@ -21,8 +22,6 @@ magic to the top of the `CodeCell` and execute it again:
 ```python
 %%nbtutor
 ```
-
-![Usage](examples/usage.gif "Usage")
 
 ### Optional arguments
 There are also optional arguments that can be used with the cell magic:
@@ -49,7 +48,7 @@ There are also optional arguments that can be used with the cell magic:
 
 - Specify the number of significant digits for floats
 ```python
-%%nbtutor -s/--digits D
+%%nbtutor --digits D
 ```
 
 *Note: The "Global" frame is depth 0; the default depth is 1, and the default
@@ -75,7 +74,6 @@ The `nbtutor` ipython kernel extension (magics) is stored in the
 
 Build tools are stored in the `./tools` folder.
 
-
 ### Getting started
 You'll need conda installed, either from
 [Anaconda](https://www.continuum.io/downloads) or
@@ -99,7 +97,6 @@ Finally, you are ready to build the assets with:
 npm run build
 ```
 
-
 ### Installing the nbextension
 To ensure that you always get the right assets (for development), install
 the nbextension with the `symlink` options:
@@ -108,4 +105,3 @@ python setup.py develop
 jupyter nbextension install --overwrite --symlink --sys-prefix --py nbtutor
 jupyter nbextension enable --sys-prefix --py nbtutor
 ```
-
