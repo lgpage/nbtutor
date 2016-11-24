@@ -1,5 +1,4 @@
 ## TODO List:
-- Redo tables css
 - Add marker and table legends
 - Args: Cutoff sequence size/length
 - Render class and instance objects

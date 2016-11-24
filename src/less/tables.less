@@ -5,47 +5,48 @@
     padding: 10px;
 }
 
-.nbtutor-canvas p {
-    font-weight: bold;
-    text-align: center;
+.nbtutor-canvas {
+    font-family: monospace;
 }
 
 .nbtutor-canvas table {
     background: lightgrey;
-    font-family: monospace;
 }
 
 .nbtutor-stack th {
-    font-style: italic;
     padding: 5px;
-}
-
-.nbtutor-stack td.nbtutor-var-name {
-    text-align: right;
-    padding-right: 5px;
-    padding-bottom: 2px;
-}
-
-.nbtutor-stack td.nbtutor-anchor-from {
-    width: 5px;
-    padding-right: 3px;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
-}
-
-.nbtutor-stack .nbtutor-var-name {
-    font-family: monospace;
+    font-style: italic;
 }
 
 .nbtutor-stack .nbtutor-frame {
     margin-bottom: 20px;
 }
 
-.nbtutor-heap .nbtutor-var-object {
+.nbtutor-stack .nbtutor-var-name {
+    padding-right: 5px;
+    padding-bottom: 3px;
     text-align: right;
-    white-space: nowrap;
-    font-family: monospace;
+}
+
+.nbtutor-stack .nbtutor-anchor-from {
+    width: 21px;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+.nbtutor-stack .nbtutor-anchor-from div {
+    padding: 10px 5px 10px 5px;
+}
+
+.nbtutor-stack .nbtutor-anchor-from div:empty {
+    padding: 10px 0px 10px 10px;
+    margin-right: 10px;
+}
+
+.nbtutor-heap .nbtutor-var-object {
     margin-bottom: 10px;
+    white-space: nowrap;
+    text-align: right;
 }
 
 .nbtutor-heap .nbtutor-var-type {
@@ -55,34 +56,53 @@
 
 .nbtutor-heap .nbtutor-var-value {
     padding: 5px;
-    border: 1px solid black;
     border-radius: 5px;
+    border: 1px solid black;
+    text-align: center;
 }
 
 .nbtutor-heap .nbtutor-var-index{
     padding-left: 3px;
     text-align: left;
     font-size: x-small;
+}
+
+.nbtutor-heap .nbtutor-seq-set td,
+.nbtutor-heap .nbtutor-seq-tuple td,
+.nbtutor-heap .nbtutor-seq-list td {
     border-left: 1px solid black;
 }
 
-.nbtutor-heap .nbtutor-seq-tuple tr {
+.nbtutor-heap .nbtutor-seq-set tr:last-child,
+.nbtutor-heap .nbtutor-seq-tuple tr:last-child,
+.nbtutor-heap .nbtutor-seq-list tr:last-child {
+    border-bottom: 1px solid black;
+}
+
+.nbtutor-heap .nbtutor-seq-set td,
+.nbtutor-heap .nbtutor-seq-tuple td {
     border-right: 1px solid black;
 }
 
+.nbtutor-heap .nbtutor-seq-set tr:first-child,
 .nbtutor-heap .nbtutor-seq-tuple tr:first-child {
     border-top: 1px solid black;
 }
 
-.nbtutor-heap .nbtutor-var-key {
-    text-align: right;
-    padding-right: 5px;
+.nbtutor-heap .nbtutor-seq-dict tr {
+    border-bottom: 1px solid black;
 }
 
-.nbtutor-heap td.nbtutor-anchor-from {
-    padding: 13px;
-    border-left: 1px solid black;
-    border-bottom: 1px solid black;
+.nbtutor-heap .nbtutor-seq-dict tr td:first-child {
+    border-right: 1px solid black;
+}
+
+.nbtutor-heap .nbtutor-anchor-from div {
+    padding: 5px 10px 5px 10px;
+}
+
+.nbtutor-heap .nbtutor-anchor-from div:empty {
+    margin-top: 10px;
 }
 
 .nbtutor-timeline table {
