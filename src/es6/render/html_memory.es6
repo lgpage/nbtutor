@@ -2,18 +2,6 @@
 import {d3, uuid, jsplumb} from "nbtutor-deps";
 
 
-let stateMachineConnector = {
-    paintStyle: {lineWidth: 2, stroke: "#056"},
-    endpoint: "Blank",
-    anchors: ["Right", "Left"],
-    connector: ["Bezier", {"curviness": 80}],
-    detachable: false,
-    overlays: [
-        ["Arrow", {length: 10, width: 10, location: 1}]
-    ],
-};
-
-
 export class MemoryModelUI{
     constructor(trace_history, d3Root){
         this.trace_history = trace_history;
@@ -34,13 +22,24 @@ export class MemoryModelUI{
     _connectObjects(){
         let that = this;
         this.connectors.map((con) => {
+            let stateMachineConnector = {
+                paintStyle: {lineWidth: 2, stroke: "#056"},
+                endpoint: "Blank",
+                anchors: ["Right", "Left"],
+                connector: ["Bezier", {"curviness": 80}],
+                detachable: false,
+                overlays: [
+                    ["Arrow", {length: 10, width: 10, location: 1}]
+                ],
+            };
             stateMachineConnector.cssClass = con.from;
             stateMachineConnector.overlays[0][1].cssClass = con.from;
             if (con.from[0] == 'r'){
                 stateMachineConnector.anchors = [
-                    ["Top", "Bottom"], ["Left", "Right"]
+                    "Top", ["Left", "Right"]
                 ];
             }
+
             d3.select("#" + con.to).classed(con.from, true);
             jsplumb.setContainer(that.d3Root[0]);
             jsplumb.connect({
