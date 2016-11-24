@@ -1,7 +1,7 @@
 ## TODO List:
+- Render class and instance objects
 - Add marker and table legends
 - Args: Cutoff sequence size/length
-- Render class and instance objects
 - Test on python2.7
 - Remove the word 'frame' ??
 - Package (pip and conda)
