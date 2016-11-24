@@ -1,49 +1,53 @@
 .nbtutor-canvas,
-.nbtutor-canvas div
-{
+.nbtutor-canvas div {
     position: relative;
 }
 
 .nbtutor-input-area,
 .nbtutor-canvas,
 .nbtutor-stack,
-.nbtutor-heap,
-.nbtutor-heap-row
-{
+div[class^="nbtutor-heap"] {
     display: flex;
 }
 
 .nbtutor-input-area,
 .nbtutor-canvas,
-.nbtutor-heap-row
-{
+div[class^="nbtutor-heap-row"] {
     flex-flow: row;
 }
 
 .nbtutor-stack,
-.nbtutor-heap
-{
+.nbtutor-heap {
     flex-flow: column;
 }
 
 .nbtutor-input-area .CodeMirror,
-.nbtutor-canvas,
-.nbtutor-stack,
-.nbtutor-heap
-{
+.nbtutor-canvas {
     flex: 1 1 50em;
+}
+
+.nbtutor-stack {
+    flex: 1 1 40em;
+}
+
+.nbtutor-heap {
+    flex: 1 1 60em;
 }
 
 .nbtutor-canvas {
     border-left: 1px solid black;
 }
 
-.nbtutor-heap {
-    align-items: flex-end;
-}
-
 .nbtutor-heap-row-left {
     align-self: flex-start;
+}
+
+.nbtutor-heap-row-center {
+    align-self: center;
+}
+
+.nbtutor-heap-row-right {
+    align-self: flex-end;
 }
 
 .nbtutor-timeline-canvas {
