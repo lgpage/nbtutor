@@ -1,39 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
-import sys
-from contextlib import contextmanager
-
 from io import StringIO
 from bdb import BdbQuit
 from bdb import Bdb as StdBdb
 
 from .history import Heap, StackFrames, TraceHistory
-
-
-ignore_vars = [
-    "__name__",
-    "__builtin__",
-    "__builtins__",
-    "__module__",
-]
-
-
-def filter_dict(d, exclude):
-    ret = {}
-    for key, value in d.items():
-        if key not in exclude:
-            ret.update({key: value})
-    return ret
-
-
-@contextmanager
-def redirect_stdout(new_stdout):
-    old_stdout, sys.stdout = sys.stdout, new_stdout
-    try:
-        yield None
-    finally:
-        sys.stdout = old_stdout
+from .utils import ignore_vars, filter_dict
+from .utils import redirect_stdout
 
 
 class Bdb(StdBdb):
