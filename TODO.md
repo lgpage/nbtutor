@@ -1,5 +1,4 @@
 ## TODO List:
-- Render class and instance objects
 - Add marker and table legends
 - Args: Cutoff sequence size/length
 - Test on python2.7

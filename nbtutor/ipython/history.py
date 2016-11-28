@@ -80,13 +80,12 @@ class Heap(object):
     def has_object(self, obj_id):
         return obj_id in self.object_ids
 
-    def _add_object(self, obj, position='right'):
+    def _add_object(self, obj, type_info, position='right', **kwargs):
         obj_id = id(obj)
         if self.has_object(obj_id):
             return
 
-        type_name = type(obj).__name__
-        type_catagory = get_type_catagory(obj)
+        type_catagory, type_name = type_info
         if type_catagory == 'primitive':
             position = 'right' if not self.options.nolies else position
 
@@ -100,7 +99,7 @@ class Heap(object):
             "value": format(obj, self.options),
         }))
 
-    def _add_sequence_object(self, obj, position='center'):
+    def _add_sequence_object(self, obj, type_info, position='center', **kwargs):
         obj_id = id(obj)
         if self.has_object(obj_id):
             return
@@ -112,8 +111,7 @@ class Heap(object):
                 "id": id(val),
             }))
 
-        type_name = type(obj).__name__
-        type_catagory = get_type_catagory(obj)
+        type_catagory, type_name = type_info
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
@@ -125,7 +123,17 @@ class Heap(object):
             "values": data_values,
         }))
 
-    def _add_key_value_object(self, obj, position='center'):
+    def _add_class_object(self, obj, type_info, position='center', **kwargs):
+        obj_id = id(obj)
+        if self.has_object(obj_id):
+            return
+
+        type_info = ('key-value', type_info[-1])
+        class_vars = filter_dict(obj.__dict__, ignore_vars)
+        self._add_key_value_object(class_vars, type_info)
+        self.data[-1]["id"] = obj_id
+
+    def _add_key_value_object(self, obj, type_info, position='center', **kwargs):
         obj_id = id(obj)
         if self.has_object(obj_id):
             return
@@ -146,8 +154,7 @@ class Heap(object):
                 "val_id": id(value),
             }))
 
-        type_name = type(obj).__name__
-        type_catagory = get_type_catagory(obj)
+        type_catagory, type_name = type_info
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
@@ -161,12 +168,20 @@ class Heap(object):
         }))
 
     def _add(self, obj, **kwargs):
-        if isinstance(obj, key_value_types):
-            self._add_key_value_object(obj, **kwargs)
-        elif isinstance(obj, sequence_types):
-            self._add_sequence_object(obj, **kwargs)
+        type_info = get_type_info(obj)
+        if type_info[0] == 'key-value':
+            self._add_key_value_object(obj, type_info, **kwargs)
+        elif type_info[0] == 'sequence':
+            self._add_sequence_object(obj, type_info, **kwargs)
+        elif type_info[0] == 'class' or type_info[0].endswith('instance'):
+            if not hasattr(obj, '__dict__'):
+                # Not all classes or class instances have a __dict__ attribute
+                type_info = ('unknown', type_info[-1])
+                self._add_object(obj, type_info, **kwargs)
+            else:
+                self._add_class_object(obj, type_info, **kwargs)
         else:
-            self._add_object(obj, **kwargs)
+            self._add_object(obj, type_info, **kwargs)
 
     def add(self, filtered_locals):
         for obj in filtered_locals.values():
