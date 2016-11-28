@@ -21,7 +21,7 @@ class StackFrames(object):
 
     def _add_frame(self, frame, lineno, event):
         name = frame.f_code.co_name
-        name = "Global" if name == "<module>" else name
+        name = "Global frame" if name == "<module>" else name
         self.data.append(dict({
             "id": id(frame),
             "name": name,

@@ -272,7 +272,7 @@ export class MemoryModelUI{
             .append("tr")
             .append("th")
                 .attr("colspan", 2)
-                .text((d) => d.name + " frame");
+                .text((d) => d.name);
         d3Frames.select("table").append("tbody");
         d3Frames.select("table").append("tfoot");
 
