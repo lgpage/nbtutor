@@ -4,11 +4,12 @@ function toShortString(type, value){
      * Get a short string representation for an object type and value
      */
     // TODO Move this data to backend
+    value = '' + value;
     let short_str = {
-        'int': (d) => (value.length > 3) ? 'INT' : value,
-        'float': (d) => (value.length > 3) ? 'FLT' : value,
-        'str': (d) => (value.length > 3) ? 'STR' : value,
-        'bool': (d) => value[0].toUpperCase(),
+        'int': (value.length > 3) ? 'INT' : value,
+        'float': (value.length > 3) ? 'FLT' : value,
+        'str': (value.length > 3) ? 'STR' : value,
+        'bool': value[0].toUpperCase(),
         'none': 'NON',
         'complex': 'CPX',
         'module': 'MOD',
