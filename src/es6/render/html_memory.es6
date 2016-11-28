@@ -137,7 +137,7 @@ export class MemoryModelUI{
         });
     }
 
-    _createDict(object, tracestep){
+    _createKeyValue(object, tracestep){
         let that = this;
         let heap_history = this.trace_history.heap_history;
         object.values.map((obj) => {
@@ -168,7 +168,7 @@ export class MemoryModelUI{
             .text(object.type);
 
         let d3Table = d3Obj.append("table")
-            .attr("class", "nbtutor-seq-" + object.type);
+            .attr("class", "nbtutor-seq-key-value");
 
         let d3Rows = d3Table.selectAll("tr")
             .data(object.values)
@@ -233,7 +233,7 @@ export class MemoryModelUI{
                 this._createSequence(object, tracestep);
                 break;
             case "key-value":
-                this._createDict(object, tracestep);
+                this._createKeyValue(object, tracestep);
                 break;
             default:
                 this._createPrimitive({
