@@ -80,15 +80,17 @@ class Heap(object):
     def has_object(self, obj_id):
         return obj_id in self.object_ids
 
-    def _add_object(self, obj, type_info, position='right', **kwargs):
+    def _add_object(self, obj, type_info, new_ids, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id):
+        if self.has_object(obj_id) or obj_id in new_ids:
             return
 
         type_catagory, type_name = type_info
+        position = kwargs.get('position', 'right')
         if type_catagory == 'primitive':
             position = 'right' if not self.options.nolies else position
 
+        new_ids.append(obj_id)
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
@@ -99,14 +101,15 @@ class Heap(object):
             "value": format(obj, self.options),
         }))
 
-    def _add_sequence_object(self, obj, type_info, position='center', **kwargs):
+    def _add_sequence_object(self, obj, type_info, new_ids, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id):
+        if self.has_object(obj_id) or obj_id in new_ids:
             return
 
         data_values = []
+        new_ids.append(obj_id)
         for val in obj:
-            self._add(val)
+            self._add(val, new_ids)
             data_values.append(dict({
                 "id": id(val),
             }))
@@ -118,24 +121,26 @@ class Heap(object):
             "catagory": type_catagory,
             "options": {
                 "inline": self.options.inline,
-                "position": position,
+                "position": kwargs.get('position', 'center'),
             },
             "values": data_values,
         }))
 
-    def _add_class_object(self, obj, type_info, position='center', **kwargs):
+    def _add_class_object(self, obj, type_info, new_ids, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id):
+        if self.has_object(obj_id) or obj_id in new_ids:
             return
 
+        new_ids.append(obj_id)
         type_info = ('key-value', type_info[-1])
         class_vars = filter_dict(obj.__dict__, ignore_vars)
-        self._add_key_value_object(class_vars, type_info)
+        self._add_key_value_object(class_vars, type_info, new_ids, **kwargs)
         self.data[-1]["id"] = obj_id
+        new_ids.remove(id(class_vars))
 
-    def _add_key_value_object(self, obj, type_info, position='center', **kwargs):
+    def _add_key_value_object(self, obj, type_info, new_ids, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id):
+        if self.has_object(obj_id) or obj_id in new_ids:
             return
 
         obj_keys = obj.keys()
@@ -145,10 +150,11 @@ class Heap(object):
             pass
 
         data_values = []
+        new_ids.append(obj_id)
         for key in obj_keys:
             value = obj[key]
-            self._add(key, position='left')
-            self._add(value)
+            self._add(key, new_ids, position='left')
+            self._add(value, new_ids)
             data_values.append(dict({
                 "key_id": id(key),
                 "val_id": id(value),
@@ -162,30 +168,31 @@ class Heap(object):
             "options": {
                 "inline_keys": not self.options.nolies,
                 "inline_vals": self.options.inline,
-                "position": position,
+                "position": kwargs.get('position', 'center'),
             },
             "values": data_values,
         }))
 
-    def _add(self, obj, **kwargs):
+    def _add(self, obj, new_ids, **kwargs):
         type_info = get_type_info(obj)
         if type_info[0] == 'key-value':
-            self._add_key_value_object(obj, type_info, **kwargs)
+            self._add_key_value_object(obj, type_info, new_ids, **kwargs)
         elif type_info[0] == 'sequence':
-            self._add_sequence_object(obj, type_info, **kwargs)
+            self._add_sequence_object(obj, type_info, new_ids, **kwargs)
         elif type_info[0] == 'class' or type_info[0].endswith('instance'):
             if not hasattr(obj, '__dict__'):
                 # Not all classes or class instances have a __dict__ attribute
                 type_info = ('unknown', type_info[-1])
-                self._add_object(obj, type_info, **kwargs)
+                self._add_object(obj, type_info, new_ids, **kwargs)
             else:
-                self._add_class_object(obj, type_info, **kwargs)
+                self._add_class_object(obj, type_info, new_ids, **kwargs)
         else:
-            self._add_object(obj, type_info, **kwargs)
+            self._add_object(obj, type_info, new_ids, **kwargs)
 
     def add(self, filtered_locals):
+        new_ids = []
         for obj in filtered_locals.values():
-            self._add(obj)
+            self._add(obj, new_ids)
 
     def is_empty(self):
         return len(self) == 0
