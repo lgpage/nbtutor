@@ -96,6 +96,8 @@ def get_type_info(obj):
         return ('sequence', type(obj).__name__)
     if isinstance(obj, key_value_types):
         return ('key-value', type(obj).__name__)
+    if isinstance(obj, types.ModuleType):
+        return ('module', type(obj).__name__)
     if isinstance(obj, (types.FunctionType, types.MethodType)):
         return ('function', type(obj).__name__)
     if isinstance(obj, type):
