@@ -4,7 +4,7 @@ function toShortString(type, value){
      * Get a short string representation for an object type and value
      */
     // TODO Move this data to backend
-    value = '' + value;
+    value = ('' + value) || 'unknown';
     let short_str = {
         'int': (value.length > 3) ? 'INT' : value,
         'float': (value.length > 3) ? 'FLT' : value,
