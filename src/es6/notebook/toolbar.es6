@@ -20,6 +20,9 @@ export class Toolbar {
     }
 
     _build(){
+        if (this.$root.hasClass("nbtutor-buttons")){
+            this.destroy();
+        }
         this.$root.addClass("nbtutor-buttons");
         this.$root.append(this.$btn_first);
         this.$root.append(this.$btn_prev);
@@ -66,5 +69,6 @@ export class Toolbar {
     }
 
     destroy(){
+        this.$root.empty();
     }
 }

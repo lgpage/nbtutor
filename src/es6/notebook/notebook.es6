@@ -190,6 +190,7 @@ export class VisualizedCell {
     destroy(){
         this.$nbtutor_canvas.remove();
         this.markers.destroy();
+        this.toolbar.destroy();
         this.cell.nbtutor = null;
     }
 }
