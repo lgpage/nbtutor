@@ -138,6 +138,7 @@ export class VisualizedCell {
         });
 
         this.toolbar.$select_view.on("change", function(){
+            that.memoryUI.destroy();
             let render_view = $(this).val();
             if (render_view == "none"){
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");

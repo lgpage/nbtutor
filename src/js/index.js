@@ -89,12 +89,6 @@ define([
                 });
             });
         });
-
-        requirejs(["nbtutor-deps"], function(deps){
-            $(window).resize(function(){
-                deps.jsplumb.repaintEverything();
-            });
-        });
     };
 
     var loadNbtutor = function(){
