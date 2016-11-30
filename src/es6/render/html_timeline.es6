@@ -1,5 +1,5 @@
 
-import {d3, jsplumb} from "nbtutor-deps";
+import {d3} from "nbtutor-deps";
 
 
 export class TimelineUI{
@@ -38,7 +38,7 @@ export class TimelineUI{
         // Create stace step headings
         d3Theads.append("tr").append("th")
             .attr("colspan", this.stack_timeline.tracestep+1)
-            .text((d) => d.name + " frame");
+            .text((d) => d.name);
 
         d3Theads.append("tr").selectAll("th")
             .data(headings)
@@ -71,7 +71,6 @@ export class TimelineUI{
     }
 
     destroy(){
-        jsplumb.empty(this.d3Root[0]);
         this.d3Root.selectAll("div").remove();
     }
 }

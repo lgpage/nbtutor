@@ -1,5 +1,5 @@
 
-import {d3, uuid, jsplumb} from "nbtutor-deps";
+import {$, d3, uuid, jsplumb} from "nbtutor-deps";
 
 
 export class MemoryModelUI{
@@ -8,6 +8,9 @@ export class MemoryModelUI{
         this.d3Root = d3Root;
         this.connectors = [];
         this.objects_rendered = [];
+        this.jsplumb = jsplumb.getInstance({
+            Container: this.d3Root[0],
+        });
     }
 
     _setHover(cls, state){
@@ -41,8 +44,7 @@ export class MemoryModelUI{
             }
 
             d3.select("#" + con.to).classed(con.from, true);
-            jsplumb.setContainer(that.d3Root[0]);
-            jsplumb.connect({
+            this.jsplumb.connect({
                 source: con.from,
                 target: con.to
             }, stateMachineConnector);
@@ -325,10 +327,14 @@ export class MemoryModelUI{
             d3.select(this).classed("nbtutor-hover", false);
             that._setHover(d.object.uuid, false);
         });
+
+        $(window).resize(function(){
+            that.jsplumb.repaintEverything();
+        });
     }
 
     destroy(){
-        jsplumb.empty(this.d3Root[0]);
+        this.jsplumb.empty(this.d3Root[0]);
         this.d3Root.selectAll("div").remove();
         this.connectors = [];
         this.objects_rendered = [];
