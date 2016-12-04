@@ -89,6 +89,15 @@ define([
                 });
             });
         });
+
+        // Clear visualizations when the kernel is restarted
+        events.on('kernel_restarting.Kernel', function(){
+            Jupyter.notebook.get_cells().map(function(cell){
+                if (cell.nbtutor){
+                    cell.nbtutor.destroy();
+                }
+            });
+        });
     };
 
     var loadNbtutor = function(){
