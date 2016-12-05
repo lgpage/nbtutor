@@ -141,16 +141,18 @@ export class VisualizedCell {
             that.memoryUI.destroy();
             let render_view = $(this).val();
             if (render_view == "none"){
+                that.markers.clearMarkers();
+                that.markers.hideLegend();
                 that.$nbtutor_canvas.addClass("nbtutor-hidden");
-                that.markers.destroy();
             } else {
+                that.markers.showLegend();
                 that.$nbtutor_canvas.removeClass("nbtutor-hidden");
                 that.toolbar.$btn_first.trigger("click");
             }
         });
 
         this.codemirror.on("change", () => {
-            that.markers.destroy();
+            that.markers.clearMarkers();
             that.toolbar.$select_view.val("none").trigger("change");
             that.trace_history.clear();
         });
