@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
+from __future__ import unicode_literals
 
 import six
 import sys
@@ -22,13 +23,13 @@ ignore_vars = [
     "__qualname__",
     "__doc__",
     "__dict__",
+    "__package__",
     "__weakref__",
 ]
 
 primitive_types = [
     int,
     float,
-    str,
     bool,
     type(None),
     complex,
@@ -44,6 +45,7 @@ key_value_types = [
     dict,
 ]
 
+primitive_types.extend(list(six.string_types))
 
 if numpy is not None:
     new_types = []
@@ -85,6 +87,8 @@ def format(obj, options):
         if isinstance(obj, (_type, )):
             return fmtr(obj)
     try:
+        if six.PY2 and isinstance(obj, six.string_types):
+            return str(obj.encode('utf-8'))
         return str(obj)
     except:
         return 'OBJECT'
@@ -106,6 +110,12 @@ def get_type_info(obj):
             return ('class', obj.__name__)
     if isinstance(type(obj), type):
         if hasattr(obj, '__dict__'):
-            return ('instance', '{} instance'.format(type(obj).__name__))
+            cls_name = type(obj).__name__
+            if cls_name == 'classobj':
+                cls_name = obj.__name__
+                return ('class', '{}'.format(cls_name))
+            if cls_name == 'instance':
+                cls_name = obj.__class__.__name__
+            return ('instance', '{} instance'.format(cls_name))
 
     return ('unknown', type(obj).__name__)
