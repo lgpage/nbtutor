@@ -39,6 +39,10 @@ class NbtutorMagics(Magics):
         help="The number of significant digits for floats (default: 3)."
     )
     @magic_arguments.argument(
+        '--step_all', action='store_true', default=False,
+        help="Step through all frames (including other global scope frames)"
+    )
+    @magic_arguments.argument(
         '--nolies', action='store_true', default=False,
         help="No inlined keys, attributes or primitive objects"
     )
