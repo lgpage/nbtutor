@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
+from __future__ import unicode_literals
 
 import six
 import sys
@@ -28,7 +29,6 @@ ignore_vars = [
 primitive_types = [
     int,
     float,
-    str,
     bool,
     type(None),
     complex,
@@ -44,6 +44,7 @@ key_value_types = [
     dict,
 ]
 
+primitive_types.extend(list(six.string_types))
 
 if numpy is not None:
     new_types = []
@@ -85,6 +86,8 @@ def format(obj, options):
         if isinstance(obj, (_type, )):
             return fmtr(obj)
     try:
+        if six.PY2:
+            return str(obj.encode('utf-8'))
         return str(obj)
     except:
         return 'OBJECT'
