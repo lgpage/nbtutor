@@ -66,6 +66,7 @@ class Heap(object):
     def __init__(self, options):
         self.options = options
         self.data = list()
+        self._new_ids = None
 
     def clear(self):
         self.__init__(self.options)
@@ -80,9 +81,9 @@ class Heap(object):
     def has_object(self, obj_id):
         return obj_id in self.object_ids
 
-    def _add_object(self, obj, type_info, new_ids, **kwargs):
+    def _add_object(self, obj, type_info, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id) or obj_id in new_ids:
+        if self.has_object(obj_id) or obj_id in self._new_ids:
             return
 
         type_catagory, type_name = type_info
@@ -90,7 +91,7 @@ class Heap(object):
         if type_catagory == 'primitive':
             position = 'right' if not self.options.nolies else position
 
-        new_ids.append(obj_id)
+        self._new_ids.append(obj_id)
         self.data.append(dict({
             "id": obj_id,
             "type": type_name,
@@ -101,15 +102,19 @@ class Heap(object):
             "value": format(obj, self.options),
         }))
 
-    def _add_sequence_object(self, obj, type_info, new_ids, **kwargs):
+    def _add_sequence_object(self, obj, type_info, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id) or obj_id in new_ids:
+        if self.has_object(obj_id) or obj_id in self._new_ids:
             return
 
         data_values = []
-        new_ids.append(obj_id)
-        for val in obj:
-            self._add(val, new_ids)
+        max_reached = False
+        self._new_ids.append(obj_id)
+        for ind, val in enumerate(obj):
+            if ind >= self.options.max_size:
+                max_reached = True
+                break
+            self._add(val)
             data_values.append(dict({
                 "id": id(val),
             }))
@@ -122,25 +127,26 @@ class Heap(object):
             "options": {
                 "inline": self.options.inline,
                 "position": kwargs.get('position', 'center'),
+                "ellipsis": max_reached,
             },
             "values": data_values,
         }))
 
-    def _add_class_object(self, obj, type_info, new_ids, **kwargs):
+    def _add_class_object(self, obj, type_info, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id) or obj_id in new_ids:
+        if self.has_object(obj_id) or obj_id in self._new_ids:
             return
 
-        new_ids.append(obj_id)
+        self._new_ids.append(obj_id)
         type_info = ('key-value', type_info[-1])
         class_vars = filter_dict(obj.__dict__, ignore_vars)
-        self._add_key_value_object(class_vars, type_info, new_ids, **kwargs)
+        self._add_key_value_object(class_vars, type_info, **kwargs)
         self.data[-1]["id"] = obj_id
-        new_ids.remove(id(class_vars))
+        self._new_ids.remove(id(class_vars))
 
-    def _add_key_value_object(self, obj, type_info, new_ids, **kwargs):
+    def _add_key_value_object(self, obj, type_info, **kwargs):
         obj_id = id(obj)
-        if self.has_object(obj_id) or obj_id in new_ids:
+        if self.has_object(obj_id) or obj_id in self._new_ids:
             return
 
         obj_keys = obj.keys()
@@ -150,11 +156,15 @@ class Heap(object):
             pass
 
         data_values = []
-        new_ids.append(obj_id)
-        for key in obj_keys:
+        max_reached = False
+        self._new_ids.append(obj_id)
+        for ind, key in enumerate(obj_keys):
+            if ind >= self.options.max_size:
+                max_reached = True
+                break
             value = obj[key]
-            self._add(key, new_ids, position='left')
-            self._add(value, new_ids)
+            self._add(key, position='left')
+            self._add(value)
             data_values.append(dict({
                 "key_id": id(key),
                 "val_id": id(value),
@@ -169,30 +179,26 @@ class Heap(object):
                 "inline_keys": not self.options.nolies,
                 "inline_vals": self.options.inline,
                 "position": kwargs.get('position', 'center'),
+                "ellipsis": max_reached,
             },
             "values": data_values,
         }))
 
-    def _add(self, obj, new_ids, **kwargs):
+    def _add(self, obj, **kwargs):
         type_info = get_type_info(obj)
         if type_info[0] == 'key-value':
-            self._add_key_value_object(obj, type_info, new_ids, **kwargs)
+            self._add_key_value_object(obj, type_info, **kwargs)
         elif type_info[0] == 'sequence':
-            self._add_sequence_object(obj, type_info, new_ids, **kwargs)
+            self._add_sequence_object(obj, type_info, **kwargs)
         elif type_info[0] == 'class' or type_info[0].endswith('instance'):
-            if not hasattr(obj, '__dict__'):
-                # Not all classes or class instances have a __dict__ attribute
-                type_info = ('unknown', type_info[-1])
-                self._add_object(obj, type_info, new_ids, **kwargs)
-            else:
-                self._add_class_object(obj, type_info, new_ids, **kwargs)
+            self._add_class_object(obj, type_info, **kwargs)
         else:
-            self._add_object(obj, type_info, new_ids, **kwargs)
+            self._add_object(obj, type_info, **kwargs)
 
     def add(self, filtered_locals):
-        new_ids = []
+        self._new_ids = []
         for obj in filtered_locals.values():
-            self._add(obj, new_ids)
+            self._add(obj)
 
     def is_empty(self):
         return len(self) == 0
