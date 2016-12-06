@@ -87,7 +87,7 @@ def format(obj, options):
         if isinstance(obj, (_type, )):
             return fmtr(obj)
     try:
-        if six.PY2:
+        if six.PY2 and isinstance(obj, six.string_types):
             return str(obj.encode('utf-8'))
         return str(obj)
     except:
