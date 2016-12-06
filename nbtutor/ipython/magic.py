@@ -39,6 +39,10 @@ class NbtutorMagics(Magics):
         help="The number of significant digits for floats (default: 3)."
     )
     @magic_arguments.argument(
+        '--max_size', metavar='S', type=int, default=5,
+        help="The number of sequence object elements to visualize (default: 5)."
+    )
+    @magic_arguments.argument(
         '--step_all', action='store_true', default=False,
         help="Step through all frames (including other global scope frames)"
     )
