@@ -59,34 +59,43 @@ class Bdb(StdBdb):
 
     def is_other_cell_frame(self, frame):
         return frame.f_code.co_filename.startswith("<ipython-input-")
+
     def get_stack_data(self, frame, traceback, event_type):
         heap_data = Heap(self.options)
         stack_data = StackFrames(self.options)
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
 
-        skip_this_frame = True
-        for frame, lineno in stack_frames:
+        for frame_ind, (frame, lineno) in enumerate(stack_frames):
+            skip_this_stack = False
+
             # Skip the self.run calling frame (first frame)
-            if skip_this_frame:
-                skip_this_frame = False
+            if frame_ind == 0:
                 continue
 
-            # Skip frames after a certain depth
-            skip_this_stack = False
+            # Skip stack after a certain stack frame depth
             if len(stack_data) > self.options.depth:
                 skip_this_stack = True
                 break
 
+            # Skip stack when frames dont belong to the current notebook or
+            # current cell, I.e. frames in another global scope altogether
+            # or frames in other cells
+            if (not self.is_notebook_frame(frame) or
+                self.is_other_cell_frame(frame)):
+                if not self.options.step_all:
+                    skip_this_stack = True
+                    break
+                lineno = 0  # So line markers dont display for these frames
+            else:
+                lineno += 1  # Because cell magic is actually line 1
+
+            # Filter out ignored names from the frame locals
             user_locals = filter_dict(
                 frame.f_locals,
                 ignore_vars + list(self.ipy_shell.user_ns_hidden.keys())
             )
 
-            lineno += 1  # Add 1 because cell magics is actually line 1
-            # FIXME: This is wrong for any/all frame code objects not created
-            # with cell magic.
-            # FIXME: Linenos from any/all frame code objects not created in
-            # Jupyter (the IPython shell) should be ignored (set to 0).
+            # Add frame and heap data
             stack_data.add(frame, lineno, event_type, user_locals)
             heap_data.add(user_locals)
 
