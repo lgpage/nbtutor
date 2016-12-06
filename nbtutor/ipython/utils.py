@@ -102,8 +102,10 @@ def get_type_info(obj):
     if isinstance(obj, (types.FunctionType, types.MethodType)):
         return ('function', type(obj).__name__)
     if isinstance(obj, type):
-        return ('class', obj.__name__)
+        if hasattr(obj, '__dict__'):
+            return ('class', obj.__name__)
     if isinstance(type(obj), type):
-        return ('instance', '{} instance'.format(type(obj).__name__))
+        if hasattr(obj, '__dict__'):
+            return ('instance', '{} instance'.format(type(obj).__name__))
 
     return ('unknown', type(obj).__name__)

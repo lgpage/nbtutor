@@ -51,13 +51,25 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor --digits D
 ```
 
+- Specify the maximum number of elements to visualize for "sequence" type
+  objects
+```python
+%%nbtutor --max_size S
+```
+
+- Step through all frames (including frames from other cells and other global
+  scopes altogether)
+```python
+%%nbtutor --step_all
+```
+
 - No inlined keys, attributes, or primitive objects
 ```python
 %%nbtutor --nolies
 ```
 
-*Note: The "Global" frame is depth 0; the default depth is 1, and the default
-significant digits is 3*
+*Note: The "Global" frame is depth 0; the default depth is 1, the default
+significant digits is 3 and the default max size is 5*
 
 
 ## Develop
