@@ -110,6 +110,12 @@ def get_type_info(obj):
             return ('class', obj.__name__)
     if isinstance(type(obj), type):
         if hasattr(obj, '__dict__'):
-            return ('instance', '{} instance'.format(type(obj).__name__))
+            cls_name = type(obj).__name__
+            if cls_name == 'classobj':
+                cls_name = obj.__name__
+                return ('class', '{}'.format(cls_name))
+            if cls_name == 'instance':
+                cls_name = obj.__class__.__name__
+            return ('instance', '{} instance'.format(cls_name))
 
     return ('unknown', type(obj).__name__)
