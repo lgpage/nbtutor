@@ -23,6 +23,9 @@ class Bdb(StdBdb):
     def run_cell(self, cell):
         globals = self.ipy_shell.user_global_ns
         locals = self.ipy_shell.user_ns
+        globals.update({
+            "__ipy_scope__": None,
+        })
         try:
             with redirect_stdout(self.stdout):
                 self.run(cell, globals, locals)
@@ -51,6 +54,11 @@ class Bdb(StdBdb):
         but only if we are to stop at or just below this level."""
         pass
 
+    def is_notebook_frame(self, frame):
+        return "__ipy_scope__" in frame.f_globals.keys()
+
+    def is_other_cell_frame(self, frame):
+        return frame.f_code.co_filename.startswith("<ipython-input-")
     def get_stack_data(self, frame, traceback, event_type):
         heap_data = Heap(self.options)
         stack_data = StackFrames(self.options)
