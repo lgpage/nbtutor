@@ -103,6 +103,12 @@ export class MemoryModelUI{
             indexes.push(i);
         }
 
+        // Add an ellipsis to the end of a long sequence
+        if (object.options.ellipsis){
+            indexes.push("...");
+            object.values.push("...");
+        }
+
         // Add index numbers
         d3IndRow.selectAll("td")
             .data(indexes)
@@ -120,11 +126,15 @@ export class MemoryModelUI{
 
         d3Refs.append("div")
             .each(function(d){
-                let child = heap_history.getObjectById(tracestep, d.id);
-                if (object.options.inline && child.catagory === 'primitive'){
-                    d3.select(this).text(child.value);
+                if (object.options.ellipsis && d === "..."){
+                    d3.select(this).text("...");
                 } else {
-                    d3.select(this).attr("id", (d) => d.uuid);
+                    let child = heap_history.getObjectById(tracestep, d.id);
+                    if (object.options.inline && child.catagory === 'primitive'){
+                        d3.select(this).text(child.value);
+                    } else {
+                        d3.select(this).attr("id", (d) => d.uuid);
+                    }
                 }
             });
 
@@ -172,6 +182,11 @@ export class MemoryModelUI{
         let d3Table = d3Obj.append("table")
             .attr("class", "nbtutor-seq-key-value");
 
+        // Add an ellipsis to the end of a long sequence
+        if (object.options.ellipsis){
+            object.values.push("...");
+        }
+
         let d3Rows = d3Table.selectAll("tr")
             .data(object.values)
             .enter()
@@ -184,21 +199,29 @@ export class MemoryModelUI{
 
         d3Keys.append("div")
             .each(function(d){
-                let key = heap_history.getObjectById(tracestep, d.key_id);
-                if (object.options.inline_keys && key.catagory === 'primitive'){
-                    d3.select(this).text(key.value);
+                if (object.options.ellipsis && d === "..."){
+                    d3.select(this).text("...");
                 } else {
-                    d3.select(this).attr("id", (d) => d.key_uuid);
+                    let key = heap_history.getObjectById(tracestep, d.key_id);
+                    if (object.options.inline_keys && key.catagory === 'primitive'){
+                        d3.select(this).text(key.value);
+                    } else {
+                        d3.select(this).attr("id", (d) => d.key_uuid);
+                    }
                 }
             });
 
         d3Vals.append("div")
             .each(function(d){
-                let value = heap_history.getObjectById(tracestep, d.val_id);
-                if (object.options.inline_vals && value.catagory === 'primitive'){
-                    d3.select(this).text(value.value);
+                if (object.options.ellipsis && d === "..."){
+                    d3.select(this).text("...");
                 } else {
-                    d3.select(this).attr("id", (d) => d.val_uuid);
+                    let value = heap_history.getObjectById(tracestep, d.val_id);
+                    if (object.options.inline_vals && value.catagory === 'primitive'){
+                        d3.select(this).text(value.value);
+                    } else {
+                        d3.select(this).attr("id", (d) => d.val_uuid);
+                    }
                 }
             });
 

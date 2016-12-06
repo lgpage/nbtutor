@@ -108,8 +108,12 @@ class Heap(object):
             return
 
         data_values = []
+        max_reached = False
         self._new_ids.append(obj_id)
-        for val in obj:
+        for ind, val in enumerate(obj):
+            if ind >= self.options.max_size:
+                max_reached = True
+                break
             self._add(val)
             data_values.append(dict({
                 "id": id(val),
@@ -123,6 +127,7 @@ class Heap(object):
             "options": {
                 "inline": self.options.inline,
                 "position": kwargs.get('position', 'center'),
+                "ellipsis": max_reached,
             },
             "values": data_values,
         }))
@@ -151,8 +156,12 @@ class Heap(object):
             pass
 
         data_values = []
+        max_reached = False
         self._new_ids.append(obj_id)
-        for key in obj_keys:
+        for ind, key in enumerate(obj_keys):
+            if ind >= self.options.max_size:
+                max_reached = True
+                break
             value = obj[key]
             self._add(key, position='left')
             self._add(value)
@@ -170,6 +179,7 @@ class Heap(object):
                 "inline_keys": not self.options.nolies,
                 "inline_vals": self.options.inline,
                 "position": kwargs.get('position', 'center'),
+                "ellipsis": max_reached,
             },
             "values": data_values,
         }))
