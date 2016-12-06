@@ -10,7 +10,7 @@ from .utils import ignore_vars, filter_dict
 from .utils import redirect_stdout
 
 
-class Bdb(StdBdb):
+class Bdb(StdBdb, object):
 
     def __init__(self, ipy_shell, options):
         super(Bdb, self).__init__()
