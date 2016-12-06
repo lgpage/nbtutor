@@ -23,6 +23,7 @@ ignore_vars = [
     "__qualname__",
     "__doc__",
     "__dict__",
+    "__package__",
     "__weakref__",
 ]
 
