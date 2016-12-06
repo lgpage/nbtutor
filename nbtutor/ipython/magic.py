@@ -39,6 +39,10 @@ class NbtutorMagics(Magics):
         help="The number of significant digits for floats (default: 3)."
     )
     @magic_arguments.argument(
+        '--step_all', action='store_true', default=False,
+        help="Step through all frames (including other global scope frames)"
+    )
+    @magic_arguments.argument(
         '--nolies', action='store_true', default=False,
         help="No inlined keys, attributes or primitive objects"
     )
@@ -57,7 +61,12 @@ class NbtutorMagics(Magics):
 
         bdb = Bdb(self.shell, opts)
         bdb.run_cell(cell)
-        if bdb.code_error and not opts.debug:
-            self.shell.run_cell(cell)
-        else:
+
+        self.shell.run_cell(cell)
+        # FIXME: This pointless re-running the cell again via ipython is needed
+        # to get the "<ipython-input-{0}-{1}>" f_code.co_filename set and the
+        # code cached. I don't know enough about the IPython API to do this
+        # better inside the debugger.
+
+        if not bdb.code_error or opts.debug:
             self.comm.send(bdb.trace_history.clean())

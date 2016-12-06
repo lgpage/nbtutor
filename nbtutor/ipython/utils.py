@@ -14,6 +14,7 @@ from contextlib import contextmanager
 
 
 ignore_vars = [
+    "__ipy_scope__",  # Added by nbtutor to the calling frame globals
     "__name__",
     "__builtin__",
     "__builtins__",

@@ -34,11 +34,11 @@ export class GutterMarkers {
             .append($prevLineMarker)
             .append($("<span/>").text("Previous line")));
         this.$legend.append($("<p/>")
-            .append($curLineMarker)
-            .append($("<span/>").text("Current line")));
-        this.$legend.append($("<p/>")
             .append($nextLineMarker)
             .append($("<span/>").text("Next line")));
+        this.$legend.append($("<p/>")
+            .append($curLineMarker)
+            .append($("<span/>").text("Waiting for next frame")));
 
         this.$root.append(this.$legend);
     }
