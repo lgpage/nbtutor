@@ -34,7 +34,7 @@ script:
   - npm run build
   - jupyter nbextension install --sys-prefix --symlink --py nbtutor
   - jupyter nbextension enable --sys-prefix --py nbtutor
-  - npm run test
+  - npm run tests
 
 after_success:
   - coveralls
