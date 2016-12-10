@@ -1,8 +1,16 @@
 name: nbtutor
 channels:
+  - conda-forge
   - defaults
 dependencies:
   - anaconda-client
+  - coverage
+  - flake8
+  - isort
   - nodejs
   - notebook >=4.2.0
+  - pytest
+  - pytest-cov
   - python
+  - requests
+  - sphinx

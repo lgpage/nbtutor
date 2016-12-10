@@ -1,0 +1,6 @@
+[report]
+omit =
+    */templates/*
+    */static/*
+    */tools/*
+    */pdf*

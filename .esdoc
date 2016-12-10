@@ -1,0 +1,4 @@
+{
+  "source": "./src/es6",
+  "destination": "./docs/api/esdoc"
+}

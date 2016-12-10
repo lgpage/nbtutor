@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: 0 */
+import {$} from "nbtutor-deps";
 
 
 export class GutterMarkers {

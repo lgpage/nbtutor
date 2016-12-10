@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-import six
 import sys
 import types
+from contextlib import contextmanager
+
+import six
 
 try:
     import numpy
 except ImportError:
     numpy = None
-
-from contextlib import contextmanager
 
 
 ignore_vars = [
@@ -78,6 +77,12 @@ key_value_types = tuple(key_value_types)
 
 
 def filter_dict(d, exclude):
+    """Return a new dict with specified keys excluded from the origional dict
+
+    Args:
+        d (dict): origional dict
+        exclude (list): The keys that are excluded
+    """
     ret = {}
     for key, value in d.items():
         if key not in exclude:
@@ -87,6 +92,11 @@ def filter_dict(d, exclude):
 
 @contextmanager
 def redirect_stdout(new_stdout):
+    """Redirect the stdout
+
+    Args:
+        new_stdout (io.StringIO): New stdout to use instead
+    """
     old_stdout, sys.stdout = sys.stdout, new_stdout
     try:
         yield None
@@ -95,6 +105,12 @@ def redirect_stdout(new_stdout):
 
 
 def format(obj, options):
+    """Return a string representation of the Python object
+
+    Args:
+        obj: The Python object
+        options: Format options
+    """
     formatters = {
         float_types: lambda x: '{:.{}g}'.format(x, options.digits),
     }
@@ -110,6 +126,14 @@ def format(obj, options):
 
 
 def get_type_info(obj):
+    """Get type information for a Python object
+
+    Args:
+        obj: The Python object
+
+    Returns:
+        tuple: (object type "catagory", object type name)
+    """
     if isinstance(obj, primitive_types):
         return ('primitive', type(obj).__name__)
     if isinstance(obj, sequence_types):

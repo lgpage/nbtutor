@@ -3,8 +3,8 @@ from __future__ import absolute_import
 
 from os.path import join
 
-from ._version import __version__
-from ._version import __version_info__
+from ._version import __version__  # flake8: noqa
+from ._version import __version_info__  # flake8: noqa
 
 
 # IPython Extension points

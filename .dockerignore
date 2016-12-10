@@ -1,0 +1,13 @@
+__pycache__/
+.git/
+*.egg-info
+*.pyc
+\.ipynb_checkpoints/
+build/
+dist/
+screenshots/
+nbtutor/static/nbtutor/
+node_modules/
+*.xunit.xml
+.coverage
+*.log
