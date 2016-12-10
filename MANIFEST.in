@@ -17,10 +17,8 @@ include package.json
 include README.rst
 include LICENCE.rst
 
-exclude docs/usage.gif
+recursive-include nbtutor *
 
-recursive-exclude docs/api *
-recursive-exclude nbtutor/static *
 recursive-exclude examples/.ipynb_checkpoints *
 
 global-exclude *.py[cod] __pycache__ *.so *.dylib *.prof

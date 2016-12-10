@@ -24,10 +24,10 @@ setup(
     url='https://github.com/lgpage/nbtutor',
     keywords="ipython jupyter notebook python tutor visualize code exection",
     classifiers=[
-        "Development Status :: 2 - Pre-Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Framework :: IPython",
         "Programming Language :: Python",
-        "License :: OSI Approved :: BSD 3-Clause License"
+        "License :: OSI Approved :: BSD License"
     ],
     packages=["nbtutor"],
     install_requires=[

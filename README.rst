@@ -6,9 +6,24 @@ Visualize Python code execution (line-by-line) in `Jupyter Notebook
 <http://pythontutor.com>`__.
 
 .. figure:: usage.gif
-   :alt: Usage
+   :alt:
 
    Usage
+
+Install
+-------
+
+Note: installing directly off this repo won't work, as we don't ship the built
+JavaScript and CSS assets. See more about `developing <#develop>`__ below.
+
+``pip``
+~~~~~~~
+
+.. code:: shell
+
+    pip install nbtutor
+    jupyter nbextension install --overwrite --py nbtutor
+    jupyter nbextension enable --py nbtutor
 
 
 Usage (Jupyter Notebook)
