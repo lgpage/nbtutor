@@ -9,16 +9,8 @@ __version__ = None
 with open('nbtutor/_version.py') as version:
     exec(version.read())
 
-try:
-    import pypandoc
-    long_description = pypandoc.convert("./README.md", "rst")
-    long_description = long_description.replace("\r", "")
-
-except ImportError:
-    print("pypandoc not found, Long description conversion failure.")
-    import io
-    with io.open("./README.md", encoding="utf-8") as fh:
-        long_description = fh.read()
+with open('./README.rst') as readme:
+    long_description = readme.read()
 
 
 setup(
