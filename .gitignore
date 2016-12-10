@@ -18,5 +18,8 @@ dist/
 screenshots/
 nbtutor/static/nbtutor/
 
+docs/api/
+docs/usage.gif
+
 __pycache__
 \.ipynb_checkpoints
