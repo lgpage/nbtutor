@@ -1,6 +1,5 @@
 
-import {d3} from "nbtutor-deps";
-import {uuid} from "nbtutor-deps";
+import {$, d3, uuid} from "nbtutor-deps";
 
 import {Toolbar} from "./toolbar";
 import {GutterMarkers} from "./gutters";
