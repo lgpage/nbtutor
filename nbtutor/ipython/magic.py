@@ -47,6 +47,10 @@ class NbtutorMagics(Magics):
         help="Step through all frames (including other global scope frames)"
     )
     @magic_arguments.argument(
+        '--expand_arrays', action='store_true', default=False,
+        help="Expand numpy arrays to show underlying data"
+    )
+    @magic_arguments.argument(
         '--nolies', action='store_true', default=False,
         help="No inlined keys, attributes or primitive objects"
     )
