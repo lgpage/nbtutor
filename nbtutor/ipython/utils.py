@@ -27,6 +27,10 @@ ignore_vars = [
     "__weakref__",
 ]
 
+float_types = [
+    float,
+]
+
 primitive_types = [
     int,
     float,
@@ -41,6 +45,9 @@ sequence_types = [
     list,
 ]
 
+array_types = [
+]
+
 key_value_types = [
     dict,
 ]
@@ -53,12 +60,20 @@ if numpy is not None:
     np_type_names = [t.__name__ for t in np_types]
     for _type in primitive_types:
         for i, name in enumerate(np_type_names):
-            if _type.__name__ in name:
+            if _type.__name__ in name or isinstance(np_types[i], (_type, )):
                 new_types.append(np_types[i])
-    primitive_types.extend(new_types)
 
+    for i, name in enumerate(np_type_names):
+        if 'float' in name or isinstance(np_types[i], (float, )):
+            float_types.append(np_types[i])
+
+    primitive_types.extend(new_types)
+    array_types.append(numpy.ndarray)
+
+float_types = tuple(float_types)
 primitive_types = tuple(primitive_types)
 sequence_types = tuple(sequence_types)
+array_types = tuple(array_types)
 key_value_types = tuple(key_value_types)
 
 
@@ -81,10 +96,10 @@ def redirect_stdout(new_stdout):
 
 def format(obj, options):
     formatters = {
-        float: lambda x: '{:.{}g}'.format(x, options.digits),
+        float_types: lambda x: '{:.{}g}'.format(x, options.digits),
     }
-    for _type, fmtr in formatters.items():
-        if isinstance(obj, (_type, )):
+    for _types, fmtr in formatters.items():
+        if isinstance(obj, _types):
             return fmtr(obj)
     try:
         if six.PY2 and isinstance(obj, six.string_types):
@@ -99,6 +114,8 @@ def get_type_info(obj):
         return ('primitive', type(obj).__name__)
     if isinstance(obj, sequence_types):
         return ('sequence', type(obj).__name__)
+    if isinstance(obj, array_types):
+        return ('array', type(obj).__name__)
     if isinstance(obj, key_value_types):
         return ('key-value', type(obj).__name__)
     if isinstance(obj, types.ModuleType):

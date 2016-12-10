@@ -104,9 +104,14 @@ export class MemoryModelUI{
         }
 
         // Add an ellipsis to the end of a long sequence
+        let ind = object.values.length-1;
         if (object.options.ellipsis){
-            indexes.push("...");
-            object.values.push("...");
+            if (object.values[ind] === '...'){
+                indexes[ind] = "...";
+            } else {
+                indexes.push("...");
+                object.values.push("...");
+            }
         }
 
         // Add index numbers
@@ -149,6 +154,52 @@ export class MemoryModelUI{
         });
     }
 
+    _createArray(object, tracestep){
+        let d3Obj = this._createHeapDiv(object);
+        d3Obj.append("div")
+            .attr("class", "nbtutor-var-type")
+            .text(object.type);
+
+        let d3Table = d3Obj.append("table")
+            .attr("class", "nbtutor-seq-array");
+        let d3IndRow = d3Table.append("tr");
+        let d3ValRow = d3Table.append("tr");
+
+        // Create sequence index numbers
+        let indexes = [];
+        for (let i=0; i<object.values.length; i++){
+            indexes.push(i);
+        }
+
+        // Add an ellipsis to the end of a long sequence
+        let ind = object.values.length-1;
+        if (object.options.ellipsis){
+            if (object.values[ind] === '...'){
+                indexes[ind] = "...";
+            } else {
+                indexes.push("...");
+                object.values.push("...");
+            }
+        }
+
+        // Add index numbers
+        d3IndRow.selectAll("td")
+            .data(indexes)
+            .enter()
+                .append("td")
+                .attr("class", "nbtutor-var-index")
+                .text((d) => d);
+
+        // Add sequence anchors
+        d3ValRow.selectAll("td")
+            .data(object.values)
+            .enter()
+                .append("td")
+                    .attr("class", "nbtutor-anchor-from")
+                .append("div")
+                    .text((d) => d);
+    }
+
     _createKeyValue(object, tracestep){
         let that = this;
         let heap_history = this.trace_history.heap_history;
@@ -183,8 +234,11 @@ export class MemoryModelUI{
             .attr("class", "nbtutor-seq-key-value");
 
         // Add an ellipsis to the end of a long sequence
+        let ind = object.values.length-1;
         if (object.options.ellipsis){
-            object.values.push("...");
+            if (object.values[ind] != '...'){
+                object.values.push("...");
+            }
         }
 
         let d3Rows = d3Table.selectAll("tr")
@@ -256,6 +310,9 @@ export class MemoryModelUI{
                 break;
             case "sequence":
                 this._createSequence(object, tracestep);
+                break;
+            case "array":
+                this._createArray(object, tracestep);
                 break;
             case "key-value":
                 this._createKeyValue(object, tracestep);

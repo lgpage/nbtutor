@@ -1,14 +1,11 @@
-
 # Nbtutor
 Visualize Python code execution (line-by-line) in [Jupyter
 Notebook](http://jupyter.org) cells. Inspired by [Online Python
 Tutor](http://pythontutor.com).
 
-**Note: This project is not quite ready for release. This has only been tested
-using Python3.5 and will probably fall over in Python2.7**
+**Note: This project is not quite ready for release.**
 
 ![Usage](examples/usage.gif "Usage")
-
 
 ## Usage (Jupyter Notebook)
 First load the `nbtutor` IPython kernel extension at top of the Notebook by
@@ -41,18 +38,18 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor -i/--inline
 ```
 
-- Specify the maximum frame depth to visualize
+- Specify the maximum frame depth to visualize (default: 1)
 ```python
 %%nbtutor -d/--depth N
 ```
 
-- Specify the number of significant digits for floats
+- Specify the number of significant digits for floats (default: 3)
 ```python
 %%nbtutor --digits D
 ```
 
 - Specify the maximum number of elements to visualize for "sequence" type
-  objects
+  objects (default: 5)
 ```python
 %%nbtutor --max_size S
 ```
@@ -63,14 +60,21 @@ There are also optional arguments that can be used with the cell magic:
 %%nbtutor --step_all
 ```
 
+- Expand `numpy` arrays to show underlying data
+```python
+%%nbtutor --expand_arrays
+```
+
 - No inlined keys, attributes, or primitive objects
 ```python
 %%nbtutor --nolies
 ```
 
-*Note: The "Global" frame is depth 0; the default depth is 1, the default
-significant digits is 3 and the default max size is 5*
-
+## Notes
+- Visualizing `numpy` arrays is somewhat experimental. Simple `ndarray`s and
+  simple slicing should work, but anything beyond that is un-tested.
+- If you find a problem please feel free to submit an
+  [issue](https://github.com/lgpage/nbtutor/issues)
 
 ## Develop
 This assumes you have cloned this repository locally:
