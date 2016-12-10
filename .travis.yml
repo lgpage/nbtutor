@@ -24,6 +24,7 @@ install:
   - conda create -n nbtutor python=$TRAVIS_PYTHON_VERSION
   - conda env update
   - source activate nbtutor
+  - pip install check-manifest
   - npm install
 
 script:
