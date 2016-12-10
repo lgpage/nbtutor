@@ -1,11 +1,10 @@
 language: python
-
-sudo: true
-
 python:
   # We don't actually use the Travis Python, but this keeps it organized.
   - "2.7"
   - "3.5"
+
+sudo: true
 
 install:
   - sudo apt-get update
@@ -34,6 +33,7 @@ script:
   - jupyter nbextension install --sys-prefix --symlink --py nbtutor
   - jupyter nbextension enable --sys-prefix --py nbtutor
   - npm run tests
+  - npm run docs
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
