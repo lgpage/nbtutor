@@ -10,6 +10,19 @@ from .utils import filter_dict, ignore_vars, redirect_stdout
 
 
 class Bdb(StdBdb, object):
+    """
+    Args:
+        ipy_shell: IPython interactive shell
+        options: Cell magic options
+
+    Attributes:
+        ipy_shell: IPython interactive shell
+        options: Cell magic options
+        code_error (bool): True if the Cell code executed successfully, else False
+        stdout (io.StringIO): The stdout used instead on the IPython stdout
+        trace_history (:class:`~.history.TraceHistory`): The
+            line-by-line trace history data
+    """
 
     def __init__(self, ipy_shell, options):
         super(Bdb, self).__init__()
@@ -20,6 +33,11 @@ class Bdb(StdBdb, object):
         self.trace_history = TraceHistory(options)
 
     def run_cell(self, cell):
+        """Run the Cell code using the IPython globals and locals
+
+        Args:
+            cell (str): Python code to be executed
+        """
         globals = self.ipy_shell.user_global_ns
         locals = self.ipy_shell.user_ns
         globals.update({
@@ -54,12 +72,18 @@ class Bdb(StdBdb, object):
         pass
 
     def is_notebook_frame(self, frame):
+        """Return True if the current frame belongs to the notebook, else
+        False"""
         return "__ipy_scope__" in frame.f_globals.keys()
 
     def is_other_cell_frame(self, frame):
+        """Return True if the current frame belongs to the Cell, else
+        False"""
         return frame.f_code.co_filename.startswith("<ipython-input-")
 
     def get_stack_data(self, frame, traceback, event_type):
+        """Get the stack frames data at each of the hooks above (Ie. for each
+        line of the Python code)"""
         heap_data = Heap(self.options)
         stack_data = StackFrames(self.options)
         stack_frames, cur_frame_ind = self.get_stack(frame, traceback)
@@ -106,4 +130,5 @@ class Bdb(StdBdb, object):
             )
 
     def finalize(self):
+        """Finalize the trace history data after execution is complete"""
         self.trace_history.sort_frame_locals()

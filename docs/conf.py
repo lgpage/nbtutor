@@ -38,6 +38,13 @@ todo_include_todos = True
 pygments_style = 'sphinx'
 templates_path = ['_templates']
 
+napoleon_google_docstring = True
+napoleon_include_private_with_doc = True
+napoleon_include_special_with_doc = True
+napoleon_use_ivar = True
+napoleon_use_rtype = True
+napoleon_use_param = True
+
 htmlhelp_basename = 'nbtutordoc'
 
 html_theme = 'alabaster'
