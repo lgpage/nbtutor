@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
-from IPython.core import magic_arguments
-from IPython.core.magic import Magics, magics_class, cell_magic
-from IPython.core.magics.namespace import NamespaceMagics
-
 from ipykernel.comm import Comm
+from IPython.core import magic_arguments
+from IPython.core.magic import Magics, cell_magic, magics_class
+from IPython.core.magics.namespace import NamespaceMagics
 
 from .debugger import Bdb
 

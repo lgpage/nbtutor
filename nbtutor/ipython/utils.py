@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import, print_function
-from __future__ import unicode_literals
+from __future__ import absolute_import, print_function, unicode_literals
 
-import six
 import sys
 import types
+from contextlib import contextmanager
+
+import six
 
 try:
     import numpy
 except ImportError:
     numpy = None
-
-from contextlib import contextmanager
 
 
 ignore_vars = [

@@ -5,9 +5,7 @@ import json
 
 from ipykernel import jsonutil
 
-from .utils import ignore_vars, filter_dict
-from .utils import primitive_types, sequence_types, key_value_types
-from .utils import format, get_type_info
+from .utils import filter_dict, format, get_type_info, ignore_vars
 
 
 class StackFrames(object):

@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function
 
-from io import StringIO
-from bdb import BdbQuit
 from bdb import Bdb as StdBdb
+from bdb import BdbQuit
+from io import StringIO
 
 from .history import Heap, StackFrames, TraceHistory
-from .utils import ignore_vars, filter_dict
-from .utils import redirect_stdout
+from .utils import filter_dict, ignore_vars, redirect_stdout
 
 
 class Bdb(StdBdb, object):
@@ -81,7 +80,7 @@ class Bdb(StdBdb, object):
             # current cell, I.e. frames in another global scope altogether
             # or frames in other cells
             if (not self.is_notebook_frame(frame) or
-                self.is_other_cell_frame(frame)):
+                    self.is_other_cell_frame(frame)):
                 if not self.options.step_all:
                     skip_this_stack = True
                     break
