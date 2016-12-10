@@ -9,7 +9,6 @@ python:
 
 install:
   - sudo apt-get update
-  - sudo apt-get install -y libfreetype6-dev libfontconfig1-dev
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
     else
@@ -25,7 +24,6 @@ install:
   - conda create -n nbtutor python=$TRAVIS_PYTHON_VERSION
   - conda env update
   - source activate nbtutor
-  - conda install python-coveralls
   - npm install
 
 script:
@@ -37,4 +35,4 @@ script:
   - npm run tests
 
 after_success:
-  - coveralls
+  - bash <(curl -s https://codecov.io/bash)
