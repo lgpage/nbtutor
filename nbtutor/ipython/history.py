@@ -66,7 +66,8 @@ class Heap(object):
     def __init__(self, options):
         self.options = options
         self.data = list()
-        self._new_ids = None
+        self._new_ids = list()
+        self._tmp_refs = dict()
 
     def clear(self):
         self.__init__(self.options)
@@ -102,12 +103,109 @@ class Heap(object):
             "value": format(obj, self.options),
         }))
 
+    def _add_array_data_object(self, obj, type_info, **kwargs):
+        type_catagory, type_name = type_info
+        if type_name != 'ndarray':
+            self._add_object(obj, type_info, **kwargs)
+            return  # XXX: Only numpy ndarrays supported for now
+
+        obj_id = id(obj)
+        if self.has_object(obj_id) or obj_id in self._new_ids:
+            return
+
+        max_reached = False
+        data_values = list()
+        self._new_ids.append(obj_id)
+        for ind, val in enumerate(obj.flatten()):
+            if ind >= self.options.max_size:
+                max_reached = True
+                break
+            data_values.append(format(val, self.options))
+
+        self.data.append(dict({
+            "id": obj_id,
+            "type": '{} array ({} x {} bytes)'.format(
+                obj.dtype,
+                obj.size,
+                obj.itemsize
+            ),
+            "catagory": type_catagory,
+            "options": {
+                "position": kwargs.get('position', 'right'),
+                "ellipsis": max_reached,
+            },
+            "values": data_values,
+        }))
+
+    def _add_array_object(self, obj, type_info, **kwargs):
+        type_catagory, type_name = type_info
+        if type_name != 'ndarray':
+            self._add_object(obj, type_info, **kwargs)
+            return  # XXX: Only numpy ndarrays supported for now
+
+        obj_id = id(obj)
+        if self.has_object(obj_id) or obj_id in self._new_ids:
+            return
+
+        # Simply point to flat (inline) array data
+        if not self.options.expand_arrays and obj.ndim == 1:
+            self._add_array_data_object(obj, type_info, **kwargs)
+            self.data[-1]['type'] = '{} ({})'.format(type_name, obj.dtype)
+            return
+
+        # Get the ndarray instance data
+        shape = obj.shape  # actually a class property
+        strides = obj.strides  # actually a class property
+
+        # store ref so objects are not garbage collected until the end of
+        # execution, so that the id cannot, on the off chance, be re-used
+        self._tmp_refs.update({(obj_id, 'shape'): shape})
+        self._tmp_refs.update({(obj_id, 'strides'): strides})
+
+        # Get underlying data object
+        base_obj = obj
+        while base_obj.base is not None:
+            base_obj = base_obj.base
+
+        # Array pointer offset (bytes)
+        offset = (
+            obj.__array_interface__['data'][0] -
+            base_obj.__array_interface__['data'][0]
+        )
+
+        # If obj.base is None
+        if base_obj is obj:
+            base_obj = base_obj.copy()  # To get a unique id
+            self._tmp_refs.update({(obj_id, 'base'): base_obj})
+
+        # If base_obj.base is None
+        if (id(base_obj), 'base') in self._tmp_refs.keys():
+            base_obj = self._tmp_refs[(id(base_obj), 'base')]
+
+        # Add the ndarray instance data
+        self._add_array_data_object(base_obj, type_info, **kwargs)
+        self._new_ids.append(obj_id)
+        self._add(shape)
+        self._add(strides)
+
+        class_vars = dict({
+            'data': base_obj,
+            'shape': shape,
+            'strides': strides,
+        })
+
+        type_name = '{} ({} bytes offset)'.format(type_name, offset)
+        type_info = ('key-value', type_name)
+        self._add_key_value_object(class_vars, type_info, **kwargs)
+        self.data[-1]["id"] = obj_id
+        self._new_ids.remove(id(class_vars))
+
     def _add_sequence_object(self, obj, type_info, **kwargs):
         obj_id = id(obj)
         if self.has_object(obj_id) or obj_id in self._new_ids:
             return
 
-        data_values = []
+        data_values = list()
         max_reached = False
         self._new_ids.append(obj_id)
         for ind, val in enumerate(obj):
@@ -155,7 +253,7 @@ class Heap(object):
         except:
             pass
 
-        data_values = []
+        data_values = list()
         max_reached = False
         self._new_ids.append(obj_id)
         for ind, key in enumerate(obj_keys):
@@ -190,13 +288,15 @@ class Heap(object):
             self._add_key_value_object(obj, type_info, **kwargs)
         elif type_info[0] == 'sequence':
             self._add_sequence_object(obj, type_info, **kwargs)
+        elif type_info[0] == 'array':
+            self._add_array_object(obj, type_info, **kwargs)
         elif type_info[0] == 'class' or type_info[0].endswith('instance'):
             self._add_class_object(obj, type_info, **kwargs)
         else:
             self._add_object(obj, type_info, **kwargs)
 
     def add(self, filtered_locals):
-        self._new_ids = []
+        self._new_ids = list()
         for obj in filtered_locals.values():
             self._add(obj)
 
