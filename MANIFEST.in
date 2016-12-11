@@ -12,6 +12,7 @@ include .esdoc
 include .jshintrc
 
 include usage.gif
+include appveyor.yml
 include environment.yml
 include package.json
 include README.rst
