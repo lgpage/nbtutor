@@ -9,8 +9,8 @@ import sys
 from importlib import import_module
 from multiprocessing import Pool, cpu_count
 
-from . import clean
-from . import requirejs
+from tools import clean
+from tools import requirejs
 
 
 try:
