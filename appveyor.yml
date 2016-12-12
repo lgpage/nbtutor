@@ -63,4 +63,4 @@ test_script:
     - cmd: npm run build
     - cmd: jupyter nbextension install --sys-prefix --py nbtutor
     - cmd: jupyter nbextension enable --sys-prefix --py nbtutor
-    - cmd: npm run test
+    - cmd: npm run tests
