@@ -8,7 +8,7 @@ import os
 import shutil
 import sys
 
-from . import _env
+from tools import _env
 
 
 def main(**opts):

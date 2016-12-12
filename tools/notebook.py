@@ -9,7 +9,7 @@ import sys
 
 from subprocess import Popen
 
-from . import _env
+from tools import _env
 
 
 def main(**opts):
