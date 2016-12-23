@@ -15,6 +15,7 @@ include usage.gif
 include appveyor.yml
 include environment.yml
 include package.json
+include readthedocs.yml
 include README.rst
 include LICENCE.rst
 
