@@ -1,3 +1,4 @@
 
 def test_main():
-    pass
+    import nbtutor
+    # TODO Proper test suite
