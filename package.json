@@ -70,7 +70,7 @@
         "pkg:conda": "conda build conda.recipe -c javascript -c mutirri -c cpcloud -c anaconda-nb-extensions -c lgpage",
         "pkg:pypi": "python setup.py register -r pypitest && python setup.py sdist && python setup.py bdist_wheel && python setup.py sdist upload -r pypitest && python setup.py bdist_wheel upload -r pypitest",
         "pkg:pypi:release": "python setup.py register -r pypi && python setup.py sdist && python setup.py bdist_wheel && python setup.py sdist bdist_wheel upload -r pypi",
-        "tests": "py.test --cov --cov-report=term-missing -vv tests",
+        "tests": "py.test --cov --cov-report=term-missing -vv tests nbtutor",
         "watch": "watch 'npm run build:dev' src",
         "watch:test": "watch 'npm run test' ./nbtutor/static/nbtutor/js"
     },

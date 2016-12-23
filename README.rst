@@ -25,6 +25,12 @@ JavaScript and CSS assets. See more about `developing <#develop>`__ below.
     jupyter nbextension install --overwrite --py nbtutor
     jupyter nbextension enable --py nbtutor
 
+``conda``
+~~~~~~~~~
+
+.. code:: shell
+
+    conda install -c conda-forge nbtutor
 
 Usage (Jupyter Notebook)
 ------------------------
