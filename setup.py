@@ -28,18 +28,6 @@ setup(
         "License :: OSI Approved :: BSD License"
     ],
     packages=find_packages(include=["nbtutor"]),
-    install_requires=[
-        "notebook",
-    ],
-    tests_require=[
-        "check-manifest",
-        "coverage",
-        "flake8",
-        "mypy",
-        "pytest-cov",
-        "pytest-mock",
-        "pytest",
-        "recommonmark"
-    ],
+    install_requires=["notebook"],
     include_package_data=True,
 )

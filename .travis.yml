@@ -1,4 +1,8 @@
-matrix:
+os: linux
+dist: xenial
+language: node_js
+
+jobs:
   include:
     - language: node_js
       node_js:
@@ -17,7 +21,8 @@ matrix:
         - 3.8
       install:
         - pip install -e .
-        - python setup.py test
+        - pip install -r requirements-dev.txt
+        - python setup.py develop
       script:
         - python -m mypy nbtutor
         - python -m flake8 nbtutor setup.py
