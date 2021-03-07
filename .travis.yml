@@ -1,40 +1,27 @@
-language: python
-python:
-  # We don't actually use the Travis Python, but this keeps it organized.
-  - "2.7"
-  - "3.4"
-  - "3.5"
+matrix:
+  include:
+    - language: node_js
+      node_js:
+        - "12"
+      addons:
+        chrome: stable
+      install:
+        - npm install
+      script:
+        - npm run lint:ui
+        - npm run test:ui
+        - npm run build:ui
 
-sudo: true
-
-install:
-  - sudo apt-get update
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda config --add channels conda-forge
-  - conda update -q conda
-  - conda info -a
-  - conda create -n nbtutor python=$TRAVIS_PYTHON_VERSION
-  - conda env update
-  - source activate nbtutor
-  - pip install check-manifest
-  - npm install
-
-script:
-  - npm run check
-  - python setup.py develop
-  - npm run build
-  - jupyter nbextension install --sys-prefix --symlink --py nbtutor
-  - jupyter nbextension enable --sys-prefix --py nbtutor
-  - npm run tests
-  - npm run docs
+    - language: python
+      python:
+        - 3.8
+      install:
+        - pip install -e .
+        - python setup.py test
+      script:
+        - python -m mypy nbtutor
+        - python -m flake8 nbtutor setup.py
+        - python -m pytest --cov --cov-report=term-missing -vv tests nbtutor
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash < (curl -s https://codecov.io/bash)

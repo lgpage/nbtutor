@@ -35,7 +35,7 @@ setup(
         "check-manifest",
         "coverage",
         "flake8",
-        "mypy"
+        "mypy",
         "pytest-cov",
         "pytest-mock",
         "pytest",
