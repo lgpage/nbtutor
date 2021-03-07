@@ -11,10 +11,13 @@ jobs:
         chrome: stable
       install:
         - npm install
+        - npm install codecov -g
       script:
         - npm run lint:ui
         - npm run test:ui
         - npm run build:ui
+      after_success:
+        - codecov
 
     - language: python
       python:
@@ -27,6 +30,5 @@ jobs:
         - python -m mypy nbtutor
         - python -m flake8 nbtutor setup.py
         - python -m pytest --cov --cov-report=term-missing -vv tests nbtutor
-
-after_success:
-  - bash < (curl -s https://codecov.io/bash)
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
