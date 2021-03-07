@@ -1,0 +1,8 @@
+<ng-container *ngFor="let heapObject of heapObjects$ | async">
+  <nbtutor-heap-object
+    [heap]="heap$ | async"
+    [heapObject]="heapObject"
+    class="heap-object"
+    *ngIf="!heapObject.hideReferences"
+  ></nbtutor-heap-object>
+</ng-container>

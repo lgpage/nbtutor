@@ -1,0 +1,8 @@
+check-manifest
+coverage
+flake8
+mypy
+pytest-cov
+pytest-mock
+pytest
+recommonmark

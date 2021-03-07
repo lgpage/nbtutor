@@ -1,0 +1,29 @@
+<div class="row center">
+  <div
+    class="code-object"
+    [id]="heapObject.uuid"
+    [nbtutorAnchorTo]="heapObject"
+  >
+    <div class="type">{{ heapObject.type }}</div>
+    <table class="sequence">
+      <tr [ngClass]="{ immutable: !!heapObject.immutable }">
+        <td class="index" *ngFor="let index of indexes">
+          <div>{{ index }}</div>
+        </td>
+        <td class="index" *ngIf="renderOptions.concat"><div></div></td>
+      </tr>
+
+      <tr>
+        <td
+          class="anchor-from"
+          [nbtutorAnchorFrom]="reference"
+          [heap]="heap"
+          *ngFor="let reference of references"
+        >
+          <div [id]="reference.uuid">{{ getObjectValue(reference) }}</div>
+        </td>
+        <td class="anchor-from" *ngIf="renderOptions?.concat"><div>...</div></td>
+      </tr>
+    </table>
+  </div>
+</div>

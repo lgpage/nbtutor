@@ -1,0 +1,52 @@
+.nbtutor {
+  &.timeline-canvas {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: column;
+    flex-flow: column;
+  }
+
+  &.timeline {
+    padding: 10px;
+
+    & table {
+      border-collapse: collapse;
+    }
+
+    & th {
+      &:first-child {
+        font-style: italic;
+        padding-bottom: 5px;
+        white-space: nowrap;
+      }
+    }
+
+    & tr {
+      & > td {
+        &:first-child {
+          text-align: left;
+          border-right: 1px solid black;
+        }
+      }
+
+      &:last-child {
+        & > th {
+          padding: 5px;
+          min-width: 36px;
+          border-bottom: 1px solid black;
+
+          &:first-child {
+            text-align: left;
+            border-right: 1px solid black;
+          }
+        }
+      }
+    }
+
+    & td {
+      padding: 5px;
+      text-align: center;
+      width: 20px;
+    }
+  }
+}

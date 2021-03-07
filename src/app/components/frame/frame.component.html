@@ -1,0 +1,20 @@
+<table [id]="frame.uuid" class="active">
+  <thead>
+    <tr>
+      <th colspan="2">{{ frame.name }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let variable of frame.variables">
+      <td class="var-name">{{ variable.name }}</td>
+      <td
+        class="anchor-from"
+        [nbtutorAnchorFrom]="variable"
+        [heap]="traceStep.heap"
+      >
+        <div [id]="variable.uuid">{{ getObjectValue(variable) }}</div>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot></tfoot>
+</table>

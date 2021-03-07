@@ -1,0 +1,30 @@
+<div class="btn-group" [id]="id">
+  <button
+    class="nbtutor start btn btn-default"
+    title="First line"
+    (click)="setStep('first')"
+  >
+    <i class="fa fa-backward"></i>
+  </button>
+  <button
+    class="nbtutor previous btn btn-default"
+    title="Previous line"
+    (click)="setStep('previous')"
+  >
+    <i class="fa fa-step-backward"></i>
+  </button>
+  <button
+    class="nbtutor next btn btn-default"
+    title="Next line"
+    (click)="setStep('next')"
+  >
+    <i class="fa fa-step-forward"></i>
+  </button>
+  <button
+    class="nbtutor end btn btn-default"
+    title="Last line"
+    (click)="setStep('last')"
+  >
+    <i class="fa fa-forward"></i>
+  </button>
+</div>

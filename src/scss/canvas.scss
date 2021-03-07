@@ -1,0 +1,19 @@
+.nbtutor {
+  &.canvas {
+    position: relative;
+    font-family: monospace;
+    border-left: 1px solid black;
+
+    &.error-message {
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      padding: 0.4em 0;
+    }
+
+    .hover .type {
+      color: $hover-text;
+      background: $hover-background;
+    }
+  }
+}

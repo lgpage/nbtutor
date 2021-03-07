@@ -1,88 +1,61 @@
-#!/usr/bin/env python
-# encoding: utf-8
-import os
+# Configuration file for the Sphinx documentation builder.
+#
+# This file only contains a selection of the most common options. For a full
+# list see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-from nbtutor._version import __version__
+# -- Path setup --------------------------------------------------------------
 
+# If extensions (or modules to document with autodoc) are in another directory,
+# add these directories to sys.path here. If the directory is relative to the
+# documentation root, use os.path.abspath to make it absolute, like shown here.
+#
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
 
+# -- Project information -----------------------------------------------------
+
+project = 'nbtutor'
+copyright = '2021, Logan Page'
+author = 'Logan Page'
+
+# The full version, including alpha/beta/rc tags
+release = '2.0.0'
+
+# -- General configuration ---------------------------------------------------
+
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.coverage',
-    'sphinx.ext.doctest',
-    'sphinx.ext.extlinks',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
+    'recommonmark'
 ]
 
-if os.getenv('SPELLCHECK'):
-    extensions += 'sphinxcontrib.spelling',
-    spelling_show_suggestions = True
-    spelling_lang = 'en_US'
-
-source_suffix = '.rst'
-master_doc = 'index'
-project = 'nbtutor'
-year = '2016'
-author = 'Logan Page'
-copyright = '{0}, {1}'.format(year, author)
-version = __version__
-release = __version__
-
-language = None
-todo_include_todos = True
-pygments_style = 'sphinx'
+# Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-napoleon_google_docstring = True
-napoleon_include_private_with_doc = True
-napoleon_include_special_with_doc = True
-napoleon_use_ivar = True
-napoleon_use_rtype = True
-napoleon_use_param = True
+# List of patterns, relative to source directory, that match files and
+# directories to ignore when looking for source files.
+# This pattern also affects html_static_path and html_extra_path.
+exclude_patterns = []
 
-htmlhelp_basename = 'nbtutordoc'
+# -- Options for HTML output -------------------------------------------------
 
+# The theme to use for HTML and HTML Help pages.  See the documentation for
+# a list of builtin themes.
+#
 html_theme = 'alabaster'
-html_use_smartypants = True
-html_last_updated_fmt = '%b %d, %Y'
-html_split_index = False
-html_sidebars = {
-   '**': ['searchbox.html', 'globaltoc.html', 'sourcelink.html'],
+
+# Add any paths that contain custom static files (such as style sheets) here,
+# relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
+html_static_path = ['_static']
+
+# -- Options for recommonmark ------------------------------------------------
+
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
 }
-html_short_title = '%s-%s' % (project, version)
-
-latex_elements = {}
-latex_documents = [
-    (master_doc, 'nbtutor.tex', 'nbtutor Documentation',
-     'Logan Page', 'manual'),
-]
-man_pages = [(master_doc, 'nbtutor', 'nbtutor Documentation', [author], 1)]
-texinfo_documents = [
-    (master_doc, 'nbtutor', 'nbtutor Documentation', author, 'nbtutor',
-     'One line description of project.', 'Miscellaneous'),
-]
-intersphinx_mapping = {
-    'python': ('https://docs.python.org/3.5', None),
-    'numpy': ('http://docs.scipy.org/doc/numpy/', None),
-}
-
-
-def run_apidoc(_):
-    from sphinx.apidoc import main
-
-    src_dir = os.path.abspath('nbtutor')
-    if os.getcwd().endswith('docs'):  # hack to get rtfd to work
-        src_dir = os.path.abspath('../nbtutor')
-
-    docs_dir = os.path.abspath(os.path.dirname(__file__))
-    api_dir = os.path.join(docs_dir, 'api')
-    main(['-f', '-P', '-e', '-o', api_dir, src_dir, '--force'])
-
-
-def setup(app):
-    app.connect('builder-inited', run_apidoc)

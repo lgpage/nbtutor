@@ -1,0 +1,28 @@
+<div class="row center">
+  <div
+    class="code-object"
+    [id]="heapObject.uuid"
+    [nbtutorAnchorTo]="heapObject"
+  >
+    <div class="type">{{ heapObject.type }}</div>
+    <table class="key-value">
+      <tr *ngFor="let key of keys">
+        <td class="key">
+          <div>{{ key }}</div>
+        </td>
+
+        <td
+          class="anchor-from"
+          [nbtutorAnchorFrom]="references[key]"
+          [heap]="heap"
+        >
+          <div [id]="references[key].uuid">{{ getObjectValue(key) }}</div>
+        </td>
+      </tr>
+      <tr *ngIf="renderOptions?.concat">
+        <td class="key"><div></div></td>
+        <td class="anchor-from"><div>...</div></td>
+      </tr>
+    </table>
+  </div>
+</div>

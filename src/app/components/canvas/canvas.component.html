@@ -1,0 +1,15 @@
+<div
+  #canvas
+  class="nbtutor canvas d-flex-grow"
+  *ngIf="showVisualization(cellSvc?.visualization$ | async)"
+>
+  <nbtutor-stack class="stack d-flex"></nbtutor-stack>
+  <nbtutor-heap class="heap d-flex"></nbtutor-heap>
+</div>
+
+<div
+  class="nbtutor canvas error-message text-center d-flex-grow"
+  *ngIf="showError(cellSvc?.visualization$ | async)"
+>
+  <p>{{ (cellSvc?.visualization$ | async)?.error }}</p>
+</div>

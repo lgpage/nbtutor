@@ -1,14 +1,9 @@
 Welcome to nbtutor's documentation!
-=====================================
-
-Contents:
+===================================
 
 .. toctree::
    :maxdepth: 2
-
-   readme
-   api
-
+   :caption: Contents:
 
 Indices and tables
 ==================
