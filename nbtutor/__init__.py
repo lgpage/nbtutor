@@ -1,23 +1,24 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import
-
-from os.path import join
-
-from ._version import __version__  # flake8: noqa
-from ._version import __version_info__  # flake8: noqa
+from .version import __version__  # noqa F401
+from .version import __version_info__  # noqa F401
 
 
-# IPython Extension points
-def load_ipython_extension(ip):
-    from .ipython.magic import NbtutorMagics  # pylint: disable=cyclic-import
-    ip.register_magics(NbtutorMagics)
+def _jupyter_server_extension_paths():
+    return [dict(module="nbtutor")]
 
 
-# Jupyter Extension points
 def _jupyter_nbextension_paths():
     return [dict(
         section="notebook",
-        src=join("static", "nbtutor"),
+        src="static",
         dest="nbtutor",
-        require="nbtutor/js/nbtutor.min")]
+        require="nbtutor/nbtutor.notebook",
+    )]
 
+
+def load_jupyter_server_extension(nbapp):
+    pass
+
+
+def load_ipython_extension(ip):
+    from .ipython.magic import NbtutorMagics
+    ip.register_magics(NbtutorMagics)

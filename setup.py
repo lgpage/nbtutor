@@ -1,45 +1,45 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_packages
+from os import path
 
+version = {}
+this_directory = path.abspath(path.dirname(__file__))
 
-# should be loaded below
-__version__ = None
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as readme_file:
+    long_description = readme_file.read()
 
-with open('nbtutor/_version.py') as version:
-    exec(version.read())
-
-with open('./README.rst') as readme:
-    long_description = readme.read()
-
+with open(path.join(this_directory, 'nbtutor', 'version.py'), encoding='utf-8') as version_file:
+    exec(version_file.read(), version)
 
 setup(
     name="nbtutor",
-    version=__version__,
+    version=version['__version__'],
     description="Visualize Python code execution in Jupyter Notebook cells",
     long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Logan Page",
     author_email="page.lg@gmail.com",
     license="BSD 3-Clause",
     url='https://github.com/lgpage/nbtutor',
-    keywords="ipython jupyter notebook python tutor visualize code exection",
+    keywords="ipython jupyter notebook python tutor visualize code execution",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: IPython",
         "Programming Language :: Python",
         "License :: OSI Approved :: BSD License"
     ],
-    packages=["nbtutor"],
+    packages=find_packages(include=["nbtutor"]),
     install_requires=[
         "notebook",
     ],
     tests_require=[
         "check-manifest",
         "coverage",
-        "pytest",
+        "flake8",
+        "mypy"
         "pytest-cov",
-        "requests",
-        "sphinxcontrib-spelling",
+        "pytest-mock",
+        "pytest",
+        "recommonmark"
     ],
     include_package_data=True,
 )

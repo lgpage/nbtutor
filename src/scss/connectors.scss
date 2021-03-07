@@ -1,0 +1,12 @@
+svg.jtk-hover {
+  stroke: $hover-background;
+
+  path {
+    fill: $hover-background;
+    stroke: $hover-background;
+
+    &:first-child {
+      fill: none;
+    }
+  }
+}

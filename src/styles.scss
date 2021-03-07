@@ -1,0 +1,106 @@
+@import "./assets/colors.css";
+@import "./scss/colors.scss";
+@import "./scss/canvas.scss";
+@import "./scss/stack.scss";
+@import "./scss/heap.scss";
+@import "./scss/connectors.scss";
+@import "./scss/codemirror.scss";
+
+.inner_cell {
+  .input_area {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+
+    .CodeMirror {
+      -webkit-box-flex: 1;
+      -ms-flex: 1;
+      flex: 1;
+    }
+  }
+}
+
+.nbtutor.d-flex-grow,
+.nbtutor .d-flex-grow,
+nbtutor-canvas {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+nbtutor-canvas:empty {
+  width: 0px;
+  display: unset;
+  -webkit-box-flex: unset;
+  -ms-flex: unset;
+  flex: unset;
+}
+
+.nbtutor.d-flex,
+.nbtutor .d-flex,
+nbtutor-basic-object,
+nbtutor-sequence-object,
+nbtutor-key-value-pair-object {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+nbtutor-basic-object {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+
+nbtutor-stack {
+  -webkit-box-flex: 0.4;
+  -ms-flex: 0.4;
+  flex: 0.4;
+}
+
+nbtutor-heap {
+  -webkit-box-flex: 0.6;
+  -ms-flex: 0.6;
+  flex: 0.6;
+}
+
+.nbtutor {
+  table {
+    color: $frame-text;
+    background: $frame-background;
+    -webkit-box-shadow: 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+    box-shadow: 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+
+    &.active {
+      color: $frame-active-text;
+      background: $frame-active-background;
+    }
+  }
+
+  .button {
+    padding: 0px;
+    height: 22px;
+    line-height: 2px;
+    font-size: x-small;
+  }
+
+  &.legend {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    font-size: smaller;
+
+    & ul {
+      list-style: none;
+    }
+  }
+
+  &.hidden {
+    display: none;
+  }
+}

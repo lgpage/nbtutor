@@ -1,0 +1,16 @@
+.nbtutor {
+  &.previous-line,
+  .previous-line {
+    color: $gutter-previous;
+  }
+
+  &.current-line,
+  .current-line {
+    color: $gutter-current;
+  }
+
+  &.next-line,
+  .next-line {
+    color: $gutter-next;
+  }
+}

@@ -1,0 +1,13 @@
+<div class="nbtutor legend d-flex-grow">
+  <div class="message d-flex-grow" *ngIf="(showInfoMessage$ | async)">
+    Toggle line numbers to see visualization markers
+  </div>
+
+  <div class="d-flex-grow" *ngIf="showVisualization(visualization$ | async)">
+    <ul>
+      <li><i class="previous-line {{ arrowIcon }}"></i> Previous Line</li>
+      <li><i class="current-line {{ arrowIcon }}"></i> Current Line</li>
+      <li><i class="next-line {{ arrowIcon }}"></i> Next Line</li>
+    </ul>
+  </div>
+</div>

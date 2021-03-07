@@ -1,0 +1,119 @@
+.nbtutor {
+  .heap {
+    padding: 10px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .heap-object {
+    padding: 10px;
+    padding-top: 0px;
+
+    .row {
+      margin: 0px;
+
+      &.left {
+        -ms-flex-item-align: start;
+        align-self: flex-start;
+      }
+
+      &.center {
+        -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+      }
+
+      &.right {
+        -ms-flex-item-align: end;
+        align-self: flex-end;
+      }
+    }
+
+    .code-object {
+      white-space: nowrap;
+      text-align: right;
+
+      .index {
+        padding-right: 5px;
+        text-align: right;
+        font-size: x-small;
+      }
+
+      .type {
+        padding-right: 5px;
+        text-align: right;
+        font-size: x-small;
+      }
+
+      .value {
+        min-width: 32px;
+        padding: 5px;
+        text-align: center;
+        border-radius: 5px;
+        border: 1px solid black;
+        background: $object-background;
+        -webkit-box-shadow: 2px 2px rgba(0, 0, 0, 0.24),
+          0 0 2px rgba(0, 0, 0, 0.12);
+        box-shadow: 2px 2px rgba(0, 0, 0, 0.24), 0 0 2px rgba(0, 0, 0, 0.12);
+      }
+    }
+
+    .anchor-from {
+      min-width: 32px;
+
+      &:hover {
+        color: $hover-text;
+        background: $hover-background;
+      }
+
+      div {
+        padding: 5px 10px 5px 10px;
+        &:empty {
+          width: 11px;
+          margin-top: 6px;
+          margin-bottom: 6px;
+        }
+      }
+    }
+
+    .sequence {
+      background: $object-background;
+
+      tr {
+        &.immutable:first-child {
+          border-top: 1px solid black;
+        }
+
+        &:last-child {
+          border-bottom: 1px solid black;
+        }
+      }
+
+      td {
+        border-left: 1px solid black;
+        border-right: 1px solid black;
+      }
+
+      .anchor-from div {
+        padding-top: 0px;
+      }
+    }
+
+    .key-value {
+      background: $object-background;
+
+      tr {
+        border-bottom: 1px solid black;
+      }
+
+      td {
+        &:first-child {
+          padding: 5px 10px 5px 10px;
+          border-right: 1px solid black;
+        }
+      }
+    }
+  }
+}

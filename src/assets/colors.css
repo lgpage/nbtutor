@@ -1,0 +1,17 @@
+:root {
+  --nbt-canvas-background: #f7f7f7;
+  --nbt-object-background: #ffffff;
+
+  --nbt-frame-text: #000000;
+  --nbt-frame-background: #ffffff;
+  --nbt-frame-active-text: #ffffff;
+  --nbt-frame-active-background: #4682b4;
+
+  --nbt-connector: #005566;
+  --nbt-hover-text: #ffffff;
+  --nbt-hover-background: #6610f2;
+
+  --nbt-gutter-previous: #0000ff;
+  --nbt-gutter-current: #008000;
+  --nbt-gutter-next: #6610f2;
+}
