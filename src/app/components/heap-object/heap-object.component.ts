@@ -1,4 +1,4 @@
-import { Component, OnInit, Type, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Type, ViewChild } from '@angular/core';
 import { DynamicElementContainerDirective } from '@app/directives';
 import { HeapObjectRender } from '@app/models';
 import { CellDataService, DomService, LoggerService } from '@app/services';
@@ -13,7 +13,7 @@ import { SequenceObjectComponent } from '../sequence-object/sequence-object.comp
   selector: 'nbtutor-heap-object',
   template: '<ng-template dynamicElementContainer></ng-template>',
 })
-export class HeapObjectComponent extends BaseObjectDirective implements OnInit {
+export class HeapObjectComponent extends BaseObjectDirective implements OnInit, AfterViewInit {
   protected _name = 'HeapObjectComponent';
 
   @ViewChild(DynamicElementContainerDirective, { static: true }) protected _container: DynamicElementContainerDirective;
@@ -55,8 +55,10 @@ export class HeapObjectComponent extends BaseObjectDirective implements OnInit {
 
       component.heap = this.heap;
       component.heapObject = this.heapObject;
-
-      this._dataSvc.heapObjectRendered(this.heapObject);
     }
+  }
+
+  ngAfterViewInit(): void {
+    this._dataSvc.heapObjectRendered(this.heapObject);
   }
 }

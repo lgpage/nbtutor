@@ -68,7 +68,7 @@ describe('JsPlumbService', () => {
         const drawConnectorsSpy = spyOn(service, 'drawConnectors');
 
         getTestScheduler().run(({ expectObservable }) => {
-          expectObservable(exposed._observables[0]).toBe('10ms 0', [true]);
+          expectObservable(exposed._observables[0]).toBe('60ms 0', [true]);
         });
 
         expect(drawConnectorsSpy).toHaveBeenCalled();

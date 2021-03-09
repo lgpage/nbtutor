@@ -46,7 +46,7 @@ export class CellDataService implements OnDestroy, ICellDataService {
 
   allHeapObjectsRendered$ = combineLatest([this.heap$, this.renderedHeapObjects$]).pipe(
     map(([heap, rendered]) => isEmpty(heap.ids) || heap.ids.every((id) => !!rendered[id])),
-    tap(() => this._loggerSvc.logDebug(`${this._name} >> allHeapObjectsRendered`)),
+    tap((rendered) => this._loggerSvc.logDebug(`${this._name} >> allHeapObjectsRendered`, { rendered })),
     shareReplay(1)
   );
 

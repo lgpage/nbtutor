@@ -25,7 +25,7 @@ export class JsPlumbService extends HasSubscriptionsDirective implements OnDestr
 
   protected initObservables(): void {
     const connectObjects$ = this._dataSvc.allHeapObjectsRendered$.pipe(
-      debounceTime(10),
+      debounceTime(60),  // Not ideal, but need to wait for css to be applied (layout change done) before drawing connectors
       tap((rendered) => rendered ? this.drawConnectors() : noop),
     );
 
