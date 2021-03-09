@@ -1,3 +1,4 @@
+import { environment } from 'environments/environment';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,13 +23,11 @@ import { metaReducersProvider, REDUCERS, reducersProvider } from './store/reduce
 import { MockTraceStepData } from './testing/mock-tracestep-data';
 
 export function setLogLevel(): LogLevel {
-  return LogLevel.Debug;
-  // return environment.production ? LogLevel.Warning : LogLevel.Trace;
+  return environment.production ? LogLevel.Warning : LogLevel.Trace;
 }
 
 export function getMockTraceStepData(): MockTraceStepData {
-  return new MockTraceStepData();
-  // return environment.production ? null : new MockTraceStepData();
+  return environment.production ? null : new MockTraceStepData();
 }
 
 @NgModule({
