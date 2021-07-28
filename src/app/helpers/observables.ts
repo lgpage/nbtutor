@@ -1,6 +1,7 @@
 import {
   fromEventPattern, MonoTypeOperatorFunction, Observable, ObservedValueOf, OperatorFunction
 } from 'rxjs';
+// eslint-disable-next-line rxjs/no-internal
 import { NodeEventHandler } from 'rxjs/internal/observable/fromEvent';
 import { filter, first, map, shareReplay, switchMap } from 'rxjs/operators';
 

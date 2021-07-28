@@ -54,7 +54,7 @@ describe('EventService', () => {
     jupyterServiceSpy = jasmine.createSpyObj<JupyterService>(
       'JupyterService',
       ['initNotebookNamespace'],
-      // tslint:disable-next-line: rxjs-finnish
+      // eslint-disable-next-line
       { 'notebookEvents$': cold('0', [notebookEventsSpy]) }
     );
 

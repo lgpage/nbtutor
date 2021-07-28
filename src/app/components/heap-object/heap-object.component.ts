@@ -14,9 +14,9 @@ import { SequenceObjectComponent } from '../sequence-object/sequence-object.comp
   template: '<ng-template dynamicElementContainer></ng-template>',
 })
 export class HeapObjectComponent extends BaseObjectDirective implements OnInit, AfterViewInit {
-  protected _name = 'HeapObjectComponent';
-
   @ViewChild(DynamicElementContainerDirective, { static: true }) protected _container: DynamicElementContainerDirective;
+
+  protected _name = 'HeapObjectComponent';
 
   constructor(
     protected _domSvc: DomService,

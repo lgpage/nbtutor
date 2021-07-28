@@ -36,7 +36,6 @@ describe('TraceStepService', () => {
   let exposed: TraceStepServiceExposed;
   let service: TraceStepService;
 
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

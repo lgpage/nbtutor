@@ -12,6 +12,6 @@ export interface VisualizationData {
 }
 
 export interface CellMetadata {
-  nbtutor?: VisualizationData;
   [key: string]: any;
+  nbtutor?: VisualizationData;
 }

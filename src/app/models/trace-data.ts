@@ -1,4 +1,3 @@
-
 import { HasSequence } from './has-sequence';
 import { HasUniqueIdentifier } from './has-unique-identifier';
 

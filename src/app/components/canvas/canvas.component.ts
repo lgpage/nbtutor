@@ -77,6 +77,11 @@ export class CanvasComponent extends HasSubscriptionsDirective implements OnInit
     );
   }
 
+  @HostListener('window:resize')
+  onWindowResize() {
+    this._jsPlumbSvc.repaintConnectors();
+  }
+
   ngOnInit(): void {
     this._loggerSvc.logDebug(`${this._name} >> ngOnInit`);
 
@@ -86,11 +91,6 @@ export class CanvasComponent extends HasSubscriptionsDirective implements OnInit
 
     this._observables = [setupJsPlumb$, isOrphaned$, detectChanges$];
     this.subscribeToObservables();
-  }
-
-  @HostListener('window:resize')
-  onWindowResize() {
-    this._jsPlumbSvc.repaintConnectors();
   }
 
   showVisualization(visualization: VisualizationData): boolean {

@@ -29,25 +29,25 @@ export class CellDataService implements OnDestroy, ICellDataService {
     )),
     filterTruthy(),
     tap(data => this._loggerSvc.logDebug(`${this._name} >> visualization$`, { data })),
-    shareReplay(1),
+    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   traceStep$ = this.visualization$.pipe(
     map(state => (state.data || [])[state.step]),
     filterTruthy(),
     tap(data => this._loggerSvc.logDebug(`${this._name} >> traceStep$`, { data })),
-    shareReplay(1),
+    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   heap$ = this.traceStep$.pipe(
     map(ts => ts.heap),
-    shareReplay(1),
+    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   allHeapObjectsRendered$ = combineLatest([this.heap$, this.renderedHeapObjects$]).pipe(
     map(([heap, rendered]) => isEmpty(heap.ids) || heap.ids.every((id) => !!rendered[id])),
     tap((rendered) => this._loggerSvc.logDebug(`${this._name} >> allHeapObjectsRendered`, { rendered })),
-    shareReplay(1)
+    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   constructor(
