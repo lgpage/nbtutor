@@ -4,3 +4,4 @@ omit =
     */static/*
     */tools/*
     */pdf*
+    */.venv/*

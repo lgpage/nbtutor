@@ -1,0 +1,6 @@
+<nbtutor-frame
+  [traceStep]="traceStep$ | async"
+  [frame]="frame"
+  class="frame d-flex"
+  *ngFor="let frame of frames$ | async"
+></nbtutor-frame>

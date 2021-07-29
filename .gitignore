@@ -1,25 +1,58 @@
-.coverage
-.DS_Store
-.coverage
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-*.log
-*.egg-info
-*.pyc
-*.xunit.xml
-
-node_modules
-sphinx/source/auto
-sphinx/source/auto
-npm-debug.log*
-
-.eggs/
-build/
-dist/
-screenshots/
-nbtutor/static/nbtutor/
-
-docs/api/
-docs/usage.gif
-
+# compiled output
+/dist
+/tmp
+/out-tsc
+/nbtutor.egg-info
 __pycache__
-\.ipynb_checkpoints
+nbtutor/static/*
+!nbtutor/static/nbtutor.notebook.js
+
+# python
+.eggs
+.coverage
+.ipynb_checkpoints
+/.mypy_cache
+/.pytest_cache
+/venv
+.venv
+
+# dependencies
+/node_modules
+
+# profiling files
+chrome-profiler-events.json
+speed-measure-plugin.json
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sonarlint
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+/typings
+npm-debug.log
+yarn-error.log
+testem.log
+TODO.md
+
+# System Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,41 @@
+.nbtutor {
+  .stack {
+    padding: 10px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+
+    th {
+      padding: 5px;
+      font-style: italic;
+    }
+
+    .frame {
+      padding-bottom: 20px;
+      .var-name {
+        padding: 5px;
+        min-width: 74px;
+        text-align: right;
+      }
+
+      .anchor-from {
+        min-width: 32px;
+        border-left: 1px solid black;
+        border-bottom: 1px solid black;
+
+        &:hover {
+          color: $hover-text;
+          background: $hover-background;
+        }
+
+        div {
+          padding: 5px;
+          &:empty {
+            width: 16px;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json",
+          "e2e/tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:rxjs/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "prefix": "nbtutor",
+            "style": "kebab-case",
+            "type": "element"
+          }
+        ],
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "prefix": "nbtutor",
+            "style": "camelCase",
+            "type": "attribute"
+          }
+        ],
+        "@typescript-eslint/member-ordering": [
+          "error",
+          {
+            "default": [
+              // Index signature
+              "signature",
+              // Fields
+              "private-abstract-field",
+              "private-static-field",
+              "private-decorated-field",
+              "private-instance-field",
+              "private-field",
+              "protected-abstract-field",
+              "protected-static-field",
+              "protected-decorated-field",
+              "protected-instance-field",
+              "protected-field",
+              "public-abstract-field",
+              "public-static-field",
+              "public-decorated-field",
+              "public-instance-field",
+              "public-field",
+              "abstract-field",
+              "static-field",
+              "instance-field",
+              "decorated-field",
+              "field",
+              // Constructors
+              "private-constructor",
+              "protected-constructor",
+              "public-constructor",
+              "constructor",
+              // Methods
+              "private-abstract-method",
+              "private-static-method",
+              "private-decorated-method",
+              "private-instance-method",
+              "private-method",
+              "protected-abstract-method",
+              "protected-static-method",
+              "protected-decorated-method",
+              "protected-instance-method",
+              "protected-method",
+              "public-abstract-method",
+              "public-static-method",
+              "public-decorated-method",
+              "public-instance-method",
+              "public-method",
+              "abstract-method",
+              "static-method",
+              "instance-method",
+              "decorated-method",
+              "method"
+            ]
+          }
+        ],
+        "no-multiple-empty-lines": [
+          "error",
+          {
+            "max": 1,
+            "maxEOF": 0,
+            "maxBOF": 0
+          }
+        ],
+        "rxjs/suffix-subjects": "error",
+        "rxjs/no-subject-unsubscribe": "error",
+        "rxjs/no-subject-value": "error",
+        "rxjs/no-unbound-methods": "error",
+        "rxjs/no-unsafe-switchmap": "error",
+        "rxjs/no-unsafe-catch": "error",
+        "rxjs/no-sharereplay": [
+          "error",
+          {
+            "allowConfig": true
+          }
+        ],
+        "rxjs/no-exposed-subjects": [
+          "error",
+          {
+            "allowProtected": true
+          }
+        ],
+        "rxjs/finnish": [
+          "error",
+          {
+            "functions": false,
+            "methods": false,
+            "parameters": true,
+            "properties": true,
+            "variables": true,
+            "names": {
+              "store$": false,
+              "valueChanges$": false
+            }
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}
