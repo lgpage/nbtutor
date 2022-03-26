@@ -8,7 +8,7 @@ dependencies:
   - flake8
   - isort
   - nodejs
-  - notebook >=4.2.0
+  - notebook
   - pytest
   - pytest-cov
   - python
