@@ -11,13 +11,14 @@ define(
 
     function injectNbtutorCss() {
       if (!$('#nbtutor-css').length) {
-        var href = '/nbextensions/nbtutor/nbtutor.min.css';
-        $('<link/>', { id: 'nbtutor-css', type: 'text/css', rel: 'stylesheet', href }).appendTo('head');
+        var href = require.toUrl('./nbtutor.min.css');
+        console.log('nbtutor >> loadCss', { href: href });
+        $('<link/>', { id: 'nbtutor-css', type: 'text/css', rel: 'stylesheet', href: href }).appendTo('head');
       }
     }
 
     function loadNbtutorSource() {
-      requirejs(["nbtutor"], function () {
+      require(["nbtutor"], function () {
         var timer = null;
 
         function waitForNbtutorToBootstrap() {
@@ -41,10 +42,13 @@ define(
     }
 
     function loadExtension() {
-      console.log('nbtutor >> loadExtension');
-      requirejs.config({
-        paths: { "nbtutor": require.toUrl("./nbtutor.min") }
-      });
+      var href = require.toUrl('./nbtutor.min.js');
+      console.log('nbtutor >> loadExtension', { href: href });
+      if (href.endsWith('.js')) {
+        href = href.substring(0, href.length - 3);
+      }
+
+      requirejs.config({ paths: { "nbtutor": href } });
 
       injectNbtutorRoot();
       injectNbtutorCss();
@@ -54,4 +58,5 @@ define(
     return {
       load_ipython_extension: loadExtension
     };
-  });
+  }
+);
