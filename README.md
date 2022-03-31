@@ -23,6 +23,8 @@ jupyter nbextension enable --py nbtutor
 
 ```shell
 conda install -c conda-forge nbtutor
+jupyter nbextension install --overwrite --py nbtutor
+jupyter nbextension enable --py nbtutor
 ```
 
 ## Usage (Jupyter Notebook)
