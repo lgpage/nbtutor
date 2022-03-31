@@ -10,6 +10,7 @@ include *.gif
 include *.js
 include *.json
 include *.md
+include *.py
 include *.txt
 include *.yml
 
