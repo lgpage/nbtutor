@@ -1,0 +1,39 @@
+name: Angular
+
+on:
+  push:
+    branches:
+      - main
+      - "release/**"
+  pull_request:
+    branches:
+      - main
+      - "release/**"
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Node.js 12
+        uses: actions/setup-node@v3
+        with:
+          node-version: "12.x"
+
+      - name: Dependencies
+        run: |
+          npm install
+          npm install -g codecov
+
+      - name: Lint
+        run: npm run lint:ui
+
+      - name: Test
+        run: |
+          npm run test:ui
+          codecov -t ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Build
+        run: npm run build:ui
