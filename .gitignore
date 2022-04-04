@@ -16,7 +16,9 @@ nbtutor/static/*
 /.mypy_cache
 /.pytest_cache
 /venv
+build/
 .venv
+.nox
 
 # dependencies
 /node_modules

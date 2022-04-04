@@ -1,4 +1,11 @@
-from typing import Dict, List, Optional, Union, Literal
+import sys
+
+from typing import Dict, List, Optional, Union
+
+if sys.version_info >= (3, 8):
+    from typing import Literal
+else:
+    from typing_extensions import Literal
 
 from ..models.serializable import Serializable
 from .unique_identifier import UniqueIdentifier
