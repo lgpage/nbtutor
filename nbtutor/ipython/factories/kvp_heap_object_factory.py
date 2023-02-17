@@ -7,7 +7,7 @@ from .base_heap_object_factory import HeapObjectFactory
 
 
 class KvpHeapObjectFactory(HeapObjectFactory):
-    def __init__(self, obj: Dict, options: Options = None) -> None:
+    def __init__(self, obj: Dict, options: Optional[Options] = None) -> None:
         super().__init__(obj, options)
 
         self._items = obj.items()

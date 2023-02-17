@@ -1,7 +1,7 @@
 from bdb import Bdb as StdDebugger
 from bdb import BdbQuit
 from io import StringIO
-from types import FrameType
+from types import FrameType, TracebackType
 from typing import Any, Dict, Iterable, List, Optional, Tuple, Type
 
 from .constants.ignore import ignore_vars
@@ -16,7 +16,7 @@ from .models.trace_step import TraceStep
 from .models.types import EventType
 from .models.options import Options
 
-_ExcInfo = Tuple[Type[BaseException], BaseException, FrameType]
+_ExcInfo = Tuple[Type[BaseException], BaseException, TracebackType]
 
 
 class Debugger(StdDebugger):

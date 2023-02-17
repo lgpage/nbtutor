@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Collection, Union
+from typing import Any, Collection, Union, Optional
 
 from ..helpers.object import get_str_id
 from ..models.heap_object import HeapObject
@@ -7,7 +7,7 @@ from ..models.options import Options
 
 
 class HeapObjectFactory(ABC):
-    def __init__(self, obj: Any, options: Options = None) -> None:
+    def __init__(self, obj: Any, options: Optional[Options] = None) -> None:
         self._object = obj
         self.options = options
 
