@@ -1,5 +1,5 @@
 import {
-  MockKernel, MockNotebook, MockNotebookCell, MockNotebookNamespace, MockOutputArea
+  MockKernel, MockNotebook, MockNotebookCell, MockNotebookNamespace, MockOutputArea,
 } from './mock-notebook-namespace';
 
 describe('MockNotebookCell', () => {

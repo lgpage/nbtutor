@@ -3,7 +3,7 @@ import { first, map, mergeMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { CanvasComponent, LegendComponent, MainButtonGroupComponent } from '@app/components';
 import {
-  CellInnerSelector, CellInputAreaSelector, MainButtonGroupId, NotebookMainToolbarContainerId
+  CellInnerSelector, CellInputAreaSelector, MainButtonGroupId, NotebookMainToolbarContainerId,
 } from '@app/constants';
 import { isCodeCell } from '@app/helpers';
 import { CodeCell } from '@app/models';

@@ -1,0 +1,21 @@
+{
+  "importStringConfiguration": {
+    "trailingComma": "multiLine",
+    "tabSize": 2,
+    "maximumNumberOfImportExpressionsPerLine": {
+      "count": 120
+    }
+  },
+  "sortConfiguration": {
+    "removeUnusedImports": true,
+    "customOrderingRules": {
+      "defaultNumberOfEmptyLinesAfterGroup": 0
+    }
+  },
+  "generalConfiguration": {
+    "sortOnBeforeSave": true,
+    "exclude": [
+      "polyfills.ts"
+    ]
+  }
+}

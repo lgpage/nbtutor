@@ -1,17 +1,11 @@
 import { BehaviorSubject, noop, Observable, timer } from 'rxjs';
 import { debounceTime, map, tap, withLatestFrom } from 'rxjs/operators';
-import {
-  ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild
-} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { showError, showVisualization } from '@app/helpers';
 import { HasSubscriptionsDirective } from '@app/helpers/has-subscriptions';
 import { filterTruthy } from '@app/helpers/observables';
-import { Nbtutor } from '@app/models';
-import { CodeCell } from '@app/models/cell';
-import { VisualizationData } from '@app/models/visualization';
-import {
-  CellDataService, CellService, CodeMirrorService, JsPlumbService, LoggerService
-} from '@app/services';
+import { CodeCell, Nbtutor, VisualizationData } from '@app/models';
+import { CellDataService, CellService, CodeMirrorService, JsPlumbService, LoggerService } from '@app/services';
 
 @Component({
   selector: 'nbtutor-canvas',

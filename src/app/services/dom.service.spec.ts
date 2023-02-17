@@ -1,6 +1,6 @@
 import {
-  ApplicationRef, ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver,
-  ComponentRef, Injectable, ViewContainerRef
+  ApplicationRef, ChangeDetectorRef, Component, ComponentFactory, ComponentFactoryResolver, ComponentRef, Injectable,
+  ViewContainerRef,
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DomService } from './dom.service';

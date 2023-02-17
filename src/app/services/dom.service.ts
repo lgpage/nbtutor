@@ -1,6 +1,5 @@
 import {
-  ApplicationRef, ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, Injectable, Injector,
-  Type, ViewContainerRef
+  ApplicationRef, ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, Injectable, Injector, Type, ViewContainerRef,
 } from '@angular/core';
 import { LoggerService } from './logger.service';
 
