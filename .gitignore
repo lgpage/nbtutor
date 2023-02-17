@@ -44,6 +44,7 @@ speed-measure-plugin.json
 !.vscode/extensions.json
 
 # misc
+/.angular/cache
 /.sonarlint
 /.sass-cache
 /connect.lock
