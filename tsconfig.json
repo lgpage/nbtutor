@@ -11,11 +11,17 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "paths": {
-      "@app/*": ["app/*"],
-      "@models/*": ["app/models/*"],
-      "@services/*": ["app/services/*"],
+      "@app/*": [
+        "app/*"
+      ],
+      "@models/*": [
+        "app/models/*"
+      ],
+      "@services/*": [
+        "app/services/*"
+      ]
     },
     "typeRoots": [
       "node_modules/@types"
@@ -23,7 +29,8 @@
     "lib": [
       "es2020",
       "dom"
-    ]
+    ],
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
