@@ -4,9 +4,7 @@ import { Heap, HeapObject, HeapObjectRender } from '@app/models';
 import { CellDataService, DomService } from '@app/services';
 import { BaseObjectDirective } from '../base-object-directive';
 import { CodeObjectComponent } from '../basic-object/basic-object.component';
-import {
-  KeyValuePairObjectComponent
-} from '../key-value-pair-object/key-value-pair-object.component';
+import { KeyValuePairObjectComponent } from '../key-value-pair-object/key-value-pair-object.component';
 import { SequenceObjectComponent } from '../sequence-object/sequence-object.component';
 import { HeapObjectComponent } from './heap-object.component';
 

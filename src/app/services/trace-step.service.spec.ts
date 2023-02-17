@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import {
-  CommTraceStep, Connector, HasUniqueIdentifier, Heap, HeapObject, StackFrame, TraceStep
-} from '@app/models';
+import { CommTraceStep, Connector, HasUniqueIdentifier, Heap, HeapObject, StackFrame, TraceStep } from '@app/models';
 import { ExistingIds, TraceStepService } from './trace-step.service';
 
 @Injectable()

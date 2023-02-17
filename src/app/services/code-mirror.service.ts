@@ -1,10 +1,8 @@
 import { combineLatest, Observable } from 'rxjs';
-import {
-  distinctUntilChanged, first, map, tap, throttleTime, withLatestFrom
-} from 'rxjs/operators';
+import { distinctUntilChanged, first, map, tap, throttleTime, withLatestFrom } from 'rxjs/operators';
 import { Injectable, OnDestroy } from '@angular/core';
 import {
-  CodeMirrorGutterId, LineMarkerClassCurrent, LineMarkerClassNext, LineMarkerClassPrevious
+  CodeMirrorGutterId, LineMarkerClassCurrent, LineMarkerClassNext, LineMarkerClassPrevious,
 } from '@app/constants';
 import { HasSubscriptionsDirective, switchMapNodeEvent } from '@app/helpers';
 import { filterTruthy } from '@app/helpers/observables';

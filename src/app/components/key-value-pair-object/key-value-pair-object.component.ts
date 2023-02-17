@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { keys } from '@app/helpers';
-import {
-  DefaultRenderOptions, HasUniqueIdentifier, KeyValuePairHeapObject, RenderOptions
-} from '@app/models';
+import { DefaultRenderOptions, HasUniqueIdentifier, KeyValuePairHeapObject, RenderOptions } from '@app/models';
 import { BaseObjectDirective } from '../base-object-directive';
 
 @Component({

@@ -1,6 +1,4 @@
-import {
-  BasicHeapObject, HeapObject, KeyValuePairHeapObject, SequenceHeapObject
-} from '@app/models';
+import { BasicHeapObject, HeapObject, KeyValuePairHeapObject, SequenceHeapObject } from '@app/models';
 
 export function basicHeapObjectValue(obj: HeapObject): obj is BasicHeapObject {
   return obj.renderType === 'basic';

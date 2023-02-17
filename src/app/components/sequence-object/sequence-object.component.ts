@@ -1,7 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  DefaultRenderOptions, HasUniqueIdentifier, RenderOptions, SequenceHeapObject
-} from '@app/models';
+import { DefaultRenderOptions, HasUniqueIdentifier, RenderOptions, SequenceHeapObject } from '@app/models';
 import { BaseObjectDirective } from '../base-object-directive';
 
 @Component({

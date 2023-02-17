@@ -3,8 +3,8 @@ import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { deepClone, isEmpty, keys, values } from '@app/helpers';
 import {
-  CommTraceStep, Connector, HasUniqueIdentifier, Heap, HeapObject, HeapObjectReferences, LineMarker,
-  LineMarkerType, StackFrame, TraceStep
+  CommTraceStep, Connector, HasUniqueIdentifier, Heap, HeapObject, HeapObjectReferences, LineMarker, LineMarkerType,
+  StackFrame, TraceStep,
 } from '@app/models';
 import { LoggerService } from './logger.service';
 

@@ -1,7 +1,5 @@
 import { HeapObject } from '@app/models';
-import {
-  basicHeapObjectValue, kvpHeapObjectValue, sequenceHeapObjectValue, sortHeapObject
-} from './trace-data';
+import { basicHeapObjectValue, kvpHeapObjectValue, sequenceHeapObjectValue, sortHeapObject } from './trace-data';
 
 describe('TraceData Helpers', () => {
   let heapObject: HeapObject;
