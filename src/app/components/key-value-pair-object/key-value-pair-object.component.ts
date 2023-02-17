@@ -27,7 +27,7 @@ export class KeyValuePairObjectComponent extends BaseObjectDirective implements 
   getObjectValue(key: string): string {
     const heapObject = this.heap.entities[this.references[key].id];
     if (!!heapObject && !!heapObject.hideReferences) {
-      return !!heapObject ? heapObject.value : null;
+      return heapObject ? heapObject.value : null;
     }
 
     return null;

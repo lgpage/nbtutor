@@ -15,7 +15,7 @@ const defaultEntity: VisualizationData = {
 // State
 
 export const stateKey = 'visualizationData';
-export interface State extends EntityState<VisualizationData> { }
+export type State = EntityState<VisualizationData>;
 export const adapter: EntityAdapter<VisualizationData> = createEntityAdapter<VisualizationData>({
   selectId: (d) => d.cellId,
 });
@@ -28,12 +28,12 @@ function setErrorEntity(state: State, id: string): State {
 }
 
 function setData(state: State, data: VisualizationData): State {
-  return !!data ? adapter.setOne(data, state) : state;
+  return data ? adapter.setOne(data, state) : state;
 }
 
 function updateData(state: State, id: string, data: TraceStep[]): State {
   const entity = state.entities[id];
-  return !!entity ? adapter.upsertOne(patchData(entity, data), state) : state;
+  return entity ? adapter.upsertOne(patchData(entity, data), state) : state;
 }
 
 function clearData(state: State, id: string): State {
@@ -47,12 +47,12 @@ function removeData(state: State, ids: string[]): State {
 
 function updateStep(state: State, id: string, step: StepType): State {
   const entity = state.entities[id];
-  return !!entity ? adapter.upsertOne(patchStep(entity, step), state) : state;
+  return entity ? adapter.upsertOne(patchStep(entity, step), state) : state;
 }
 
 function updateVisualize(state: State, id: string): State {
   const entity = state.entities[id];
-  return !!entity ? adapter.upsertOne(toggleVisualize(entity), state) : setErrorEntity(state, id);
+  return entity ? adapter.upsertOne(toggleVisualize(entity), state) : setErrorEntity(state, id);
 }
 
 // Reducer

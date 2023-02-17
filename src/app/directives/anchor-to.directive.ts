@@ -21,7 +21,7 @@ export class AnchorToDirective extends HasSubscriptionsDirective {
 
   protected initObservables(): void {
     const hover$ = this._cellSvc.hover$.pipe(
-      map((hover) => !!hover ? hover.to.id : null),
+      map((hover) => hover ? hover.to.id : null),
       map((id) => !!this.to && id === this.to.id),
       distinctUntilChanged(),
       tap((hover) => this.hover = hover),

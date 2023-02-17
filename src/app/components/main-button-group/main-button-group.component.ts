@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { MainButtonGroupId } from '@app/constants';
 import { HasThrottledSubject } from '@app/helpers';
 import { ButtonActions } from '@app/store/actions';
-import { NbtutorState } from '@app/store/reducers';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -14,14 +13,14 @@ export class MainButtonGroupComponent extends HasThrottledSubject<Event> impleme
   id = MainButtonGroupId;
 
   constructor(
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
   ) {
     super();
   }
 
   ngOnInit(): void {
     const toggleSelectedCellVisualization$ = this.valueThrottled$.pipe(
-      tap(() => this._store.dispatch(ButtonActions.toggleVisualization()))
+      tap(() => this._store$.dispatch(ButtonActions.toggleVisualization()))
     );
 
     this._observables = [toggleSelectedCellVisualization$];

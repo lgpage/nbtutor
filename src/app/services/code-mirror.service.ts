@@ -10,12 +10,11 @@ import { HasSubscriptionsDirective, switchMapNodeEvent } from '@app/helpers';
 import { filterTruthy } from '@app/helpers/observables';
 import { CodeCell, LineMarker, LineMarkerType } from '@app/models';
 import { CodeMirrorActions } from '@app/store/actions';
-import { NbtutorState } from '@app/store/reducers';
 import { Store } from '@ngrx/store';
 import { CellDataService } from './cell-data.service';
 import { LoggerService } from './logger.service';
 
-declare var $: JQueryStatic;
+declare let $: JQueryStatic;
 
 @Injectable()
 export class CodeMirrorService extends HasSubscriptionsDirective implements OnDestroy {
@@ -33,7 +32,7 @@ export class CodeMirrorService extends HasSubscriptionsDirective implements OnDe
 
   constructor(
     protected _dataSvc: CellDataService,
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
     protected _loggerSvc: LoggerService,
   ) {
     super();
@@ -77,8 +76,8 @@ export class CodeMirrorService extends HasSubscriptionsDirective implements OnDe
     return this.getEditorOnEvent('change').pipe(
       throttleTime(1000),
       withLatestFrom(this._dataSvc.cell$),
-      map(([_, cell]) => cell),
-      tap((cell) => this._store.dispatch(CodeMirrorActions.codeChanged({ id: cell.cell_id }))),
+      map(([, cell]) => cell),
+      tap((cell) => this._store$.dispatch(CodeMirrorActions.codeChanged({ id: cell.cell_id }))),
     );
   }
 

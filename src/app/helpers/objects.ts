@@ -6,7 +6,7 @@ export function isEmpty(obj: Array<any> | Dictionary<any>) {
   }
 
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (Object.hasOwnProperty.call(obj, key)) {
       return false;
     }
   }
@@ -15,14 +15,14 @@ export function isEmpty(obj: Array<any> | Dictionary<any>) {
 }
 
 export function keys<T>(obj: Dictionary<T>): string[] {
-  return Object.keys(obj).filter(k => obj.hasOwnProperty(k));
+  return Object.keys(obj).filter(k => Object.hasOwnProperty.call(obj, k));
 }
 
 export function values<T extends R, R = T>(obj: Dictionary<T>, selector?: (v: T) => R): R[] {
   const result: R[] = [];
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const value = !!selector ? selector(obj[key]) : obj[key];
+    if (Object.hasOwnProperty.call(obj, key)) {
+      const value = selector ? selector(obj[key]) : obj[key];
       result.push(value);
     }
   }

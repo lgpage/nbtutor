@@ -99,7 +99,7 @@ describe('StepButtonGroupComponent', () => {
       it('should call setStep', () => {
         const setStepSpy = spyOn(component, 'setStep');
 
-        buttonElements.forEach((btnElement, i) => {
+        buttonElements.forEach((btnElement) => {
           btnElement.click();
           fixture.detectChanges();
         });

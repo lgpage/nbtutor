@@ -5,7 +5,6 @@ import { HasThrottledSubject } from '@app/helpers';
 import { StepType } from '@app/models';
 import { LoggerService } from '@app/services';
 import { ButtonActions } from '@app/store/actions';
-import { NbtutorState } from '@app/store/reducers';
 import { Action, Store } from '@ngrx/store';
 
 @Component({
@@ -20,7 +19,7 @@ export class StepButtonGroupComponent extends HasThrottledSubject<StepType> impl
 
   constructor(
     protected _loggerSvc: LoggerService,
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
   ) {
     super();
   }
@@ -42,7 +41,7 @@ export class StepButtonGroupComponent extends HasThrottledSubject<StepType> impl
         }
       }),
       tap((action) => this._loggerSvc.logDebug(`${this._name} >> setStep$`, { action })),
-      tap((action) => this._store.dispatch(action)),
+      tap((action) => this._store$.dispatch(action)),
     );
 
     this._observables = [setStep$];

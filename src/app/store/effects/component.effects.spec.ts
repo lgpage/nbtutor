@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { cold, hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { ComponentRef, Injectable } from '@angular/core';

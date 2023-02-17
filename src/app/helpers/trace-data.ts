@@ -16,8 +16,14 @@ export function kvpHeapObjectValue(obj: HeapObject): obj is KeyValuePairHeapObje
 
 export function sortHeapObject(items: HeapObject[]): HeapObject[] {
   return [...items].sort((a, b) => {
-    if (a.sequence < b.sequence) { return -1; }
-    if (a.sequence > b.sequence) { return 1; }
+    if (a.sequence < b.sequence) {
+      return -1;
+    }
+
+    if (a.sequence > b.sequence) {
+      return 1;
+    }
+
     return a.id < b.id ? -1 : 1;
   });
 }

@@ -16,25 +16,45 @@
         "createDefaultProgram": true
       },
       "extends": [
+        "eslint:recommended",
         "plugin:rxjs/recommended",
+        "plugin:@ngrx/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/recommended",
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
+      "plugins": [
+        "eslint-plugin-rxjs"
+      ],
       "rules": {
-        "@angular-eslint/component-selector": [
-          "error",
-          {
-            "prefix": "nbtutor",
-            "style": "kebab-case",
-            "type": "element"
-          }
-        ],
+        "semi": "off",
+        "no-shadow": "off",
         "@angular-eslint/directive-selector": [
           "error",
           {
             "prefix": "nbtutor",
-            "style": "camelCase",
-            "type": "attribute"
+            "type": "attribute",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "nbtutor",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/semi": "error",
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-member-accessibility": [
+          "off",
+          {
+            "accessibility": "explicit"
           }
         ],
         "@typescript-eslint/member-ordering": [
@@ -44,7 +64,6 @@
               // Index signature
               "signature",
               // Fields
-              "private-abstract-field",
               "private-static-field",
               "private-decorated-field",
               "private-instance-field",
@@ -70,7 +89,6 @@
               "public-constructor",
               "constructor",
               // Methods
-              "private-abstract-method",
               "private-static-method",
               "private-decorated-method",
               "private-instance-method",
@@ -93,6 +111,13 @@
             ]
           }
         ],
+        "brace-style": [
+          "error",
+          "1tbs"
+        ],
+        "id-blacklist": "off",
+        "id-match": "off",
+        "no-underscore-dangle": "off",
         "no-multiple-empty-lines": [
           "error",
           {
@@ -105,7 +130,6 @@
         "rxjs/no-subject-unsubscribe": "error",
         "rxjs/no-subject-value": "error",
         "rxjs/no-unbound-methods": "error",
-        "rxjs/no-unsafe-switchmap": "error",
         "rxjs/no-unsafe-catch": "error",
         "rxjs/no-sharereplay": [
           "error",
@@ -128,10 +152,19 @@
             "properties": true,
             "variables": true,
             "names": {
+              "_$": false,
               "store$": false,
               "valueChanges$": false
             }
           }
+        ],
+        "@ngrx/select-style": [
+          "error",
+          "operator"
+        ],
+        "@ngrx/use-consistent-global-store-name": [
+          "error",
+          "_store$"
         ]
       }
     },

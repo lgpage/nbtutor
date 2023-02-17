@@ -1,7 +1,6 @@
 import { environment } from 'environments/environment';
 import { Injectable, Optional } from '@angular/core';
 import { CommActions, ComponentActions } from '@app/store/actions';
-import { NbtutorState } from '@app/store/reducers';
 import { MockTraceStepData } from '@app/testing/mock-tracestep-data';
 import { Store } from '@ngrx/store';
 import { EventService } from './event.service';
@@ -19,7 +18,7 @@ export class NbtutorService {
     protected _jupyterSvc: JupyterService,
     protected _eventSvc: EventService,
     protected _loggerSvc: LoggerService,
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
     @Optional() protected _mockTraceStepData: MockTraceStepData,
   ) {
     this._loggerSvc.logWarning('nbtutor version', environment.version);
@@ -28,12 +27,12 @@ export class NbtutorService {
 
   initForNotebook(jupyter: NotebookNamespace, events: NotebookEvents): void {
     this._jupyterSvc.initNotebookNamespace(jupyter, events);
-    this._store.dispatch(ComponentActions.addMainToolbarButtonsToNotebook());
+    this._store$.dispatch(ComponentActions.addMainToolbarButtonsToNotebook());
 
     if (!environment.production && !!this._mockTraceStepData) {
       const traceSteps = this._mockTraceStepData.traceStepdata;
       this._loggerSvc.logDebug(`${this._name} >> initForNotebook >> using mock data`, { data: traceSteps });
-      this._store.dispatch(CommActions.setData({ msgId: 'id', traceSteps }));
+      this._store$.dispatch(CommActions.setData({ msgId: 'id', traceSteps }));
     }
   }
 }

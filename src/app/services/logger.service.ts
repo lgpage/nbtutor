@@ -23,7 +23,7 @@ export class LoggerService {
     if (logLevel >= this._logLevel) {
       try {
         logFunc(message, ...optionalParams);
-      } catch { }
+      } catch { /* empty */ }
     }
   }
 
