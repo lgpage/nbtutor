@@ -4,6 +4,18 @@ Visualize Python code execution (line-by-line) in [Jupyter Notebook] cells. Insp
 
 ![Usage Example](usage.gif)
 
+[![PyPI latest release](https://img.shields.io/pypi/v/nbtutor.svg?style=flat)](https://pypi.org/project/nbtutor)
+[![PyPI monthly downloads](https://img.shields.io/pypi/dm/nbtutor.svg?style=flat)](https://pypi.org/project/nbtutor)
+[![PyPI wheel](https://img.shields.io/pypi/wheel/nbtutor.svg?style=flat)](https://pypi.org/project/nbtutor)
+[![Supported versions](https://img.shields.io/pypi/pyversions/nbtutor.svg?style=flat)](https://pypi.org/project/nbtutor)
+[![Supported implementations](https://img.shields.io/pypi/implementation/nbtutor.svg?style=flat)](https://pypi.org/project/nbtutor)
+[![Conda version](https://img.shields.io/conda/vn/conda-forge/nbtutor.svg)](https://anaconda.org/conda-forge/nbtutor)
+[![Conda downloads](https://img.shields.io/conda/dn/conda-forge/nbtutor.svg)](https://anaconda.org/conda-forge/nbtutor)
+
+[![Angular test status](https://github.com/lgpage/nbtutor/actions/workflows/anguler-test.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/angular-test.yml?query=branch%3Amain)
+[![Python check status](https://github.com/lgpage/nbtutor/actions/workflows/python-check.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/python-check.yml?query=branch%3Amain)
+[![Python test status](https://github.com/lgpage/nbtutor/actions/workflows/python-test.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/python-test.yml?query=branch%3Amain)
+
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lgpage/nbtutor/HEAD)
 
 ## Install
@@ -85,7 +97,7 @@ There are also optional arguments that can be used with the cell magic:
 
 ## Develop
 
-Please see the [DEVELOPMENT.md](DEVELOPMENT.md) file
+Please see the [CONTRIBUTING](CONTRIBUTING.md) and [DEVELOPMENT.md](DEVELOPMENT.md) guides
 
 [Jupyter Notebook]: https://jupyter.org
 [Online Python Tutor]: http://pythontutor.com/index.html
