@@ -7,9 +7,9 @@ const fs = require('fs-extra');
 
 (async function build() {
   const files = [
-    './dist/nbtutor/runtime-es2015.js',
-    './dist/nbtutor/polyfills-es2015.js',
-    './dist/nbtutor/main-es2015.js',
+    './dist/nbtutor/runtime.js',
+    './dist/nbtutor/polyfills.js',
+    './dist/nbtutor/main.js',
   ];
 
   await fs.ensureDir('./nbtutor/static');

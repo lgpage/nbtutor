@@ -2,15 +2,18 @@
   "compileOnSave": true,
   "compilerOptions": {
     "baseUrl": "src",
-    "outDir": "dist/out-tsc",
-    "sourceMap": true,
     "declaration": false,
-    "module": "es2020",
-    "moduleResolution": "node",
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "downlevelIteration": true,
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "outDir": "dist/out-tsc",
+    "sourceMap": true,
     "target": "ES2022",
     "paths": {
       "@app/*": [
@@ -35,6 +38,7 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "strictTemplates": true
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
   }
 }
