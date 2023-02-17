@@ -30,7 +30,7 @@ export class TraceStepService {
 
   protected setId(item: HasUniqueIdentifier, existingIds: ExistingIds, prefix: string): void {
     item.uuid = `${prefix}-${uuid.v4()}`;
-    if (!!existingIds) {
+    if (existingIds) {
       item.uuid = existingIds[item.id] || item.uuid;
       existingIds[item.id] = item.uuid;
     }
@@ -46,7 +46,7 @@ export class TraceStepService {
     for (const id of heap.ids) {
       const heapObject = heap.entities[id];
       this.setId(heapObject, existingIds, prefix);
-      if (!!heapObject.references) {
+      if (heapObject.references) {
         this.setArrayIds(this.getReferencesArray(heapObject.references), null, 'r');
       }
     }
@@ -68,7 +68,7 @@ export class TraceStepService {
         connectors[hash] = connector;
 
         const heapObject = (heap.entities[ref.id] || { references: null });
-        if (!!heapObject.references) {
+        if (heapObject.references) {
           this.populateHeapObjectConnectors(heapObject.references, heap, connectors);
         }
       }
@@ -149,7 +149,10 @@ export class TraceStepService {
   formatDecimalValues(data: TraceStep[], decimalsPerType: { [type: string]: number }): TraceStep[] {
     return this.updateHeapObject(data, (heapObject) => {
       const decimals = decimalsPerType[heapObject.type];
-      if (!decimals) { return; }
+      if (!decimals) {
+        return;
+      }
+
       try {
         heapObject.value = new DecimalPipe('en-US').transform(heapObject.value, `1.0-${decimals}`);
       } catch {

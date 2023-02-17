@@ -6,7 +6,7 @@ declare class CommMessage {
   };
   content: {
     data: any;
-  }
+  };
 }
 
 declare class OutputMessage {
@@ -60,7 +60,7 @@ declare class NotebookCell {
   cell_type: CellType;
   output_area: OutputArea;
   element: JQuery<HTMLElement>;
-  metadata: { [key: string]: any }
+  metadata: { [key: string]: any };
 }
 
 declare class NotebookCodeCell extends NotebookCell {

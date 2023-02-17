@@ -3,11 +3,9 @@ import { CodeMirrorActions, VisualizationActions } from '../actions';
 import { adapter, initialState, reducer } from './visualization.reducer';
 
 describe('Visualization Reducer', () => {
-  let noDataError: string;
   let defaultEntity: VisualizationData;
 
   beforeEach(() => {
-    noDataError = 'No visualization data found for this cell';
     defaultEntity = {
       cellId: 'id',
       step: 0,

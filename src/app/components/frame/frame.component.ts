@@ -20,7 +20,7 @@ export class FrameComponent {
   getObjectValue(variable: Variable): string {
     const heapObject = this.traceStep.heap.entities[variable.id];
     if (!!heapObject && !!heapObject.hideReferences) {
-      return !!heapObject ? heapObject.value : null;
+      return heapObject ? heapObject.value : null;
     }
 
     return null;

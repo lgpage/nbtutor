@@ -9,28 +9,32 @@ import { CommActions, ComponentActions, VisualizationActions } from '../actions'
 export class CellDataEffects {
   protected _name = 'CellDataEffects';
 
-  setCellData$ = createEffect(() => this._actions$.pipe(
-    ofType(CommActions.setData),
-    mergeMap(({ msgId, traceSteps }) => this._notebookSvc.getMsgCell(msgId).pipe(
-      map((cell) => {
-        if (!cell) { return null; }
-        const data: VisualizationData = {
-          cellId: cell.cell_id,
-          data: this._traceStepSvc.sanitize(traceSteps),
-          step: 0,
-          maxSteps: 0,
-          visualize: true,
-        };
+  setCellData$ = createEffect(() => {
+    return this._actions$.pipe(
+      ofType(CommActions.setData),
+      mergeMap(({ msgId, traceSteps }) => this._notebookSvc.getMsgCell(msgId).pipe(
+        map((cell) => {
+          if (!cell) {
+            return null;
+          }
+          const data: VisualizationData = {
+            cellId: cell.cell_id,
+            data: this._traceStepSvc.sanitize(traceSteps),
+            step: 0,
+            maxSteps: 0,
+            visualize: true,
+          };
 
-        data.maxSteps = data.data.length;
-        return data;
-      }),
-    )),
-    mergeMap((data) => [
-      VisualizationActions.addData({ data }),
-      ComponentActions.addCanvasComponentToCell({ cellId: data.cellId }),
-    ]),
-  ));
+          data.maxSteps = data.data.length;
+          return data;
+        }),
+      )),
+      mergeMap((data) => [
+        VisualizationActions.addData({ data }),
+        ComponentActions.addCanvasComponentToCell({ cellId: data.cellId }),
+      ]),
+    );
+  });
 
   constructor(
     protected _actions$: Actions,

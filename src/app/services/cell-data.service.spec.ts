@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { cold } from 'jasmine-marbles';
 import { TestBed } from '@angular/core/testing';
 import { CodeCell, Connector, Heap, HeapObject, TraceStep, VisualizationData } from '@app/models';

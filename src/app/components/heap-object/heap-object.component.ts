@@ -49,7 +49,7 @@ export class HeapObjectComponent extends BaseObjectDirective implements OnInit, 
     }
 
     const componentType = this.resolveObjectComponent(this.heapObject.renderType);
-    if (!!componentType) {
+    if (componentType) {
       const componentRef = this._domSvc.createComponent(componentType, this._container.viewContainerRef);
       const component = componentRef.instance;
 

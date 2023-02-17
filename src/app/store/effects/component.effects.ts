@@ -16,21 +16,27 @@ import { ComponentActions, VisualizationActions } from '../actions';
 export class ComponentEffects {
   protected _name = 'ComponentEffects';
 
-  addMainToolbarButtonsToNotebook$ = createEffect(() => this._actions$.pipe(
-    ofType(ComponentActions.addMainToolbarButtonsToNotebook),
-    tap(() => this.addMainToolbarButtonsToNotebook()),
-  ), { dispatch: false });
+  addMainToolbarButtonsToNotebook$ = createEffect(() => {
+    return this._actions$.pipe(
+      ofType(ComponentActions.addMainToolbarButtonsToNotebook),
+      tap(() => this.addMainToolbarButtonsToNotebook()),
+    );
+  }, { dispatch: false });
 
-  addCanvasComponentToCell$ = createEffect(() => this._actions$.pipe(
-    ofType(ComponentActions.addCanvasComponentToCell),
-    mergeMap(({ cellId }) => this.addCanvasComponentToCodeCell(cellId)),
-  ), { dispatch: false });
+  addCanvasComponentToCell$ = createEffect(() => {
+    return this._actions$.pipe(
+      ofType(ComponentActions.addCanvasComponentToCell),
+      mergeMap(({ cellId }) => this.addCanvasComponentToCodeCell(cellId)),
+    );
+  }, { dispatch: false });
 
-  toggleCanvasComponentDisplay$ = createEffect(() => this._actions$.pipe(
-    ofType(ComponentActions.toggleCanvasComponentDisplay),
-    mergeMap(() => this.addCanvasComponentToCodeCell()),
-    map((cell) => VisualizationActions.toggleVisualize({ id: cell.cell_id })),
-  ));
+  toggleCanvasComponentDisplay$ = createEffect(() => {
+    return this._actions$.pipe(
+      ofType(ComponentActions.toggleCanvasComponentDisplay),
+      mergeMap(() => this.addCanvasComponentToCodeCell()),
+      map((cell) => VisualizationActions.toggleVisualize({ id: cell.cell_id })),
+    );
+  });
 
   constructor(
     protected _actions$: Actions,
@@ -57,7 +63,7 @@ export class ComponentEffects {
     const inputArea = cell.element.find(CellInputAreaSelector);
     const canvasComponent = this._domSvc.createChildComponent(CanvasComponent, null, inputArea).instance;
 
-    if (!!cell.nbtutor) {
+    if (cell.nbtutor) {
       cell.nbtutor.ngOnDestroy();
     }
 
@@ -67,7 +73,7 @@ export class ComponentEffects {
   }
 
   protected addComponentToCodeCell(createComponentFn: (cell: CodeCell) => void, cellId?: string): Observable<CodeCell> {
-    const cell$ = !!cellId ? this._notebookSvc.getCellById(cellId) : this._notebookSvc.getSelectedCell();
+    const cell$ = cellId ? this._notebookSvc.getCellById(cellId) : this._notebookSvc.getSelectedCell();
     return cell$.pipe(
       map((cell) => isCodeCell(cell) ? (cell as CodeCell) : null),
       tap((cell) => (!cell || !!cell.nbtutor) ? noop : createComponentFn(cell)),

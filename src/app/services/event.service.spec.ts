@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { cold, getTestScheduler } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';

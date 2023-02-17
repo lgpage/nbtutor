@@ -1,8 +1,9 @@
-declare var $: JQueryStatic;
+/* eslint-disable @typescript-eslint/no-empty-function */
+declare let $: JQueryStatic;
 
 export class MockOutputArea implements OutputArea {
   clear_output(): void { }
-  handle_output(msg: OutputMessage): void { }
+  handle_output(): void { }
 }
 
 export class MockNotebookCell implements NotebookCell {
@@ -17,8 +18,8 @@ export class MockNotebookCell implements NotebookCell {
 }
 
 export class MockCommManager implements CommManager {
-  register_target(name: string, callback: (comm: Comm) => void): void { }
-  unregister_target(name: string): void { }
+  register_target(): void { }
+  unregister_target(): void { }
 }
 
 export class MockKernel implements Kernel {
@@ -38,7 +39,7 @@ export class MockNotebook implements Notebook {
     return this._cell;
   }
 
-  get_msg_cell(msg_id: string): NotebookCell {
+  get_msg_cell(): NotebookCell {
     return this._cell;
   }
 }

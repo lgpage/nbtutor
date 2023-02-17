@@ -26,7 +26,7 @@ export class SequenceObjectComponent extends BaseObjectDirective implements OnIn
   getObjectValue(reference: HasUniqueIdentifier): string {
     const heapObject = this.heap.entities[reference.id];
     if (!!heapObject && !!heapObject.hideReferences) {
-      return !!heapObject ? heapObject.value : null;
+      return heapObject ? heapObject.value : null;
     }
 
     return null;

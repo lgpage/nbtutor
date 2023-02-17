@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import { LoggerService } from './logger.service';
 
-declare var $: JQueryStatic;
+declare let $: JQueryStatic;
 
 export type ElementSelector = string | HTMLElement | JQuery<HTMLElement>;
 
@@ -34,7 +34,9 @@ export class DomService {
     elementExists: () => boolean,
     getParentElement: () => JQuery<HTMLElement>,
   ): ComponentRef<T> {
-    if (elementExists()) { return; }
+    if (elementExists()) {
+      return;
+    }
 
     const factory = this._componentFactoryResolver.resolveComponentFactory(componentType);
     const componentRef = factory.create(this._injector);

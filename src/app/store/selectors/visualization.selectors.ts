@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { NbtutorState, VisualizationReducer } from '../reducers';
+import { VisualizationReducer } from '../reducers';
 
 type State = VisualizationReducer.State;
 const selectors = VisualizationReducer.adapter.getSelectors();

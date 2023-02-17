@@ -64,9 +64,9 @@ export class CanvasComponent extends HasSubscriptionsDirective implements OnInit
   protected getIsOrphanedTimer$(cell$: Observable<CodeCell>): Observable<boolean> {
     return timer(this._dataPollTime, this._dataPollTime).pipe(
       withLatestFrom(this.getElement$(cell$)),
-      map(([_, element]) => !!element ? !this.documentContains(element[0]) : true),
+      map(([, element]) => element ? !this.documentContains(element[0]) : true),
       tap((isOrphaned) => this._loggerSvc.logDebug(`${this._name} >> isOrphaned$`, { isOrphaned })),
-      tap((isOrphaned) => !!isOrphaned ? this.ngOnDestroy() : noop),
+      tap((isOrphaned) => isOrphaned ? this.ngOnDestroy() : noop),
     );
   }
 

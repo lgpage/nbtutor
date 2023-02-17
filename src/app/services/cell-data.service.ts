@@ -4,7 +4,6 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { filterTruthy, isEmpty } from '@app/helpers';
 import { CodeCell, HeapObject, ICellDataService } from '@app/models';
 import { Hover } from '@app/models/runtime';
-import { NbtutorState } from '@app/store/reducers';
 import { VisualizationSelectors } from '@app/store/selectors';
 import { select, Store } from '@ngrx/store';
 import { LoggerService } from './logger.service';
@@ -23,7 +22,7 @@ export class CellDataService implements OnDestroy, ICellDataService {
   renderedHeapObjects$ = this._renderedHeapObjectsSubject$.asObservable();
 
   visualization$ = this.cell$.pipe(
-    switchMap((cell) => this._store.pipe(
+    switchMap((cell) => this._store$.pipe(
       select(VisualizationSelectors.selectVisualizationEntities),
       map((entities) => entities[cell.cell_id])
     )),
@@ -51,7 +50,7 @@ export class CellDataService implements OnDestroy, ICellDataService {
   );
 
   constructor(
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
     protected _loggerSvc: LoggerService,
   ) { }
 

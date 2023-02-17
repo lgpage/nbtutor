@@ -7,7 +7,7 @@ import { Connector } from '@app/models';
 import { CellDataService } from './cell-data.service';
 import { LoggerService } from './logger.service';
 
-declare var $: JQueryStatic;
+declare let $: JQueryStatic;
 
 @Injectable()
 export class JsPlumbService extends HasSubscriptionsDirective implements OnDestroy {
@@ -38,7 +38,7 @@ export class JsPlumbService extends HasSubscriptionsDirective implements OnDestr
       map((visualization) => visualization.connectors),
       tap(() => this.resetJsPlumb()),
       tap((connectors) => {
-        if (!!this._jsPlumb) {
+        if (this._jsPlumb) {
           this._loggerSvc.logDebug(`${this._name} >> drawConnectors`, { connectors, jsPlumb: this._jsPlumb });
           for (const connector of connectors) {
             this._jsPlumb.connect({ source: connector.from, target: connector.to }, { cssClass: connector.from });
@@ -76,13 +76,13 @@ export class JsPlumbService extends HasSubscriptionsDirective implements OnDestr
   }
 
   repaintConnectors(): void {
-    if (!!this._jsPlumb) {
+    if (this._jsPlumb) {
       this._jsPlumb.repaintEverything();
     }
   }
 
   resetJsPlumb(): void {
-    if (!!this._jsPlumb) {
+    if (this._jsPlumb) {
       this._jsPlumb.reset();
     }
   }

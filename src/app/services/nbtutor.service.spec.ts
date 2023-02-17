@@ -1,7 +1,6 @@
 import { environment } from 'environments/environment';
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { UpdateEvent } from '@app/models';
 import { CommActions, ComponentActions } from '@app/store/actions';
 import { NbtutorState } from '@app/store/reducers';
 import { MockTraceStepData } from '@app/testing';
@@ -22,18 +21,10 @@ describe('NbtutorService', () => {
   let service: NbtutorService;
   let store: MockStore<NbtutorState>;
 
-  let cell: NotebookCell;
-  let action: UpdateEvent;
-
   let jupyterServiceSpy: jasmine.SpyObj<JupyterService>;
   let loggerServiceSpy: jasmine.SpyObj<LoggerService>;
 
   beforeEach(() => {
-    const output_area: OutputArea = { clear_output() { }, handle_output() { } };
-
-    action = { action: 'toggleVisualization', cell: null };
-    cell = { cell_id: 'id', cell_type: 'code', element: null, metadata: {}, output_area };
-
     jupyterServiceSpy = jasmine.createSpyObj<JupyterService>('JupyterService', ['initNotebookNamespace']);
     loggerServiceSpy = jasmine.createSpyObj<LoggerService>('LoggerService', ['logDebug', 'logWarning']);
 

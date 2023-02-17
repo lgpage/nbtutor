@@ -47,11 +47,11 @@ export class JupyterService {
   ) { }
 
   initNotebookNamespace(jupyter: NotebookNamespace, events: NotebookEvents): void {
-    if (!!jupyter) {
+    if (jupyter) {
       this._notebookNamespaceSubject$.next(jupyter);
     }
 
-    if (!!events) {
+    if (events) {
       this._notebookEventsSubject$.next(events);
     }
 

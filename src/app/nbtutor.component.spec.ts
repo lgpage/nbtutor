@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { NbtutorComponent } from './nbtutor.component';
 import { NbtutorService } from './services/nbtutor.service';
 import { MockNotebookNamespace } from './testing/mock-notebook-namespace';
 
 class MockNbtutorService {
-  initForNotebook(jupyter: NotebookNamespace, events: NotebookEvents): void { }
+  initForNotebook(): void { }
 }
 
 describe('NbtutorComponent', () => {

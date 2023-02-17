@@ -3,7 +3,6 @@ import { map, startWith, switchMap, tap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { HasSubscriptionsDirective, switchMapNodeEvent } from '@app/helpers';
 import { CommActions, VisualizationActions } from '@app/store/actions';
-import { NbtutorState } from '@app/store/reducers';
 import { Store } from '@ngrx/store';
 import { NotebookEvents } from '../constants';
 import { JupyterService } from './jupyter.service';
@@ -21,7 +20,7 @@ export class EventService extends HasSubscriptionsDirective {
     protected _jupyterSvc: JupyterService,
     protected _notebookSvc: NotebookService,
     protected _loggerSvc: LoggerService,
-    protected _store: Store<NbtutorState>,
+    protected _store$: Store,
   ) {
     super();
     this.initObservables();
@@ -43,7 +42,7 @@ export class EventService extends HasSubscriptionsDirective {
 
     return merge(notebookSaved$, timer(this._pollTime, this._pollTime)).pipe(
       tap((args) => this._loggerSvc.logDebug(`${this._name} >> syncData$`, { args })),
-      tap(() => this._store.dispatch(VisualizationActions.syncData())),
+      tap(() => this._store$.dispatch(VisualizationActions.syncData())),
       map(() => true),
     );
   }
@@ -68,7 +67,7 @@ export class EventService extends HasSubscriptionsDirective {
             this._loggerSvc.logDebug(`${this._name} >> getInitCommManager`, { msg, comm });
             const msgId = msg.parent_header.msg_id;
             const traceSteps = msg.content.data;
-            this._store.dispatch(CommActions.setData({ msgId, traceSteps }));
+            this._store$.dispatch(CommActions.setData({ msgId, traceSteps }));
           });
         });
       }),
