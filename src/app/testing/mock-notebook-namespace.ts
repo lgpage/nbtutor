@@ -39,7 +39,7 @@ export class MockNotebook implements Notebook {
     return this._cell;
   }
 
-  get_msg_cell(): NotebookCell {
+  get_msg_cell(msg_id: string): NotebookCell {
     return this._cell;
   }
 }

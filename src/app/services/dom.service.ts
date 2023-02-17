@@ -35,7 +35,7 @@ export class DomService {
     getParentElement: () => JQuery<HTMLElement>,
   ): ComponentRef<T> {
     if (elementExists()) {
-      return;
+      return null;
     }
 
     const factory = this._componentFactoryResolver.resolveComponentFactory(componentType);
@@ -71,5 +71,7 @@ export class DomService {
       const componentRef = viewContainerRef.createComponent(factory);
       return componentRef;
     }
+
+    return null;
   }
 }
