@@ -143,8 +143,9 @@
       }
     }
   },
-  "defaultProject": "nbtutor",
   "cli": {
-    "defaultCollection": "@ngrx/schematics"
+    "schematicCollections": [
+      "@ngrx/schematics"
+    ]
   }
 }
