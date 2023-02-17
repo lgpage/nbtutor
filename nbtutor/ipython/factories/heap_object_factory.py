@@ -1,4 +1,4 @@
-from typing import Any, Collection, Dict
+from typing import Any, Collection, Dict, Optional
 
 from ..constants.types import basic_types, key_value_types, named_types, sequence_types
 from ..models.heap_object import HeapObject
@@ -13,7 +13,7 @@ from .sequence_heap_object_factory import SequenceHeapObjectFactory
 from .unknown_heap_object_factory import UnknownHeapObjectFactory
 
 
-def resolve_heap_object_factory(obj: Any, options: Options = None) -> HeapObjectFactory:
+def resolve_heap_object_factory(obj: Any, options: Optional[Options] = None) -> HeapObjectFactory:
     if isinstance(obj, basic_types):
         return BasicHeapObjectFactory(obj, options)
 
@@ -35,11 +35,12 @@ def resolve_heap_object_factory(obj: Any, options: Options = None) -> HeapObject
     return UnknownHeapObjectFactory(obj, options)
 
 
-def create_heap_object(obj: Any, options: Options = None) -> HeapObject:
+def create_heap_object(obj: Any, options: Optional[Options] = None) -> HeapObject:
     return resolve_heap_object_factory(obj, options).create()
 
 
-def reduce_heap_objects(objects: Collection[Any], heap: Dict[str, HeapObject], options: Options = None) -> None:
+def reduce_heap_objects(objects: Collection[Any], heap: Dict[str, HeapObject],
+                        options: Optional[Options] = None) -> None:
     for obj in objects:
         obj_id = HeapObjectFactory.get_object_id(obj)
         if heap.get(obj_id, None) is not None:
@@ -53,7 +54,7 @@ def reduce_heap_objects(objects: Collection[Any], heap: Dict[str, HeapObject], o
             reduce_heap_objects(objects_to_reduce, heap, options)
 
 
-def create_heap_objects(objects: Collection[Any], options: Options = None) -> Dict[str, HeapObject]:
+def create_heap_objects(objects: Collection[Any], options: Optional[Options] = None) -> Dict[str, HeapObject]:
     heap: Dict[str, HeapObject] = dict()
     reduce_heap_objects(objects, heap, options)
     return heap

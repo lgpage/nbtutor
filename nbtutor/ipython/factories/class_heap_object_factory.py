@@ -1,4 +1,4 @@
-from typing import Any, Collection, Union
+from typing import Any, Collection, Optional, Union
 
 from ..constants.ignore import ignore_vars
 from ..models.heap_object import HeapObject
@@ -9,7 +9,7 @@ from .base_heap_object_factory import HeapObjectFactory
 
 
 class ClassHeapObjectFactory(HeapObjectFactory):
-    def __init__(self, obj: Any, options: Options = None) -> None:
+    def __init__(self, obj: Any, options: Optional[Options] = None) -> None:
         super().__init__(obj, options)
 
         self._dict = filter_dict(self._object.__dict__, ignore_vars)

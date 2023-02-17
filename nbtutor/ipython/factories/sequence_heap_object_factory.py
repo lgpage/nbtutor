@@ -7,7 +7,7 @@ from .base_heap_object_factory import HeapObjectFactory
 
 
 class SequenceHeapObjectFactory(HeapObjectFactory):
-    def __init__(self, obj: Union[Tuple, List], options: Options = None) -> None:
+    def __init__(self, obj: Union[Tuple, List], options: Optional[Options] = None) -> None:
         super().__init__(obj, options)
 
         self._object_id = self.get_object_id(obj)
