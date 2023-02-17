@@ -9,5 +9,6 @@
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
   "restructuredtext.confPath": "",
-  "restructuredtext.preview.docutil.disabled": true
+  "restructuredtext.preview.docutil.disabled": true,
+  "esbonio.sphinx.confDir": ""
 }
