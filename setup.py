@@ -24,8 +24,12 @@ setup(
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Framework :: IPython",
+        "Intended Audience :: Developers",
+        "Intended Audience :: Education",
+        "License :: OSI Approved :: BSD License",
         "Programming Language :: Python",
-        "License :: OSI Approved :: BSD License"
+        "Programming Language :: Python :: 3",
+        "Topic :: Education",
     ],
     packages=find_packages(include=["nbtutor"]),
     install_requires=["notebook"],
