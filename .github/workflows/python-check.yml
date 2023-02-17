@@ -1,0 +1,49 @@
+# This workflow will install Python dependencies, run lint and check
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python Check
+
+on:
+  push:
+    branches:
+      - main
+      - "release/**"
+  pull_request:
+    branches:
+      - main
+      - "release/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install mypy flake8 build twine wheel check-manifest
+
+    - name: Lint with flake8
+      run: |
+        mypy nbtutor
+        flake8 nbtutor tests setup.py noxfile.py docs/conf.py
+
+    - name: Check manifest and dist
+      run: |
+        check-manifest
+        python -m build
+        twine check dist/*.*
+
+    - name: Activate nbextension
+      run: |
+        python -m pip install -e .
+        jupyter nbextension install --overwrite --sys-prefix --py nbtutor
+        jupyter nbextension enable nbtutor --py --sys-prefix
