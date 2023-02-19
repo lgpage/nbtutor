@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { cold, getTestScheduler } from 'jasmine-marbles';
-import { jsPlumb, jsPlumbInstance } from 'jsplumb';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Connector, TraceStep } from '@app/models';
+import { BrowserJsPlumbDefaults, BrowserJsPlumbInstance } from '@jsplumb/browser-ui';
 import { CellDataService } from './cell-data.service';
 import { JsPlumbService } from './js-plumb.service';
 
@@ -12,12 +12,20 @@ import { JsPlumbService } from './js-plumb.service';
 class JsPlumbServiceExposed extends JsPlumbService {
   _observables: Observable<any>[];
 
-  setJsPlumb(instance: jsPlumbInstance): void {
+  createJsPlumbInstance(options: BrowserJsPlumbDefaults): void {
+    return super.createJsPlumbInstance(options);
+  }
+
+  setJsPlumb(instance: BrowserJsPlumbInstance): void {
     this._jsPlumb = instance;
   }
 
   initObservables(): void {
     return super.initObservables();
+  }
+
+  getElementById(id: string): HTMLElement {
+    return super.getElementById(id);
   }
 
   getDrawConnectors(): Observable<Connector[]> {
@@ -80,42 +88,46 @@ describe('JsPlumbService', () => {
   describe('getDrawConnectors', () => {
     describe('when jsPlumb instance is truthy', () => {
       it('should call expected methods and emit expected result', () => {
-        const resetJsPlumbSpy = spyOn(service, 'resetJsPlumb');
+        const from = {} as HTMLElement;
+        const to = {} as HTMLElement;
 
-        expect(exposed.getDrawConnectors()).toBeObservable(cold('(0|)', [[{ from: 'from', to: 'to' }]]));
-        expect(resetJsPlumbSpy).toHaveBeenCalled();
-      });
-    });
-
-    describe('when jsPlumb instance is truthy', () => {
-      it('should call expected methods and emit expected result', () => {
-        const jsPlumbSpy = jasmine.createSpyObj<jsPlumbInstance>('jsPlumbInstance', ['connect']);
+        const jsPlumbSpy = jasmine.createSpyObj<BrowserJsPlumbInstance>('BrowserJsPlumbInstance', ['connect']);
         const resetJsPlumbSpy = spyOn(service, 'resetJsPlumb');
+        const getElementByIdSpy = spyOn(exposed, 'getElementById')
+          .withArgs('from').and.returnValue(from)
+          .withArgs('to').and.returnValue(to);
+
+        // Act
         exposed.setJsPlumb(jsPlumbSpy);
 
         expect(exposed.getDrawConnectors()).toBeObservable(cold('(0|)', [[{ from: 'from', to: 'to' }]]));
 
         expect(resetJsPlumbSpy).toHaveBeenCalled();
-        expect(jsPlumbSpy.connect).toHaveBeenCalledWith({ source: 'from', target: 'to' }, { cssClass: 'from' });
+        expect(getElementByIdSpy).toHaveBeenCalledWith('from');
+        expect(getElementByIdSpy).toHaveBeenCalledWith('to');
+        expect(jsPlumbSpy.connect).toHaveBeenCalledWith({ source: from, target: to }, { cssClass: 'from' });
       });
     });
   });
 
   describe('setupJsPlumb', () => {
     it('should call expected methods', () => {
-      const getInstanceSpy = spyOn(jsPlumb, 'getInstance');
+      const container = {} as HTMLElement;
+      const getInstanceSpy = spyOn(exposed, 'createJsPlumbInstance');
+      const resetJsPlumbSpy = spyOn(exposed, 'resetJsPlumb');
 
-      service.setupJsPlumb({} as HTMLElement);
+      service.setupJsPlumb(container);
 
+      expect(resetJsPlumbSpy).toHaveBeenCalled();
       expect(getInstanceSpy).toHaveBeenCalledWith({
-        Container: {},
-        PaintStyle: { stroke: '#056', strokeWidth: 1, fill: null },
-        Endpoint: 'Blank',
-        Anchors: ['Right', 'Left'],
-        Connector: ['Bezier', { 'curviness': 80 }],
-        ConnectionsDetachable: false,
-        ConnectionOverlays: [
-          ['Arrow', { length: 8, width: 8, location: 1 }]
+        container: container,
+        paintStyle: { stroke: '#056', strokeWidth: 1, fill: null },
+        endpoint: 'Blank',
+        anchors: ['Right', 'Left'],
+        connector: { type: 'Bezier', options: { curviness: 80 } },
+        connectionsDetachable: false,
+        connectionOverlays: [
+          { type: 'Arrow', options: { length: 8, width: 8, location: 1 } }
         ],
       });
     });
@@ -132,7 +144,7 @@ describe('JsPlumbService', () => {
 
   describe('repaintConnectors', () => {
     it('should call expected methods', () => {
-      const jsPlumbSpy = jasmine.createSpyObj<jsPlumbInstance>('jsPlumbInstance', ['repaintEverything']);
+      const jsPlumbSpy = jasmine.createSpyObj<BrowserJsPlumbInstance>('BrowserJsPlumbInstance', ['repaintEverything']);
       exposed.setJsPlumb(jsPlumbSpy);
 
       service.repaintConnectors();
@@ -142,7 +154,7 @@ describe('JsPlumbService', () => {
 
   describe('resetJsPlumb', () => {
     it('should call expected methods', () => {
-      const jsPlumbSpy = jasmine.createSpyObj<jsPlumbInstance>('jsPlumbInstance', ['reset']);
+      const jsPlumbSpy = jasmine.createSpyObj<BrowserJsPlumbInstance>('BrowserJsPlumbInstance', ['reset']);
       exposed.setJsPlumb(jsPlumbSpy);
 
       service.resetJsPlumb();
