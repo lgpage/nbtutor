@@ -3,6 +3,11 @@
   "extends": [
     "config:base"
   ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "src/index.html"
+  ],
   "labels": ["dependencies"],
   "packageRules": [
     {
