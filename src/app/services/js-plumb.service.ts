@@ -1,9 +1,10 @@
-import { Defaults, jsPlumb, jsPlumbInstance } from 'jsplumb';
 import { noop, Observable } from 'rxjs';
 import { debounceTime, first, map, tap } from 'rxjs/operators';
 import { Injectable, OnDestroy } from '@angular/core';
 import { HasSubscriptionsDirective } from '@app/helpers';
 import { Connector } from '@app/models';
+import { BrowserJsPlumbDefaults, BrowserJsPlumbInstance, newInstance } from '@jsplumb/browser-ui';
+import { BezierConnector } from '@jsplumb/connector-bezier';
 import { CellDataService } from './cell-data.service';
 import { LoggerService } from './logger.service';
 
@@ -12,7 +13,7 @@ declare let $: JQueryStatic;
 @Injectable()
 export class JsPlumbService extends HasSubscriptionsDirective implements OnDestroy {
   protected _name = 'JsPlumbService';
-  protected _jsPlumb: jsPlumbInstance;
+  protected _jsPlumb: BrowserJsPlumbInstance;
 
   constructor(
     protected _dataSvc: CellDataService,
@@ -32,6 +33,14 @@ export class JsPlumbService extends HasSubscriptionsDirective implements OnDestr
     this._observables = [connectObjects$];
   }
 
+  protected createJsPlumbInstance(options: BrowserJsPlumbDefaults): void {
+    this._jsPlumb = newInstance(options);
+  }
+
+  protected getElementById(id: string): HTMLElement {
+    return document.getElementById(id);
+  }
+
   protected getDrawConnectors(): Observable<Connector[]> {
     return this._dataSvc.traceStep$.pipe(
       first(),
@@ -41,30 +50,31 @@ export class JsPlumbService extends HasSubscriptionsDirective implements OnDestr
         if (this._jsPlumb) {
           this._loggerSvc.logDebug(`${this._name} >> drawConnectors`, { connectors, jsPlumb: this._jsPlumb });
           for (const connector of connectors) {
-            this._jsPlumb.connect({ source: connector.from, target: connector.to }, { cssClass: connector.from });
+            const source = this.getElementById(connector.from);
+            const target = this.getElementById(connector.to);
+            this._jsPlumb.connect({ source, target }, { cssClass: connector.from });
           }
         }
       }),
     );
   }
 
-  setupJsPlumb(container?: HTMLElement): void {
+  setupJsPlumb(container: HTMLElement): void {
     this.resetJsPlumb();
-
-    const options: Defaults = {
-      Container: container || 'body',
-      PaintStyle: { stroke: '#056', strokeWidth: 1, fill: null },
-      Endpoint: 'Blank',
-      Anchors: ['Right', 'Left'],
-      Connector: ['Bezier', { curviness: 80 }],
-      ConnectionsDetachable: false,
-      ConnectionOverlays: [
-        ['Arrow', { length: 8, width: 8, location: 1 }]
+    const options: BrowserJsPlumbDefaults = {
+      container: container,
+      paintStyle: { stroke: '#056', strokeWidth: 1, fill: null },
+      endpoint: 'Blank',
+      anchors: ['Right', 'Left'],
+      connector: { type: BezierConnector.type, options: { curviness: 80 } },
+      connectionsDetachable: false,
+      connectionOverlays: [
+        { type: 'Arrow', options: { length: 8, width: 8, location: 1 } }
       ],
     };
 
     this._loggerSvc.logDebug(`${this._name} >> setupJsPlumb`, { options });
-    this._jsPlumb = jsPlumb.getInstance(options);
+    this.createJsPlumbInstance(options);
   }
 
   drawConnectors(): void {

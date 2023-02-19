@@ -12,11 +12,13 @@ Visualize Python code execution (line-by-line) in [Jupyter Notebook] cells. Insp
 [![Conda version](https://img.shields.io/conda/vn/conda-forge/nbtutor.svg)](https://anaconda.org/conda-forge/nbtutor)
 [![Conda downloads](https://img.shields.io/conda/dn/conda-forge/nbtutor.svg)](https://anaconda.org/conda-forge/nbtutor)
 
-[![Angular test status](https://github.com/lgpage/nbtutor/actions/workflows/anguler-test.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/angular-test.yml?query=branch%3Amain)
+[![Angular test status](https://github.com/lgpage/nbtutor/actions/workflows/angular-test.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/angular-test.yml?query=branch%3Amain)
 [![Python check status](https://github.com/lgpage/nbtutor/actions/workflows/python-check.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/python-check.yml?query=branch%3Amain)
 [![Python test status](https://github.com/lgpage/nbtutor/actions/workflows/python-test.yml/badge.svg?branch=main)](https://github.com/lgpage/nbtutor/actions/workflows/python-test.yml?query=branch%3Amain)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lgpage/nbtutor/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lgpage/nbtutor/HEAD?urlpath=tree/)
+
+To try out `nbtutor`, click on the "launch binder" button above and then view the examples.
 
 ## Install
 
