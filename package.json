@@ -69,7 +69,7 @@
     "@types/uuid": "^7.0.5",
     "@typescript-eslint/eslint-plugin": "^5.52.0",
     "@typescript-eslint/parser": "^5.52.0",
-    "codemirror": "^5.65.11",
+    "codemirror": "^5.65.12",
     "concat": "^1.0.3",
     "eslint": "^8.34.0",
     "eslint-plugin-rxjs": "^5.0.2",
