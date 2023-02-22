@@ -82,7 +82,7 @@
     "karma": "^6.4.1",
     "karma-chrome-launcher": "^3.1.1",
     "karma-coverage": "^2.2.0",
-    "karma-jasmine": "^4.0.2",
+    "karma-jasmine": "^5.1.0",
     "karma-jasmine-html-reporter": "^1.7.0",
     "karma-junit-reporter": "^2.0.1",
     "ng-mocks": "^14.6.0",
