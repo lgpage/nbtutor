@@ -1,4 +1,4 @@
-import * as uuid from 'uuid';
+import { v4 as uuidV4 } from 'uuid';
 import { DecimalPipe } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { deepClone, isEmpty, keys, values } from '@app/helpers';
@@ -29,7 +29,7 @@ export class TraceStepService {
   ) { }
 
   protected setId(item: HasUniqueIdentifier, existingIds: ExistingIds, prefix: string): void {
-    item.uuid = `${prefix}-${uuid.v4()}`;
+    item.uuid = `${prefix}-${uuidV4()}`;
     if (existingIds) {
       item.uuid = existingIds[item.id] || item.uuid;
       existingIds[item.id] = item.uuid;
