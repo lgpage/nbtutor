@@ -1,22 +1,32 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "ignorePaths": [
     "**/node_modules/**",
     "**/bower_components/**",
     "src/index.html"
   ],
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["eslint"],
-      "labels": ["linting"]
+      "matchPackagePatterns": [
+        "eslint"
+      ],
+      "labels": [
+        "linting"
+      ]
     },
     {
-      "matchDepTypes": ["optionalDependencies"],
-      "addLabels": ["optional"]
+      "matchDepTypes": [
+        "optionalDependencies"
+      ],
+      "addLabels": [
+        "optional"
+      ]
     }
   ],
   "schedule": [
