@@ -64,7 +64,7 @@
     "@ngrx/store-devtools": "^15.4.0",
     "@types/codemirror": "^5.60.7",
     "@types/jasmine": "^4.3.1",
-    "@types/jasminewd2": "^2.0.10",
+    "@types/jasminewd2": "^2.0.13",
     "@types/jquery": "^3.5.16",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
