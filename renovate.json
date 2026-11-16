@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base"
+    "config:recommended"
   ],
   "ignorePaths": [
     "**/node_modules/**",
@@ -11,8 +11,10 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
-      "matchPackagePatterns": ["eslint"],
-      "labels": ["linting"]
+      "labels": ["linting"],
+      "matchPackageNames": [
+        "/eslint/"
+      ]
     },
     {
       "matchDepTypes": ["optionalDependencies"],
@@ -24,5 +26,7 @@
   ],
   "configMigration": true,
   "rangeStrategy": "bump",
-  "dependencyDashboardTitle": "chore: dependency dashboard"
+  "dependencyDashboard": {
+    "title": "chore: dependency dashboard"
+  }
 }
